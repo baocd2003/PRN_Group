@@ -52,5 +52,28 @@ namespace DataAccessLayer.Service
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<Customer> CustomerRegister(Customer customer)
+        {
+            try
+            {
+                customer.Id = Guid.NewGuid();
+                var customerParse = new Customer
+                {
+                    Id = customer.Id,
+                    Email = customer.Email,
+                    Name = customer.Name,
+                    Password = customer.Password,
+                    PhoneNumber = customer.PhoneNumber,
+                    UserId = customer.Id
+                };
+                await _db.Users.AddAsync(customerParse);
+                await _db.SaveChangesAsync();
+                return customerParse;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

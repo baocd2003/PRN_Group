@@ -14,8 +14,8 @@ namespace Repository
     {
         public async Task<User> Login(LoginDTO loginDTO)
         => await AuthenticationService.Instance.Login(loginDTO);
+        public async Task<Customer> CustomerRegister(Customer customer)
+       => await AuthenticationService.Instance.CustomerRegister(customer);
 
-       
-       
     }
 }

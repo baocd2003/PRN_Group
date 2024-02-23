@@ -11,6 +11,6 @@ namespace Repository.Interface
     public interface IAuthRepository
     {
         public Task<User> Login(LoginDTO loginDTO);
-       
+        public Task<Customer> CustomerRegister(Customer customer);
     }
 }

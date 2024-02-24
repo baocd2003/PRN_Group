@@ -24,8 +24,14 @@ namespace ICQS_Management.Pages.Authentication
                 return RedirectToPage();
             }
             else
-            {
+            {               
                 HttpContext.Session.SetString("LoggedEmail", loginDTO.email);
+            }
+            //role-base
+            var role = user.GetType().Name;
+            if (role.Equals("Staff"))
+            {
+                return RedirectToPage("/Account_Staff/Details", new { id = user.UserId });
             }
             return RedirectToPage("/Account/Details", new { id = user.UserId });
         }

@@ -1,0 +1,43 @@
+﻿@page
+@model ICQS_Management.Pages.ProjectManagement.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].ProjectName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Project) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ProjectID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ProjectID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ProjectID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

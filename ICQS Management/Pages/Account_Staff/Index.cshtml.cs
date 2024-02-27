@@ -7,24 +7,26 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
-using Repository.Interface;
 
 namespace ICQS_Management.Pages.Account_Staff
 {
     public class IndexModel : PageModel
     {
-        private readonly IBaseRepository<Staff> _baseRepository;
-        public IndexModel(IBaseRepository<Staff> baseRepository)
+        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+
+        public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
-            _baseRepository = baseRepository;
+            _context = context;
         }
-        [BindProperty]
 
-        public Staff Staff { get;set; } = default!;
+        public IList<Staff> Staff { get;set; } = default!;
 
-        public async Task OnGetAsync(Guid id)
+        public async Task OnGetAsync()
         {
-            Staff = _baseRepository.GetById(id);
+            if (_context.Staffs != null)
+            {
+                Staff = await _context.Staffs.ToListAsync();
+            }
         }
     }
 }

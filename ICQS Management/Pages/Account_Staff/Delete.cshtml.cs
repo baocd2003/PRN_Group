@@ -7,51 +7,54 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
-using Repository.Interface;
 
-namespace ICQS_Management.Pages.Admin_View
+namespace ICQS_Management.Pages.Account_Staff
 {
     public class DeleteModel : PageModel
     {
-        private readonly IBaseRepository<User> _baseRepository;
+        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
 
-        public DeleteModel(IBaseRepository<User> baseRepository)
+        public DeleteModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
-            _baseRepository = baseRepository;
+            _context = context;
         }
 
         [BindProperty]
-        public User User { get; set; }
+      public Staff Staff { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (id == null || _context.Staffs == null)
             {
                 return NotFound();
             }
 
-            User =  _baseRepository.GetById(id);
+            var staff = await _context.Staffs.FirstOrDefaultAsync(m => m.UserId == id);
 
-            if (User == null)
+            if (staff == null)
             {
                 return NotFound();
+            }
+            else 
+            {
+                Staff = staff;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(Guid? id)
         {
-            if (id == null)
+            if (id == null || _context.Staffs == null)
             {
                 return NotFound();
             }
+            var staff = await _context.Staffs.FindAsync(id);
 
-            User = _baseRepository.GetById(id);
-
-            if (User != null)
+            if (staff != null)
             {
-                _baseRepository.Delete(User.UserId);
-                _baseRepository.Save();
+                Staff = staff;
+                _context.Staffs.Remove(Staff);
+                await _context.SaveChangesAsync();
             }
 
             return RedirectToPage("./Index");

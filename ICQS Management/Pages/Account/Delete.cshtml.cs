@@ -10,16 +10,17 @@ using DataAccessLayer.ApplicationDbContext;
 
 namespace ICQS_Management.Pages.Account
 {
-    public class DetailsModel : PageModel
+    public class DeleteModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
 
-        public DetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public DeleteModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
         }
 
-      public Customer Customer { get; set; } = default!; 
+        [BindProperty]
+      public Customer Customer { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -29,6 +30,7 @@ namespace ICQS_Management.Pages.Account
             }
 
             var customer = await _context.Customers.FirstOrDefaultAsync(m => m.UserId == id);
+
             if (customer == null)
             {
                 return NotFound();
@@ -38,6 +40,24 @@ namespace ICQS_Management.Pages.Account
                 Customer = customer;
             }
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(Guid? id)
+        {
+            if (id == null || _context.Customers == null)
+            {
+                return NotFound();
+            }
+            var customer = await _context.Customers.FindAsync(id);
+
+            if (customer != null)
+            {
+                Customer = customer;
+                _context.Customers.Remove(Customer);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage("./Index");
         }
     }
 }

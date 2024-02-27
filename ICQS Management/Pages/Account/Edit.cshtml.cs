@@ -8,16 +8,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
-using Repository.Interface;
 
 namespace ICQS_Management.Pages.Account
 {
     public class EditModel : PageModel
     {
-        private readonly IBaseRepository<Customer> _baseRepository;
-        public EditModel(IBaseRepository<Customer> baseRepository)
+        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+
+        public EditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
-            _baseRepository = baseRepository;
+            _context = context;
         }
 
         [BindProperty]
@@ -25,12 +25,12 @@ namespace ICQS_Management.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (id == null || _context.Customers == null)
             {
                 return NotFound();
             }
 
-            var customer = _baseRepository.GetById(id);
+            var customer =  await _context.Customers.FirstOrDefaultAsync(m => m.UserId == id);
             if (customer == null)
             {
                 return NotFound();
@@ -48,20 +48,30 @@ namespace ICQS_Management.Pages.Account
                 return Page();
             }
 
-            _baseRepository.Update(Customer,Customer.Id);
+            _context.Attach(Customer).State = EntityState.Modified;
 
             try
             {
-                _baseRepository.Save();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                throw new Exception();
+                if (!CustomerExists(Customer.UserId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
-            return RedirectToPage("./Details", new {id = Customer.Id});
+            return RedirectToPage("./Index");
         }
 
-        
+        private bool CustomerExists(Guid id)
+        {
+          return (_context.Customers?.Any(e => e.UserId == id)).GetValueOrDefault();
+        }
     }
 }

@@ -1,9 +1,6 @@
 
-using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
-using Repository.Interface;
-using Repository;
 
 namespace ICQS_Management
 {
@@ -21,9 +18,6 @@ namespace ICQS_Management
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
-            //Scope
-            builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

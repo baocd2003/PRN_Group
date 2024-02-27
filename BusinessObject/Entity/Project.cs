@@ -17,7 +17,7 @@ namespace BussinessObject.Entity
         public float AreaPerFloor { get; set; }
         public int NumOfFloors { get; set; }
         public byte Status { get; set; }
-        public virtual ICollection<Customer> Customers { get; set;}
+        //public virtual User Customers { get; set; }
         public virtual ICollection<ProjectMaterial> ProjectMaterials { get; set;}
 
     }

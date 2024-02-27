@@ -1,10 +1,9 @@
 ﻿@page
 @model ICQS_Management.Pages.Authentication.CustomerRegisterModel
-
-<h4>Customer</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+@{
+}
+<div style="background:lightgrey; padding: 50px; border-radius: 10px">
+    <div>
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @if (TempData["RegisterError"] is not null)
@@ -36,12 +35,13 @@
             </div>
         </form>
     </div>
+
+
 </div>
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

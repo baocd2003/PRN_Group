@@ -9,7 +9,7 @@ namespace BussinessObject.Entity
     public class Customer : User
     {
 
-        public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
 
     }
 }

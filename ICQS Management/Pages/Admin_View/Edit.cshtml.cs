@@ -10,18 +10,19 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository.Interface;
 
-namespace ICQS_Management.Pages.Account_Staff
+namespace ICQS_Management.Pages.Admin_View
 {
     public class EditModel : PageModel
     {
-        private readonly IBaseRepository<Staff> _baseRepository;
-        public EditModel(IBaseRepository<Staff> baseRepository)
+        private readonly IBaseRepository<User> _baseRepository;
+
+        public EditModel(IBaseRepository<User> baseRepository)
         {
             _baseRepository = baseRepository;
         }
 
         [BindProperty]
-        public Staff Staff { get; set; } = default!;
+        public User User { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -30,12 +31,12 @@ namespace ICQS_Management.Pages.Account_Staff
                 return NotFound();
             }
 
-            var staff = _baseRepository.GetById(id);
-            if (staff == null)
+            User = _baseRepository.GetById(id);
+
+            if (User == null)
             {
                 return NotFound();
             }
-            Staff = staff;
             return Page();
         }
 
@@ -48,7 +49,7 @@ namespace ICQS_Management.Pages.Account_Staff
                 return Page();
             }
 
-            _baseRepository.Update(Staff, Staff.UserId);
+            _baseRepository.Update(User, User.UserId);
 
             try
             {
@@ -56,14 +57,12 @@ namespace ICQS_Management.Pages.Account_Staff
             }
             catch (DbUpdateConcurrencyException)
             {
-
                 throw;
-
             }
 
-            return RedirectToPage("./Index", new { id = Staff.UserId });
+            return RedirectToPage("./Index");
         }
 
-
+      
     }
 }

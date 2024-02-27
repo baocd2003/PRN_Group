@@ -9,33 +9,31 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository.Interface;
 
-namespace ICQS_Management.Pages.Account_Staff
+namespace ICQS_Management.Pages.Admin_View
 {
     public class DetailsModel : PageModel
     {
-        private readonly IBaseRepository<Staff> _baseRepository;
-        public DetailsModel(IBaseRepository<Staff> baseRepository)
+        private readonly IBaseRepository<User> _baseRepository;
+
+        public DetailsModel(IBaseRepository<User> baseRepository)
         {
             _baseRepository = baseRepository;
         }
 
-        public Staff Staff { get; set; } = default!; 
+        public User User { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null )
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var staff = _baseRepository.GetById(id);
-            if (staff == null)
+            User =  _baseRepository.GetById(id);
+
+            if (User == null)
             {
                 return NotFound();
-            }
-            else 
-            {
-                Staff = staff;
             }
             return Page();
         }

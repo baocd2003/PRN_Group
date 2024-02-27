@@ -7,54 +7,51 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
 
-namespace ICQS_Management.Pages.Account_Staff
+namespace ICQS_Management.Pages.Admin_View
 {
     public class DeleteModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private readonly IBaseRepository<User> _baseRepository;
 
-        public DeleteModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public DeleteModel(IBaseRepository<User> baseRepository)
         {
-            _context = context;
+            _baseRepository = baseRepository;
         }
 
         [BindProperty]
-      public Staff Staff { get; set; } = default!;
+        public User User { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null || _context.Staffs == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var staff = await _context.Staffs.FirstOrDefaultAsync(m => m.UserId == id);
+            User =  _baseRepository.GetById(id);
 
-            if (staff == null)
+            if (User == null)
             {
                 return NotFound();
-            }
-            else 
-            {
-                Staff = staff;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(Guid? id)
         {
-            if (id == null || _context.Staffs == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var staff = await _context.Staffs.FindAsync(id);
 
-            if (staff != null)
+            User = _baseRepository.GetById(id);
+
+            if (User != null)
             {
-                Staff = staff;
-                _context.Staffs.Remove(Staff);
-                await _context.SaveChangesAsync();
+                _baseRepository.Delete(User.UserId);
+                _baseRepository.Save();
             }
 
             return RedirectToPage("./Index");

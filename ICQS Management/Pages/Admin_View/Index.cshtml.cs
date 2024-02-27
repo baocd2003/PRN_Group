@@ -9,22 +9,21 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository.Interface;
 
-namespace ICQS_Management.Pages.Account_Staff
+namespace ICQS_Management.Pages.Admin_View
 {
     public class IndexModel : PageModel
     {
-        private readonly IBaseRepository<Staff> _baseRepository;
-        public IndexModel(IBaseRepository<Staff> baseRepository)
+        private readonly IBaseRepository<User> _baseRepository;
+
+        public IndexModel(IBaseRepository<User> baseRepository)
         {
             _baseRepository = baseRepository;
         }
-        [BindProperty]
+        public IList<User> User { get;set; }
 
-        public Staff Staff { get;set; } = default!;
-
-        public async Task OnGetAsync(Guid id)
+        public async Task OnGetAsync()
         {
-            Staff = _baseRepository.GetById(id);
+            User = _baseRepository.GetAll().ToList();
         }
     }
 }

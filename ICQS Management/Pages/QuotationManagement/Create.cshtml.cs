@@ -22,7 +22,7 @@ namespace ICQS_Management.Pages.QuotationManagement
         public IActionResult OnGet()
         {
         ViewData["CustomerId"] = new SelectList(_context.Customers, "UserId", "Discriminator");
-        ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "Description");
+        ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "ProjectName");
         ViewData["StaffID"] = new SelectList(_context.Staffs, "UserId", "Discriminator");
             return Page();
         }

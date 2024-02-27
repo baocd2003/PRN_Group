@@ -12,5 +12,7 @@ namespace Repository.Interface
         public void CreateBatch(DateTime importDate, List<BatchDetail> batchDetails);
         public Batch GetLastBatch();
         public void CreateBatchDetails(BatchDetail batchDetail);
+        public List<BatchDetail> GetBatchDetailsByBatchId(Guid batchId);
+        public void AddMoreDetailsInBatch(List<BatchDetail> batchDetails);
     }
 }

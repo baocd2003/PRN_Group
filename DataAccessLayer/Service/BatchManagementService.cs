@@ -1,5 +1,6 @@
 ﻿using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +53,20 @@ namespace DataAccessLayer.Service
         {
             _db.BatchDetails.Add(batchDetail);
             _db.SaveChanges();
+        }
+
+        public List<BatchDetail> GetBatchDetailsByBatchId(Guid batchId) {
+            List<BatchDetail> batchDetails = _db.BatchDetails.Where(bd => bd.BatchId == batchId).Include(bd => bd.Materials).ToList(); 
+            return batchDetails;
+        }
+
+        public void AddMoreDetailsInBatch(List<BatchDetail> batchDetails)
+        {
+            foreach(BatchDetail batchDetail in batchDetails)
+            {
+                _db.BatchDetails.Add(batchDetail);
+                _db.SaveChanges();
+            }
         }
     }
 }

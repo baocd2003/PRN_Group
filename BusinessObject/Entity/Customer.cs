@@ -8,6 +8,8 @@ namespace BussinessObject.Entity
 {
     public class Customer : User
     {
+
         public Guid Id { get; set; }
+
     }
 }

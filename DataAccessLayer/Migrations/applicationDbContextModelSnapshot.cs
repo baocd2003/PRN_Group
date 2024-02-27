@@ -217,12 +217,7 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Customer_Id");
-
-                    b.Property<Guid?>("ProjectID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("ProjectID");
+                        .HasColumnName("CustomerId");
 
                     b.HasDiscriminator().HasValue("Customer");
                 });
@@ -231,7 +226,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasBaseType("BussinessObject.Entity.User");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("StaffId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasDiscriminator().HasValue("Staff");
@@ -318,14 +313,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Staff");
                 });
 
-            modelBuilder.Entity("BussinessObject.Entity.Customer", b =>
-                {
-                    b.HasOne("BussinessObject.Entity.Project", null)
-                        .WithMany("Customers")
-                        .HasForeignKey("ProjectID")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("BussinessObject.Entity.Batch", b =>
                 {
                     b.Navigation("BatchDetails");
@@ -338,8 +325,6 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("BussinessObject.Entity.Project", b =>
                 {
-                    b.Navigation("Customers");
-
                     b.Navigation("ProjectMaterials");
                 });
 

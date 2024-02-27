@@ -17,6 +17,16 @@ namespace ICQS_Management.Pages.Authentication
         }
         public async Task<IActionResult> OnPost(LoginDTO loginDTO)  
         {
+            var email = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AdminCredentials:Email").Value;
+            var password = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("AdminCredentials:Password").Value;
+            if (loginDTO.email.Equals(email))
+            {
+                if (loginDTO.password.Equals(password))
+                {
+                    HttpContext.Session.SetString("LoggedEmail", loginDTO.email);
+                    return RedirectToPage("Admin_View/Index");
+                }
+            }
             var user = await _authRepository.Login(loginDTO);
             if (user == null)
             {

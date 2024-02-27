@@ -7,23 +7,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.Admin_View
 {
     public class IndexModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private readonly IBaseRepository<User> _baseRepository;
 
-        public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public IndexModel(IBaseRepository<User> baseRepository)
         {
-            _context = context;
+            _baseRepository = baseRepository;
         }
-
-        public IList<User> User { get;set; }
+        public IList<User> User { get; set; }
 
         public async Task OnGetAsync()
         {
-            User = await _context.Users.ToListAsync();
+            User = _baseRepository.GetAll().ToList();
         }
     }
 }

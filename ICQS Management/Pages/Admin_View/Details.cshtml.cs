@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.Admin_View
 {
     public class DetailsModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private readonly IBaseRepository<User> _baseRepository;
 
-        public DetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public DetailsModel(IBaseRepository<User> baseRepository)
         {
-            _context = context;
+            _baseRepository = baseRepository;
         }
 
         public User User { get; set; }
@@ -28,7 +29,7 @@ namespace ICQS_Management.Pages.Admin_View
                 return NotFound();
             }
 
-            User = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            User = _baseRepository.GetById(id);
 
             if (User == null)
             {

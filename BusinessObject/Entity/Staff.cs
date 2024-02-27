@@ -8,6 +8,6 @@ namespace BussinessObject.Entity
 {
     public class Staff : User
     {
-        public Guid Id { get; set; }
+        public Guid StaffId { get; set; }
     }
 }

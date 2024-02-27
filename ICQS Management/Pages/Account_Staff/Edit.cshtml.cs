@@ -8,16 +8,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.Account_Staff
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-
-        public EditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        private readonly IBaseRepository<Staff> _baseRepository;
+        public EditModel(IBaseRepository<Staff> baseRepository)
         {
-            _context = context;
+            _baseRepository = baseRepository;
         }
 
         [BindProperty]
@@ -25,12 +25,12 @@ namespace ICQS_Management.Pages.Account_Staff
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null || _context.Staffs == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var staff =  await _context.Staffs.FirstOrDefaultAsync(m => m.UserId == id);
+            var staff = _baseRepository.GetById(id);
             if (staff == null)
             {
                 return NotFound();
@@ -48,30 +48,22 @@ namespace ICQS_Management.Pages.Account_Staff
                 return Page();
             }
 
-            _context.Attach(Staff).State = EntityState.Modified;
+            _baseRepository.Update(Staff, Staff.UserId);
 
             try
             {
-                await _context.SaveChangesAsync();
+                _baseRepository.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StaffExists(Staff.UserId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+
+                throw;
+
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { id = Staff.UserId });
         }
 
-        private bool StaffExists(Guid id)
-        {
-          return (_context.Staffs?.Any(e => e.UserId == id)).GetValueOrDefault();
-        }
+
     }
 }

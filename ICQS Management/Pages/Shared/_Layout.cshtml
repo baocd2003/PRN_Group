@@ -40,11 +40,11 @@
                         <ul class="navbar-nav justify-content-between ">
                             <div class="User_option">
                             <li class="">
-                                <a class="mr-4" href="">
-
+                                <a class="mr-4" href="Authentication/LoginView">
+                                    Login
                                 </a>
-                                <a class="" href="">
-
+                                <a class="" href="Authentication/CustomerRegister">
+                                    Sign up
                                 </a>
                             </li>
                     </div>
@@ -101,22 +101,24 @@
             </div>
         </div>
     </section>
+    <!-- end slider section -->
     </div>
+
+    
+    <!-- about section -->
 
     <section class="about_section layout_padding-bottom">
         <div class="square-box">
             <img src="images/square.png" alt="">
         </div>
         <div class="container">
-            <div>
-                @RenderBody()
-                @RenderSection("scripts", required: false)
-            </div>
-
+            @RenderBody()
+            @RenderSection("scripts", required: false)
         </div>
     </section>
 
-    <!-- end about section -->
+
+    <!-- end info_section -->
     <!-- footer section -->
     <section class="container-fluid footer_section ">
         <div class="container">

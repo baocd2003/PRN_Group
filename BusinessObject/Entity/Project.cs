@@ -14,7 +14,9 @@ namespace BussinessObject.Entity
         public Guid ProjectID { get; set; } 
         public string ProjectName { get; set; }
         public string Description { get; set; }
-        
+        public float AreaPerFloor { get; set; }
+        public int NumOfFloors { get; set; }
+        public byte Status { get; set; }
         public virtual ICollection<Customer> Customers { get; set;}
         public virtual ICollection<ProjectMaterial> ProjectMaterials { get; set;}
 

@@ -81,12 +81,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int>("StorageQuantity")
-                        .HasColumnType("int");
-
                     b.HasKey("MaterialId");
 
                     b.ToTable("Materials");
@@ -98,13 +92,22 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<float>("AreaPerFloor")
+                        .HasColumnType("real");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NumOfFloors")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -162,9 +165,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalArea")
                         .HasColumnType("int");
 
                     b.HasKey("QuotationId");

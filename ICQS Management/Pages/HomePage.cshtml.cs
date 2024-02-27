@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ICQS_Management.Pages
 {
-    public class TestUIModel : PageModel
+    public class HomePageModel : PageModel
     {
-        public void OnGet(int id)
+        public void OnGet()
         {
         }
     }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace ICQS_Management.Pages.QuotationManagement
 {
@@ -19,28 +21,55 @@ namespace ICQS_Management.Pages.QuotationManagement
             _context = context;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-        ViewData["CustomerId"] = new SelectList(_context.Customers, "UserId", "Discriminator");
-        ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "ProjectName");
-        ViewData["StaffID"] = new SelectList(_context.Staffs, "UserId", "Discriminator");
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Project = await _context.Projects.FirstOrDefaultAsync(m => m.ProjectID == id);
+            if (Project == null)
+            {
+                return NotFound();
+            }
+            ProjectMaterials = await _context.ProjectMaterials.Include(p => p.Materials).Where(p => p.ProjectId == id).ToListAsync();
+
+            //ViewData["CustomerId"] = new SelectList(_context.Customers, "UserId", "Discriminator");
+            //ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "ProjectName");
+            //ViewData["StaffID"] = new SelectList(_context.Staffs, "UserId", "Discriminator");
             return Page();
         }
 
+        // Project properties
         [BindProperty]
-        public Quotation Quotation { get; set; } = default!;
-        
+        public DateTime RequestDate { get; set; } = default!;
+        [BindProperty]
+        public float EstimatePrice { get; set; } = default!;
+        [BindProperty]
+        public Project Project { get; set; } = default!;
+        [BindProperty]
+        public IList<ProjectMaterial> ProjectMaterials { get; set; } = default!;
+
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Quotations == null || Quotation == null)
-            {
-                return Page();
-            }
-
-            _context.Quotations.Add(Quotation);
+            //if (!ModelState.IsValid || Project == null || ProjectMaterials == null)
+            //{
+            //    return Page();
+            //}
+            
+            _context.Projects.Add(Project);
             await _context.SaveChangesAsync();
+
+            foreach (var projectMaterial in ProjectMaterials)
+            {
+                projectMaterial.ProjectId = Project.ProjectID;
+                _context.ProjectMaterials.Add(projectMaterial);
+            }
+            await _context.SaveChangesAsync();
+
 
             return RedirectToPage("./Index");
         }

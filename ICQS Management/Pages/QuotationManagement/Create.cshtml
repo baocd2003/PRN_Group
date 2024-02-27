@@ -6,48 +6,85 @@
 }
 
 <div class="wrapper">
-    <h4>Creating new quotation</h4>
+    <h4 class="font-weight-bold">Creating new quotation</h4>
     <hr />
     <form method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="Quotation.ProjectId" class="control-label fw-bold">Construction Project</label>
-                    <select asp-for="Quotation.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                    <label class="control-label fw-bold">Prototype</label>
+                    @* <select asp-for="Quotation.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select> *@
+                    <input class="form-control" readonly value="@Html.DisplayFor(model => model.Project.ProjectName)" />
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="Quotation.RequestDate" class="control-label fw-bold">Request Date</label>
-                    <input asp-for="Quotation.RequestDate" class="form-control" readonly value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")">
-                    <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
+                    <label asp-for="RequestDate" class="control-label fw-bold">Request Date</label>
+                    <input asp-for="RequestDate" class="form-control" readonly value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")">
+                    <span asp-validation-for="RequestDate" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="Quotation.EstimatePrice" class="control-label fw-bold"></label>
-                    <input asp-for="Quotation.EstimatePrice" class="form-control" readonly placeholder="..." />
-                    <span asp-validation-for="Quotation.EstimatePrice" class="text-danger"></span>
+                    <label asp-for="EstimatePrice" class="control-label fw-bold">Estimated Price</label>
+                    <input asp-for="EstimatePrice" class="form-control" readonly placeholder="..." value=0/>
+                    <span asp-validation-for="EstimatePrice" class="text-danger"></span>
                 </div>
             </div>
         </div>
 
-        @*  <div class="form-group">
-        <label asp-for="Quotation.CustomerId" class="control-label"></label>
-        <select asp-for="Quotation.CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
+        @* Project + Project Materials Detail *@
+        <input type="hidden" asp-for="Project.Status" value=1 />
+        <div class="project_detail_wrapper">
+            <h5 class="font-weight-bold">Project Details</h5><hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Project.ProjectName" class="control-label">My Project</label>
+                        <input asp-for="Project.ProjectName" class="form-control" />
+                        <span asp-validation-for="Project.ProjectName" class="text-danger"></span>
+                    </div>
+                </div>
+                 <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Project.AreaPerFloor" class="control-label">Area per floor (m²)</label>
+                        <input asp-for="Project.AreaPerFloor" class="form-control" />
+                        <span asp-validation-for="Project.AreaPerFloor" class="text-danger"></span>
+                    </div>
+                </div>
+                 <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Project.NumOfFloors" class="control-label">Number of floors</label>
+                        <input asp-for="Project.NumOfFloors" class="form-control" />
+                        <span asp-validation-for="Project.NumOfFloors" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mb-5">
+                <label asp-for="Project.Description" class="control-label"></label>
+                <input asp-for="Project.Description" class="form-control" placeholder="Project description..."/>
+                <span asp-validation-for="Project.Description" class="text-danger"></span>
+            </div>
+
+            <h5 class="font-weight-bold">Materials</h5><hr />
+            <div class="row">
+                @{int count = 0;}
+                @foreach (var item in Model.ProjectMaterials)
+                {
+                    <input type="hidden" asp-for="ProjectMaterials[count].MaterialId" value="@item.MaterialId"/>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @* <label asp-for="ProjectMaterials[count].Quantity" class="control-label">@item.Materials.Name</label> *@
+                            <input asp-for="ProjectMaterials[count].Quantity" class="form-control" value="@item.Quantity" />
+                            @* <span asp-validation-for="Project.Description" class="text-danger"></span> *@
+                        </div>
+                    </div>
+                    count++;
+                }
+            </div>
+            
         </div>
-        <div class="form-group">
-        <label asp-for="Quotation.StaffID" class="control-label"></label>
-        <select asp-for="Quotation.StaffID" class ="form-control" asp-items="ViewBag.StaffID"></select>
-        </div> *@
-
-
-        @*  <div class="form-group">
-        <label asp-for="Quotation.Status" class="control-label"></label>
-        <input asp-for="Quotation.Status" class="form-control" />
-        <span asp-validation-for="Quotation.Status" class="text-danger"></span>
-        </div> *@
         <div class="form-group">
             <input type="submit" value="Create" class="btn btn-primary" />
         </div>

@@ -5,10 +5,6 @@ namespace BussinessObject.Entity
 {
     public class Project
     {
-        public Project()
-        {
-            this.Customers = new HashSet<Customer>();
-        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ProjectID { get; set; } 

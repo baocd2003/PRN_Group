@@ -20,9 +20,8 @@ namespace ICQS_Management.Pages.Admin_View
         {
             _baseRepository = baseRepository;
         }
-
         [BindProperty]
-        public User User { get; set; }
+        public User User { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -31,12 +30,12 @@ namespace ICQS_Management.Pages.Admin_View
                 return NotFound();
             }
 
-            User = _baseRepository.GetById(id);
-
-            if (User == null)
+            var user = _baseRepository.GetById(id);
+            if (user == null)
             {
                 return NotFound();
             }
+            User = user;
             return Page();
         }
 
@@ -57,12 +56,14 @@ namespace ICQS_Management.Pages.Admin_View
             }
             catch (DbUpdateConcurrencyException)
             {
+
                 throw;
+
             }
 
             return RedirectToPage("./Index");
         }
 
-      
+
     }
 }

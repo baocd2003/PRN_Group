@@ -14,7 +14,7 @@ namespace BussinessObject.Entity
         public Guid ProjectId { get; set; }
         public Guid CustomerId { get; set; }
         public Guid StaffID { get; set; } 
-        public int TotalArea { get; set; }
+        //public int TotalArea { get; set; }
         public DateTime RequestDate { get; set; }
         public double EstimatePrice { get; set; }
         public int Status { get; set; }

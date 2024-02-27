@@ -1,0 +1,60 @@
+﻿@page
+@model ICQS_Management.Pages.QuotationManagement.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].RequestDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].EstimatePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].Project)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].Staff)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Quotation) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimatePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Description)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.QuotationId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.QuotationId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -5,10 +5,7 @@ namespace BussinessObject.Entity
 {
     public class User
     {
-        public User()
-        {
-            this.Projects = new HashSet<Project>();
-        }
+       
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid UserId { get; set; }
@@ -16,6 +13,6 @@ namespace BussinessObject.Entity
         public string Email { get; set; }
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
-        public virtual ICollection<Project> Projects { get; set;}
+        public ICollection<Project> Projects { get; set; }
     }
 }

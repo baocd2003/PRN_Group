@@ -16,3 +16,12 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+.navbar-brand {
+    span {
+        padding-left: 0.5rem;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+}

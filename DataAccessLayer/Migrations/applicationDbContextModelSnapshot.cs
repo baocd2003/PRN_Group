@@ -81,12 +81,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int>("StorageQuantity")
-                        .HasColumnType("int");
-
                     b.HasKey("MaterialId");
 
                     b.ToTable("Materials");
@@ -98,13 +92,22 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<float>("AreaPerFloor")
+                        .HasColumnType("real");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NumOfFloors")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -164,9 +167,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalArea")
-                        .HasColumnType("int");
-
                     b.HasKey("QuotationId");
 
                     b.HasIndex("CustomerId");
@@ -217,12 +217,7 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Customer_Id");
-
-                    b.Property<Guid?>("ProjectID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("ProjectID");
+                        .HasColumnName("CustomerId");
 
                     b.HasDiscriminator().HasValue("Customer");
                 });
@@ -231,7 +226,7 @@ namespace DataAccessLayer.Migrations
                 {
                     b.HasBaseType("BussinessObject.Entity.User");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("StaffId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasDiscriminator().HasValue("Staff");
@@ -318,14 +313,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Staff");
                 });
 
-            modelBuilder.Entity("BussinessObject.Entity.Customer", b =>
-                {
-                    b.HasOne("BussinessObject.Entity.Project", null)
-                        .WithMany("Customers")
-                        .HasForeignKey("ProjectID")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("BussinessObject.Entity.Batch", b =>
                 {
                     b.Navigation("BatchDetails");
@@ -338,8 +325,6 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("BussinessObject.Entity.Project", b =>
                 {
-                    b.Navigation("Customers");
-
                     b.Navigation("ProjectMaterials");
                 });
 

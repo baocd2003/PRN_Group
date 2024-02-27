@@ -56,15 +56,15 @@ namespace DataAccessLayer.Service
         {
             try
             {
-                customer.Id = Guid.NewGuid();
+                customer.CustomerId = Guid.NewGuid();
                 var customerParse = new Customer
                 {
-                    Id = customer.Id,
+                    CustomerId = customer.CustomerId,
                     Email = customer.Email,
                     Name = customer.Name,
                     Password = customer.Password,
                     PhoneNumber = customer.PhoneNumber,
-                    UserId = customer.Id
+                    UserId = customer.CustomerId
                 };
                 await _db.Users.AddAsync(customerParse);
                 await _db.SaveChangesAsync();

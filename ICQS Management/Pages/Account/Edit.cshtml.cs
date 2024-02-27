@@ -48,7 +48,7 @@ namespace ICQS_Management.Pages.Account
                 return Page();
             }
 
-            _baseRepository.Update(Customer,Customer.Id);
+            _baseRepository.Update(Customer,Customer.CustomerId);
 
             try
             {
@@ -59,7 +59,7 @@ namespace ICQS_Management.Pages.Account
                 throw new Exception();
             }
 
-            return RedirectToPage("./Details", new {id = Customer.Id});
+            return RedirectToPage("./Details", new {id = Customer.CustomerId});
         }
 
         

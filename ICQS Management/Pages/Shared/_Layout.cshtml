@@ -5,12 +5,25 @@
 <head>
     <!-- Basic -->
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ICQS_Management</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    
-    <link rel="stylesheet" href="~/ICQS Management.styles.css" asp-append-version="true" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Teaser</title>
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css" />
+
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700|Raleway:400,700&display=swap" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="~/css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="~/css/responsive.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -26,11 +39,11 @@
                         <ul class="navbar-nav justify-content-between ">
                             <div class="User_option">
                             <li class="">
-                                <a class="mr-4" href="">
-
+                                <a class="mr-4" href="Authentication/LoginView">
+                                    Login
                                 </a>
-                                <a class="" href="">
-
+                                <a class="" href="Authentication/CustomerRegister">
+                                    Sign up
                                 </a>
                             </li>
                     </div>
@@ -87,22 +100,24 @@
             </div>
         </div>
     </section>
+    <!-- end slider section -->
     </div>
+
+    
+    <!-- about section -->
 
     <section class="about_section layout_padding-bottom">
         <div class="square-box">
             <img src="images/square.png" alt="">
         </div>
         <div class="container">
-            <div>
-                @RenderBody()
-                @RenderSection("scripts", required: false)
-            </div>
-
+            @RenderBody()
+            @RenderSection("scripts", required: false)
         </div>
     </section>
 
-    <!-- end about section -->
+
+    <!-- end info_section -->
     <!-- footer section -->
     <section class="container-fluid footer_section ">
         <div class="container">

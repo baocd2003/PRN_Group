@@ -42,7 +42,7 @@ namespace ICQS_Management.Pages.Admin_View
                     UserId = User.UserId,
                     Email = User.Email,
                     Name = User.Name,
-                    Id = User.UserId,
+                    StaffId = User.UserId,
                     Password = User.Password,
                     PhoneNumber = User.PhoneNumber,
                 };
@@ -58,7 +58,7 @@ namespace ICQS_Management.Pages.Admin_View
                     UserId = User.UserId,
                     Email = User.Email,
                     Name = User.Name,
-                    Id = User.UserId,
+                    CustomerId = User.UserId,
                     Password = User.Password,
                     PhoneNumber = User.PhoneNumber,
                 };

@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.Admin_View
 {
     public class DeleteModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private readonly IBaseRepository<User> _baseRepository;
 
-        public DeleteModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public DeleteModel(IBaseRepository<User> baseRepository)
         {
-            _context = context;
+            _baseRepository = baseRepository;
         }
 
         [BindProperty]
@@ -29,7 +30,7 @@ namespace ICQS_Management.Pages.Admin_View
                 return NotFound();
             }
 
-            User = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            User = _baseRepository.GetById(id);
 
             if (User == null)
             {
@@ -45,12 +46,12 @@ namespace ICQS_Management.Pages.Admin_View
                 return NotFound();
             }
 
-            User = await _context.Users.FindAsync(id);
+            User = _baseRepository.GetById(id);
 
             if (User != null)
             {
-                _context.Users.Remove(User);
-                await _context.SaveChangesAsync();
+                _baseRepository.Delete(User.UserId);
+                _baseRepository.Save();
             }
 
             return RedirectToPage("./Index");

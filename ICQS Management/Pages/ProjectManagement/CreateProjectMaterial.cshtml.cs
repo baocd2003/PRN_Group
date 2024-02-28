@@ -17,7 +17,6 @@ namespace ICQS_Management.Pages.ProjectManagement
         private IMaterialManagementRepository _mMRepository = new MaterialManagementRepository();
         private IProjectManagementRepository _projectManagementRepository = new ProjectManagementRepository();
 
-
         [BindProperty]
         public ProjectMaterial ProjectMaterial { get; set; } = default!;
         [BindProperty]

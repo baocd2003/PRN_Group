@@ -14,5 +14,6 @@ namespace Repository.Interface
         public void CreateBatchDetails(BatchDetail batchDetail);
         public List<BatchDetail> GetBatchDetailsByBatchId(Guid batchId);
         public void AddMoreDetailsInBatch(List<BatchDetail> batchDetails);
+        public Batch GetBatchById(Guid batchId);
     }
 }

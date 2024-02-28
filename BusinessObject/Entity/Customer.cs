@@ -10,6 +10,7 @@ namespace BussinessObject.Entity
     {
 
         public Guid CustomerId { get; set; }
+        public ICollection<Quotation> Quotations { get; set; }
 
     }
 }

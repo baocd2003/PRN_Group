@@ -21,24 +21,23 @@ namespace ICQS_Management.Pages.QuotationManagement
         }
 
         [BindProperty]
-        public Quotation Quotation { get; set; } = default!;
+        public Quotation Quotation { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null || _context.Quotations == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var quotation =  await _context.Quotations.FirstOrDefaultAsync(m => m.QuotationId == id);
-            if (quotation == null)
+            Quotation = await _context.Quotations
+                .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
+
+            if (Quotation == null)
             {
                 return NotFound();
             }
-            Quotation = quotation;
-           ViewData["CustomerId"] = new SelectList(_context.Customers, "UserId", "Discriminator");
            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "Description");
-           ViewData["StaffID"] = new SelectList(_context.Staffs, "UserId", "Discriminator");
             return Page();
         }
 
@@ -74,7 +73,7 @@ namespace ICQS_Management.Pages.QuotationManagement
 
         private bool QuotationExists(Guid id)
         {
-          return (_context.Quotations?.Any(e => e.QuotationId == id)).GetValueOrDefault();
+            return _context.Quotations.Any(e => e.QuotationId == id);
         }
     }
 }

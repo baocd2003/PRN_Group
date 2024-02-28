@@ -43,9 +43,44 @@ namespace ICQS_Management.Pages.QuotationManagement
 
         // Project properties
         [BindProperty]
+        [Required]
+        public string ProjectName { get; set; } = default!;
+        [BindProperty]
+        [Required]
+        public string Description { get; set; } = default!;
+        [BindProperty]
+        [Required(ErrorMessage = "Area per floor field is required!")]
+        public int AreaPerFloor { get; set; } = default!;
+        [BindProperty]
+        [Required(ErrorMessage = "Number of floors field is required!")]
+        public int NumOfFloors { get; set; } = default!;
+        private Project NewProject { get; set; } = new Project();
+
+        ///////////////////////////////////////////////////////////////
+        // Project Material Properties
+        public class NewProjectMaterial
+        {
+            public Guid MaterialId { get; set; } = default!;
+            public int Quantity { get; set; } = default!;
+
+        }
+        [BindProperty]
+        [Required]
+        public IList<NewProjectMaterial> NewProjectMaterials { get; set; } = default!;
+        private IList<ProjectMaterial> CreatedProjectMaterials { get; set; } = new List<ProjectMaterial>();
+
+
+        //////////////////////////////////////////////////////////////////////
+        // Quotation properties
+        [BindProperty]
         public DateTime RequestDate { get; set; } = default!;
         [BindProperty]
         public float EstimatePrice { get; set; } = default!;
+        private Quotation CreatedQuotation { get; set; } = new Quotation();
+
+
+
+
         [BindProperty]
         public Project Project { get; set; } = default!;
         [BindProperty]
@@ -55,19 +90,54 @@ namespace ICQS_Management.Pages.QuotationManagement
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            //if (!ModelState.IsValid || Project == null || ProjectMaterials == null)
+            //if (!ModelState.IsValid)
             //{
             //    return Page();
             //}
-            
-            _context.Projects.Add(Project);
-            await _context.SaveChangesAsync();
 
-            foreach (var projectMaterial in ProjectMaterials)
+            NewProject.ProjectName = ProjectName;
+            NewProject.Description = Description;
+            NewProject.AreaPerFloor = AreaPerFloor;
+            NewProject.NumOfFloors = NumOfFloors;
+            NewProject.Status = 1;
+
+            var projectResult = _context.Projects.Add(NewProject);
+            if (projectResult == null)
             {
-                projectMaterial.ProjectId = Project.ProjectID;
-                _context.ProjectMaterials.Add(projectMaterial);
+                ModelState.AddModelError(string.Empty, "something wrong when create project");
+                return Page();
             }
+
+            foreach (var projectMaterial in NewProjectMaterials)
+            {
+                CreatedProjectMaterials.Add(new ProjectMaterial()
+                {
+                    MaterialId = projectMaterial.MaterialId,
+                    ProjectId = projectResult.Entity.ProjectID,
+                    Quantity = projectMaterial.Quantity
+                });
+            }
+            foreach (var createdPrjMaterial in CreatedProjectMaterials)
+            {
+                _context.ProjectMaterials.Add(createdPrjMaterial);
+            }
+
+            CreatedQuotation.ProjectId = projectResult.Entity.ProjectID;
+            CreatedQuotation.RequestDate = RequestDate;
+            CreatedQuotation.EstimatePrice = EstimatePrice;
+            CreatedQuotation.Status = 0;
+
+            string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
+            Customer cus = _context.Customers.FirstOrDefault(c  => c.Email == loggedEmail);
+            if (cus.Quotations == null)
+            {
+                cus.Quotations = new List<Quotation>();
+            }
+            cus.Quotations.Add(CreatedQuotation);
+
+            _context.Quotations.Add(CreatedQuotation);
+
+
             await _context.SaveChangesAsync();
 
 

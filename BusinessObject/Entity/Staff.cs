@@ -9,5 +9,7 @@ namespace BussinessObject.Entity
     public class Staff : User
     {
         public Guid StaffId { get; set; }
+        public ICollection<Quotation> Quotations { get; set; }
+
     }
 }

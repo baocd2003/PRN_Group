@@ -149,7 +149,7 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid?>("CustomerUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("EstimatePrice")
@@ -161,7 +161,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("StaffID")
+                    b.Property<Guid?>("StaffUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -169,11 +169,11 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("QuotationId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerUserId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("StaffID");
+                    b.HasIndex("StaffUserId");
 
                     b.ToTable("Quotations");
                 });
@@ -287,11 +287,10 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("BussinessObject.Entity.Quotation", b =>
                 {
-                    b.HasOne("BussinessObject.Entity.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.HasOne("BussinessObject.Entity.Customer", null)
+                        .WithMany("Quotations")
+                        .HasForeignKey("CustomerUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BussinessObject.Entity.Project", "Project")
                         .WithMany()
@@ -299,17 +298,12 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BussinessObject.Entity.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
+                    b.HasOne("BussinessObject.Entity.Staff", null)
+                        .WithMany("Quotations")
+                        .HasForeignKey("StaffUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Project");
-
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("BussinessObject.Entity.Batch", b =>
@@ -335,6 +329,16 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("BussinessObject.Entity.User", b =>
                 {
                     b.Navigation("Projects");
+                });
+
+            modelBuilder.Entity("BussinessObject.Entity.Customer", b =>
+                {
+                    b.Navigation("Quotations");
+                });
+
+            modelBuilder.Entity("BussinessObject.Entity.Staff", b =>
+                {
+                    b.Navigation("Quotations");
                 });
 #pragma warning restore 612, 618
         }

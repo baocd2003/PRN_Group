@@ -35,15 +35,9 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Quotation.Project.Description)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Quotation.Customer)
-        </dt>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Quotation.Staff)
-        </dt>
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Quotation?.QuotationId">Edit</a> |
+    <a asp-page="./Edit" asp-route-id="@Model.Quotation.QuotationId">Edit</a> |
     <a asp-page="./Index">Back to List</a>
 </div>

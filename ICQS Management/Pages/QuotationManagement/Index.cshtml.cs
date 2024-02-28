@@ -19,17 +19,12 @@ namespace ICQS_Management.Pages.QuotationManagement
             _context = context;
         }
 
-        public IList<Quotation> Quotation { get;set; } = default!;
+        public IList<Quotation> Quotation { get;set; }
 
         public async Task OnGetAsync()
         {
-            if (_context.Quotations != null)
-            {
-                Quotation = await _context.Quotations
-                .Include(q => q.Customer)
-                .Include(q => q.Project)
-                .Include(q => q.Staff).ToListAsync();
-            }
+            Quotation = await _context.Quotations
+                .Include(q => q.Project).ToListAsync();
         }
     }
 }

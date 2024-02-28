@@ -35,36 +35,35 @@
         </div>
 
         @* Project + Project Materials Detail *@
-        <input type="hidden" asp-for="Project.Status" value=1 />
         <div class="project_detail_wrapper">
             <h5 class="font-weight-bold">Project Details</h5><hr />
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="Project.ProjectName" class="control-label">My Project</label>
-                        <input asp-for="Project.ProjectName" class="form-control" />
-                        <span asp-validation-for="Project.ProjectName" class="text-danger"></span>
+                        <label asp-for="ProjectName" class="control-label">Project Name</label>
+                        <input asp-for="ProjectName" class="form-control" placeholder="Your project name.."/>
+                        <span asp-validation-for="ProjectName" class="text-danger"></span>
                     </div>
                 </div>
                  <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="Project.AreaPerFloor" class="control-label">Area per floor (m²)</label>
-                        <input asp-for="Project.AreaPerFloor" class="form-control" />
-                        <span asp-validation-for="Project.AreaPerFloor" class="text-danger"></span>
+                        <label asp-for="AreaPerFloor" class="control-label">Area per floor (m²)</label>
+                        <input asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor"/>
+                        <span asp-validation-for="AreaPerFloor" class="text-danger"></span>
                     </div>
                 </div>
                  <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="Project.NumOfFloors" class="control-label">Number of floors</label>
-                        <input asp-for="Project.NumOfFloors" class="form-control" />
-                        <span asp-validation-for="Project.NumOfFloors" class="text-danger"></span>
+                        <label asp-for="NumOfFloors" class="control-label">Number of floors</label>
+                        <input asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" />
+                        <span asp-validation-for="NumOfFloors" class="text-danger"></span>
                     </div>
                 </div>
             </div>
             <div class="form-group mb-5">
-                <label asp-for="Project.Description" class="control-label"></label>
-                <input asp-for="Project.Description" class="form-control" placeholder="Project description..."/>
-                <span asp-validation-for="Project.Description" class="text-danger"></span>
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" placeholder="Project description..." />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
             <h5 class="font-weight-bold">Materials</h5><hr />
@@ -72,11 +71,11 @@
                 @{int count = 0;}
                 @foreach (var item in Model.ProjectMaterials)
                 {
-                    <input type="hidden" asp-for="ProjectMaterials[count].MaterialId" value="@item.MaterialId"/>
+                    <input type="hidden" asp-for="NewProjectMaterials[count].MaterialId" value="@item.MaterialId" />
                     <div class="col-md-4">
                         <div class="form-group">
-                            @* <label asp-for="ProjectMaterials[count].Quantity" class="control-label">@item.Materials.Name</label> *@
-                            <input asp-for="ProjectMaterials[count].Quantity" class="form-control" value="@item.Quantity" />
+                            <label asp-for="NewProjectMaterials[count].Quantity" class="control-label">@item.Materials.Name</label>
+                            <input asp-for="NewProjectMaterials[count].Quantity" class="form-control" value="@item.Quantity" />
                             @* <span asp-validation-for="Project.Description" class="text-danger"></span> *@
                         </div>
                     </div>

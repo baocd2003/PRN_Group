@@ -68,5 +68,11 @@ namespace DataAccessLayer.Service
                 _db.SaveChanges();
             }
         }
+
+        public Batch GetBatchById(Guid batchId)
+        {
+            Batch batch = _db.Batches.FirstOrDefault(b => b.BatchId == batchId);
+            return batch;
+        }
     }
 }

@@ -17,7 +17,6 @@ namespace ICQS_Management.Pages.ProjectManagement
         private IMaterialManagementRepository _mMRepository = new MaterialManagementRepository();
         private IProjectManagementRepository _projectManagementRepository = new ProjectManagementRepository();
 
-
         [BindProperty]
         public ProjectMaterial ProjectMaterial { get; set; } = default!;
         public IActionResult OnGet(Guid ProjectId)
@@ -31,9 +30,6 @@ namespace ICQS_Management.Pages.ProjectManagement
             ViewData["MaterialId"] = new SelectList(_mMRepository.GetAllMaterials(), "MaterialId", "Name");
             return Page();
         }
-
-
-
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()

@@ -20,6 +20,9 @@ namespace Repository
         public void CreateBatchDetails(BatchDetail batchDetail)
         =>BatchManagementService.Instance.CreateBatchDetails(batchDetail);
 
+        public Batch GetBatchById(Guid batchId)
+        =>BatchManagementService.Instance.GetBatchById(batchId);
+
         public List<BatchDetail> GetBatchDetailsByBatchId(Guid batchId)
         => BatchManagementService.Instance.GetBatchDetailsByBatchId(batchId);
 

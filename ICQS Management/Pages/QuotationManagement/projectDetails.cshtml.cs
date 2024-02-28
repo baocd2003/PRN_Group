@@ -10,16 +10,16 @@ using DataAccessLayer.ApplicationDbContext;
 
 namespace ICQS_Management.Pages.QuotationManagement
 {
-    public class DetailsModel : PageModel
+    public class projectDetailsModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
 
-        public DetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public projectDetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
         }
 
-        public Quotation Quotation { get; set; }
+        public Project Project { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -28,10 +28,9 @@ namespace ICQS_Management.Pages.QuotationManagement
                 return NotFound();
             }
 
-            Quotation = await _context.Quotations
-                .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
+            Project = await _context.Projects.FirstOrDefaultAsync(m => m.ProjectID == id);
 
-            if (Quotation == null)
+            if (Project == null)
             {
                 return NotFound();
             }

@@ -12,15 +12,11 @@ namespace BussinessObject.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid QuotationId { get; set; }
         public Guid ProjectId { get; set; }
-        public Guid CustomerId { get; set; }
-        public Guid StaffID { get; set; } 
         //public int TotalArea { get; set; }
         public DateTime RequestDate { get; set; }
         public double EstimatePrice { get; set; }
         public int Status { get; set; }
         public virtual Project Project { get; set; } = null!;
-        public virtual Customer Customer { get; set; } = null!;
-        public virtual Staff Staff { get; set; } = null!;
         public virtual ICollection<Batch> Batchs { get; set; }
     }
 }

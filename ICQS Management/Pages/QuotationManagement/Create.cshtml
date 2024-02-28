@@ -5,52 +5,97 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<div class="wrapper">
+    <h4 class="font-weight-bold">Creating new quotation</h4>
+    <hr />
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label fw-bold">Prototype</label>
+                    @* <select asp-for="Quotation.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select> *@
+                    <input class="form-control" readonly value="@Html.DisplayFor(model => model.Project.ProjectName)" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="RequestDate" class="control-label fw-bold">Request Date</label>
+                    <input asp-for="RequestDate" class="form-control" readonly value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")">
+                    <span asp-validation-for="RequestDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="EstimatePrice" class="control-label fw-bold">Estimated Price</label>
+                    <input asp-for="EstimatePrice" class="form-control" readonly placeholder="..." value=0/>
+                    <span asp-validation-for="EstimatePrice" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
 
-<h4>Quotation</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Quotation.ProjectId" class="control-label"></label>
-                <select asp-for="Quotation.ProjectId" class ="form-control" asp-items="ViewBag.ProjectId"></select>
+        @* Project + Project Materials Detail *@
+        <div class="project_detail_wrapper">
+            <h5 class="font-weight-bold">Project Details</h5><hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ProjectName" class="control-label">Project Name</label>
+                        <input asp-for="ProjectName" class="form-control" placeholder="Your project name.."/>
+                        <span asp-validation-for="ProjectName" class="text-danger"></span>
+                    </div>
+                </div>
+                 <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="AreaPerFloor" class="control-label">Area per floor (m²)</label>
+                        <input asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor"/>
+                        <span asp-validation-for="AreaPerFloor" class="text-danger"></span>
+                    </div>
+                </div>
+                 <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="NumOfFloors" class="control-label">Number of floors</label>
+                        <input asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" />
+                        <span asp-validation-for="NumOfFloors" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Quotation.CustomerId" class="control-label"></label>
-                <select asp-for="Quotation.CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
+            <div class="form-group mb-5">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" placeholder="Project description..." />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Quotation.StaffID" class="control-label"></label>
-                <select asp-for="Quotation.StaffID" class ="form-control" asp-items="ViewBag.StaffID"></select>
+
+            <h5 class="font-weight-bold">Materials</h5><hr />
+            <div class="row">
+                @{int count = 0;}
+                @foreach (var item in Model.ProjectMaterials)
+                {
+                    <input type="hidden" asp-for="NewProjectMaterials[count].MaterialId" value="@item.MaterialId" />
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="NewProjectMaterials[count].Quantity" class="control-label">@item.Materials.Name</label>
+                            <input asp-for="NewProjectMaterials[count].Quantity" class="form-control" value="@item.Quantity" />
+                            @* <span asp-validation-for="Project.Description" class="text-danger"></span> *@
+                        </div>
+                    </div>
+                    count++;
+                }
             </div>
-            <div class="form-group">
-                <label asp-for="Quotation.RequestDate" class="control-label"></label>
-                <input asp-for="Quotation.RequestDate" class="form-control" />
-                <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quotation.EstimatePrice" class="control-label"></label>
-                <input asp-for="Quotation.EstimatePrice" class="form-control" />
-                <span asp-validation-for="Quotation.EstimatePrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quotation.Status" class="control-label"></label>
-                <input asp-for="Quotation.Status" class="form-control" />
-                <span asp-validation-for="Quotation.Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+            
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
-<div>
+@* <div>
     <a asp-page="Index">Back to List</a>
-</div>
+</div> *@
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -11,17 +11,17 @@ using DataAccessLayer.ApplicationDbContext;
 
 namespace ICQS_Management.Pages.QuotationManagement
 {
-    public class EditModel : PageModel
+    public class projectMaterialEditModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
 
-        public EditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public projectMaterialEditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Quotation Quotation { get; set; }
+        public ProjectMaterial ProjectMaterial { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -30,13 +30,15 @@ namespace ICQS_Management.Pages.QuotationManagement
                 return NotFound();
             }
 
-            Quotation = await _context.Quotations
-                .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
+            ProjectMaterial = await _context.ProjectMaterials
+                .Include(p => p.Materials)
+                .Include(p => p.Projects).FirstOrDefaultAsync(m => m.ProjectMaterialId == id);
 
-            if (Quotation == null)
+            if (ProjectMaterial == null)
             {
                 return NotFound();
             }
+           ViewData["MaterialId"] = new SelectList(_context.Materials, "MaterialId", "Name");
            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "Description");
             return Page();
         }
@@ -50,7 +52,7 @@ namespace ICQS_Management.Pages.QuotationManagement
                 return Page();
             }
 
-            _context.Attach(Quotation).State = EntityState.Modified;
+            _context.Attach(ProjectMaterial).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +60,7 @@ namespace ICQS_Management.Pages.QuotationManagement
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!QuotationExists(Quotation.QuotationId))
+                if (!ProjectMaterialExists(ProjectMaterial.ProjectMaterialId))
                 {
                     return NotFound();
                 }
@@ -71,9 +73,9 @@ namespace ICQS_Management.Pages.QuotationManagement
             return RedirectToPage("./Index");
         }
 
-        private bool QuotationExists(Guid id)
+        private bool ProjectMaterialExists(Guid id)
         {
-            return _context.Quotations.Any(e => e.QuotationId == id);
+            return _context.ProjectMaterials.Any(e => e.ProjectMaterialId == id);
         }
     }
 }

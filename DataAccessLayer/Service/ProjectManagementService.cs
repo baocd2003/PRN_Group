@@ -32,7 +32,7 @@ public class ProjectManagementService : applicationDbContext
     }
     public IEnumerable<Project> GetAllProjects()
     {
-        return this.Projects.ToList();
+        return this.Projects.Where(p => p.Status == 0).ToList();
     }
 
     public Project GetProjectById(Guid id)

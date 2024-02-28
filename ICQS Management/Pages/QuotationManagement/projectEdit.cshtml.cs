@@ -11,17 +11,17 @@ using DataAccessLayer.ApplicationDbContext;
 
 namespace ICQS_Management.Pages.QuotationManagement
 {
-    public class EditModel : PageModel
+    public class projectEditModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
 
-        public EditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public projectEditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Quotation Quotation { get; set; }
+        public Project Project { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -30,14 +30,12 @@ namespace ICQS_Management.Pages.QuotationManagement
                 return NotFound();
             }
 
-            Quotation = await _context.Quotations
-                .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
+            Project = await _context.Projects.FirstOrDefaultAsync(m => m.ProjectID == id);
 
-            if (Quotation == null)
+            if (Project == null)
             {
                 return NotFound();
             }
-           ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "Description");
             return Page();
         }
 
@@ -50,7 +48,7 @@ namespace ICQS_Management.Pages.QuotationManagement
                 return Page();
             }
 
-            _context.Attach(Quotation).State = EntityState.Modified;
+            _context.Attach(Project).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +56,7 @@ namespace ICQS_Management.Pages.QuotationManagement
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!QuotationExists(Quotation.QuotationId))
+                if (!ProjectExists(Project.ProjectID))
                 {
                     return NotFound();
                 }
@@ -71,9 +69,9 @@ namespace ICQS_Management.Pages.QuotationManagement
             return RedirectToPage("./Index");
         }
 
-        private bool QuotationExists(Guid id)
+        private bool ProjectExists(Guid id)
         {
-            return _context.Quotations.Any(e => e.QuotationId == id);
+            return _context.Projects.Any(e => e.ProjectID == id);
         }
     }
 }

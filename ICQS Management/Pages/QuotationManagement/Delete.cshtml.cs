@@ -20,39 +20,36 @@ namespace ICQS_Management.Pages.QuotationManagement
         }
 
         [BindProperty]
-      public Quotation Quotation { get; set; } = default!;
+        public Quotation Quotation { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null || _context.Quotations == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var quotation = await _context.Quotations.FirstOrDefaultAsync(m => m.QuotationId == id);
+            Quotation = await _context.Quotations
+                .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
 
-            if (quotation == null)
+            if (Quotation == null)
             {
                 return NotFound();
-            }
-            else 
-            {
-                Quotation = quotation;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(Guid? id)
         {
-            if (id == null || _context.Quotations == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var quotation = await _context.Quotations.FindAsync(id);
 
-            if (quotation != null)
+            Quotation = await _context.Quotations.FindAsync(id);
+
+            if (Quotation != null)
             {
-                Quotation = quotation;
                 _context.Quotations.Remove(Quotation);
                 await _context.SaveChangesAsync();
             }

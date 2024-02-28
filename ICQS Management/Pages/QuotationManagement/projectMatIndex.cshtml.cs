@@ -10,21 +10,22 @@ using DataAccessLayer.ApplicationDbContext;
 
 namespace ICQS_Management.Pages.QuotationManagement
 {
-    public class IndexModel : PageModel
+    public class projectMatIndexModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
 
-        public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public projectMatIndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
         }
 
-        public IList<Quotation> Quotation { get;set; }
+        public IList<ProjectMaterial> ProjectMaterial { get;set; }
 
         public async Task OnGetAsync()
         {
-            Quotation = await _context.Quotations
-                .Include(q => q.Project).ToListAsync();
+            ProjectMaterial = await _context.ProjectMaterials
+                .Include(p => p.Materials)
+                .Include(p => p.Projects).ToListAsync();
         }
     }
 }

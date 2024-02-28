@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository.Interface;
@@ -12,27 +13,41 @@ using Repository;
 
 namespace ICQS_Management.Pages.ProjectManagement
 {
-    public class CreateModel : PageModel
+    public class EditProjectModel : PageModel
     {
         private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
 
         [BindProperty]
-        public Project Project { get; set; } = default!;
+        public Project Project { get; set; }
         [BindProperty]
         public string message { get; set; } = string.Empty;
 
+        public IActionResult OnGet(Guid id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Project = _pmRepository.GetProjectById(id);
+            if (Project == null)
+            {
+                return NotFound();
+            }
+            return Page();
+        }
         public IActionResult OnPost()
         {
             if (Project != null)
             {
-                if(_pmRepository.checkUpdatedProjectExist(Project))
+                if (_pmRepository.checkUpdatedProjectExist(Project))
                 {
                     ModelState.AddModelError("Project.ProjectName", "Project Name already exists!");
                     return Page();
                 }
                 Project.Status = 0;
-                _pmRepository.AddProject(Project);
-                message = "Add successfully.";
+                _pmRepository.UpdateProject(Project);
+                message = "Update successfully.";
                 return Page();
             }
             return Page();

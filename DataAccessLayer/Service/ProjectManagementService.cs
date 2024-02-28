@@ -51,4 +51,38 @@ public class ProjectManagementService : applicationDbContext
         this.ProjectMaterials.Add(projetMaterial);
         this.SaveChanges();
     }
+    public bool checkProjectExist(Project project)
+    {
+        return (GetAllProjects().Where(p => (p.ProjectName.Equals(project.ProjectName))).Count() > 0);
+    }
+    public bool checkUpdatedProjectExist(Project project)
+    {
+        var allProjects = GetAllProjects();
+        return allProjects.Any(p => p.ProjectName == project.ProjectName && p.ProjectID != project.ProjectID);
+    }
+    public void UpdateProject(Project project)
+    {
+        var updatedProject = GetProjectById(project.ProjectID);
+        if (updatedProject != null)
+        {
+            updatedProject.ProjectName = project.ProjectName;
+            updatedProject.AreaPerFloor = project.AreaPerFloor;
+            updatedProject.NumOfFloors = project.NumOfFloors;
+            updatedProject.Description = project.Description;
+            updatedProject.Status = project.Status;
+            this.SaveChanges(true);
+        }
+    }
+    public IEnumerable<ProjectMaterial> GetAllProjectMaterial()
+    {
+        return this.ProjectMaterials.ToList();
+    }
+    public IEnumerable<ProjectMaterial> GetProjectMaterialByProjectId(Guid projectID)
+    {
+        return this.ProjectMaterials.Where(pm => pm.ProjectId == projectID).ToList();
+    }
+    public ProjectMaterial GetProjectMaterialByProjectMaterialId(Guid projectMaterialID)
+    {
+        return this.ProjectMaterials.FirstOrDefault(p => p.ProjectMaterialId.Equals(projectMaterialID));
+    }
 }

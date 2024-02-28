@@ -1,0 +1,50 @@
+﻿@page
+@model ICQS_Management.Pages.ProjectManagement.ProjectMaterialListModel
+
+@{
+    ViewData["Title"] = "ProjectMaterialList";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1 style="margin-bottom: 2vh; text-align: center">Project Material Management</h1>
+
+<p>
+    @if (Model.Status == 0)
+    {
+        <a asp-page="./CreateProjectMaterial" asp-route-Projectid="@Model.ProjectId" class="btn btn-primary">Create New</a>
+    }
+    <a asp-page="Index" class="btn btn-primary">Back to Project List</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectMaterialList[0].MaterialName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectMaterialList[0].Quantity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProjectMaterialList)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaterialName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                    @if (Model.Status == 0)
+                    {
+                        <a asp-page="./ProjectMaterialDetail" asp-route-id="@item.ProjectMaterialId" class="btn btn-primary" style="width: 40%; text-align: center">Edit</a>
+                    }
+                    <a asp-page="./Delete" asp-route-id="@item.ProjectMaterialId" class="btn btn-primary" style="width: 40%; text-align: center">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -24,7 +24,7 @@ namespace ICQS_Management.Pages.Authentication
                 if (loginDTO.password.Equals(password))
                 {
                     HttpContext.Session.SetString("LoggedEmail", loginDTO.email);
-                    return RedirectToPage("Admin_View/Index");
+                    return RedirectToPage("/Admin_View/Index");
                 }
             }
             var user = await _authRepository.Login(loginDTO);

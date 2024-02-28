@@ -26,7 +26,7 @@
             <input type="hidden" asp-for="ProjectMaterialList.ProjectId" />
             <div class="form-group">
                 <label asp-for="ProjectMaterialList.MaterialName" class="control-label"></label>
-                <input asp-for="ProjectMaterialList.MaterialName" class="form-control" />
+                <select asp-for="ProjectMaterialList.MaterialName" class="form-control" asp-items="ViewBag.MaterialName"></select>
                 <span asp-validation-for="ProjectMaterialList.MaterialName" class="text-danger"></span>
             </div>
             <div class="form-group">

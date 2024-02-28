@@ -20,9 +20,13 @@ namespace ICQS_Management.Pages.ProjectManagement
 
         [BindProperty]
         public ProjectMaterial ProjectMaterial { get; set; } = default!;
+        [BindProperty]
+        public string projectName { get; set; }
+        [BindProperty]
+        public bool IsAddMoreMaterial { get; set; }
         public IActionResult OnGet(Guid ProjectId)
         {
-            //ProjectMaterial.ProjectId = ProjectId;
+            projectName = _projectManagementRepository.GetProjectById(ProjectId).ProjectName;
             var ProjId = new ProjectMaterial
             {
                 ProjectId = ProjectId,
@@ -32,13 +36,14 @@ namespace ICQS_Management.Pages.ProjectManagement
             return Page();
         }
 
-
-
-
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPostAsync()
         {
             _projectManagementRepository.AddProjectMaterial(ProjectMaterial);
+            if(IsAddMoreMaterial)
+            {
+                return RedirectToPage("./CreateProjectMaterial", new { ProjectId = ProjectMaterial.ProjectId });
+            }
             return RedirectToPage("./Index");
         }
     }

@@ -21,6 +21,21 @@ public class ProjectManagementRepository : IProjectManagementRepository
         ProjectManagementService.Instance.AddProjectMaterial(projetMaterial);
     }
 
+    public bool checkProjectExist(Project project)
+    {
+        return ProjectManagementService.Instance.checkProjectExist(project);
+    }
+
+    public bool checkUpdatedProjectExist(Project project)
+    {
+        return ProjectManagementService.Instance.checkUpdatedProjectExist(project);
+    }
+
+    public IEnumerable<ProjectMaterial> GetAllProjectMaterial()
+    {
+        return ProjectManagementService.Instance.GetAllProjectMaterial();
+    }
+
     public IEnumerable<Project> GetAllProjects()
     {
         return ProjectManagementService.Instance.GetAllProjects();
@@ -29,5 +44,20 @@ public class ProjectManagementRepository : IProjectManagementRepository
     public Project GetProjectById(Guid id)
     {
         return ProjectManagementService.Instance.GetProjectById(id);
+    }
+
+    public IEnumerable<ProjectMaterial> GetProjectMaterialByProjectId(Guid projectID)
+    {
+        return ProjectManagementService.Instance.GetProjectMaterialByProjectId(projectID);
+    }
+
+    public ProjectMaterial GetProjectMaterialByProjectMaterialId(Guid projectMaterialID)
+    {
+        return ProjectManagementService.Instance.GetProjectMaterialByProjectMaterialId(projectMaterialID);
+    }
+
+    public void UpdateProject(Project project)
+    {
+        ProjectManagementService.Instance.UpdateProject(project);
     }
 }

@@ -6,10 +6,10 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1 style="margin-bottom: 2vh; text-align: center">Project Management</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-primary">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -19,6 +19,15 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Project[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].AreaPerFloor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].NumOfFloors)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].Status)
             </th>
             <th></th>
         </tr>
@@ -33,11 +42,25 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.ProjectID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ProjectID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ProjectID">Delete</a>  |
-                <a asp-page="../QuotationManagement/Create" asp-route-id="@item.ProjectID">CreateQuotation</a>
 
+                @Html.DisplayFor(modelItem => item.AreaPerFloor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumOfFloors)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td style="display: flex; justify-content: space-evenly; border-bottom: 0">
+                @if (item.Status == 0)
+                {
+                    <a asp-page="./EditProject" asp-route-id="@item.ProjectID" class="btn btn-primary" style="width: 30%; text-align: center">Edit</a>
+                }
+                    <a asp-page="./ProjectMaterialList" asp-route-id="@item.ProjectID" asp-route-status="@item.Status" class="btn btn-primary" style="width: 30%; text-align: center">Details</a>
+                @if (item.Status == 0)
+                {
+                    <a asp-page="./Delete" asp-route-id="@item.ProjectID" class="btn btn-danger" style="width: 30%; text-align: center">Delete</a>
+                }
             </td>
         </tr>
 }

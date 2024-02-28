@@ -13,4 +13,10 @@ public interface IProjectManagementRepository
     Project GetProjectById(Guid id);
     Project AddProject(Project project);
     void AddProjectMaterial(ProjectMaterial projetMaterial);
+    bool checkProjectExist(Project project);
+    bool checkUpdatedProjectExist(Project project);
+    void UpdateProject(Project project);
+    IEnumerable<ProjectMaterial> GetAllProjectMaterial();
+    IEnumerable<ProjectMaterial> GetProjectMaterialByProjectId(Guid projectID);
+    ProjectMaterial GetProjectMaterialByProjectMaterialId(Guid projectMaterialID);
 }

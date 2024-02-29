@@ -61,6 +61,10 @@
                 {
                     <a asp-page="./Delete" asp-route-id="@item.ProjectID" class="btn btn-danger" style="width: 30%; text-align: center">Delete</a>
                 }
+                    @if (item.Status == 0)
+                    {
+                        <a asp-page="../QuotationManagement/Create" asp-route-id="@item.ProjectID" class="btn btn-danger" style="width: 30%; text-align: center">Create Quotation</a>
+                    }
             </td>
         </tr>
 }

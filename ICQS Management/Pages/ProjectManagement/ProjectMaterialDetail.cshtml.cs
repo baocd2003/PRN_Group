@@ -11,6 +11,7 @@ using Repository.Interface;
 using Repository;
 using static ICQS_Management.Pages.ProjectManagement.ProjectMaterialListModel;
 using Microsoft.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ICQS_Management.Pages.ProjectManagement
 {
@@ -29,7 +30,7 @@ namespace ICQS_Management.Pages.ProjectManagement
             ProjectId = id;
             var projectMaterial = _pmRepository.GetProjectMaterialByProjectMaterialId(id);
             var materials = _materialRepository.GetAllMaterials();
-
+            ViewData["MaterialName"] = new SelectList(_materialRepository.GetAllMaterials(), "Name", "Name");
             if (projectMaterial != null)
             {
                 ProjectMaterialList = new ProjectMaterialCombined

@@ -7,9 +7,10 @@
 }
 
 <h1 style="margin-bottom: 2vh; text-align: center">Project Material Management</h1>
+<h3 style="margin-bottom: 2vh; text-align: center">Project Name: @Model.ProjectName</h3>
 
 <p>
-    @if (Model.Status == 0)
+    @if (Model.Status == 1)
     {
         <a asp-page="./CreateProjectMaterial" asp-route-Projectid="@Model.ProjectId" class="btn btn-primary">Create New</a>
     }
@@ -38,11 +39,11 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                    @if (Model.Status == 0)
-                    {
-                        <a asp-page="./ProjectMaterialDetail" asp-route-id="@item.ProjectMaterialId" class="btn btn-primary" style="width: 40%; text-align: center">Edit</a>
-                    }
-                    <a asp-page="./Delete" asp-route-id="@item.ProjectMaterialId" class="btn btn-primary" style="width: 40%; text-align: center">Delete</a>
+                @if (Model.Status == 1)
+                {
+                    <a asp-page="./ProjectMaterialDetail" asp-route-id="@item.ProjectMaterialId" class="btn btn-primary" style="width: 40%; text-align: center">Edit</a>
+                }
+                <a asp-page="./DeleteProjectMaterial" asp-route-id="@item.ProjectMaterialId" class="btn btn-danger" style="width: 40%; text-align: center">Delete</a>
             </td>
         </tr>
 }

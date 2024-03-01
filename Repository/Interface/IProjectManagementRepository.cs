@@ -19,4 +19,7 @@ public interface IProjectManagementRepository
     IEnumerable<ProjectMaterial> GetAllProjectMaterial();
     IEnumerable<ProjectMaterial> GetProjectMaterialByProjectId(Guid projectID);
     ProjectMaterial GetProjectMaterialByProjectMaterialId(Guid projectMaterialID);
+    void ChangeProjectStatus(Project project);
+    void UpdateProjectMaterial(ProjectMaterial projectMaterial);
+    void DeleteProjectMaterial(Guid projectMaterialID);
 }

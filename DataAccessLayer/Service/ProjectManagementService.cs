@@ -32,7 +32,7 @@ public class ProjectManagementService : applicationDbContext
     }
     public IEnumerable<Project> GetAllProjects()
     {
-        return this.Projects.Where(p => p.Status == 0).ToList();
+        return this.Projects.ToList();
     }
 
     public Project GetProjectById(Guid id)
@@ -84,5 +84,34 @@ public class ProjectManagementService : applicationDbContext
     public ProjectMaterial GetProjectMaterialByProjectMaterialId(Guid projectMaterialID)
     {
         return this.ProjectMaterials.FirstOrDefault(p => p.ProjectMaterialId.Equals(projectMaterialID));
+    }
+    public void ChangeProjectStatus(Project project)
+    {
+        if(project.Status == 1)
+        {
+            project.Status = 0;
+        }else if(project.Status == 0) {
+            project.Status = 1;
+        }
+        this.SaveChanges();
+    }
+    public void UpdateProjectMaterial(ProjectMaterial projectMaterial)
+    {
+        var updatedProjectMaterial = GetProjectMaterialByProjectMaterialId(projectMaterial.ProjectMaterialId);
+        if(updatedProjectMaterial != null)
+        {
+            updatedProjectMaterial.MaterialId = projectMaterial.MaterialId;
+            updatedProjectMaterial.Quantity = projectMaterial.Quantity;
+            this.SaveChanges();
+        }
+    }
+    public void DeleteProjectMaterial(Guid projectMaterialID)
+    {
+        var deletedProjectMaterial = GetProjectMaterialByProjectMaterialId(projectMaterialID);
+        if(deletedProjectMaterial != null)
+        {
+            this.ProjectMaterials.Remove(deletedProjectMaterial);
+            this.SaveChanges();
+        }
     }
 }

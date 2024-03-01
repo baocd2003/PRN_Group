@@ -9,6 +9,8 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.BatchDetailsManagement
 {
@@ -16,6 +18,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
         private BatchManagementRepository _repo = new BatchManagementRepository();
+        private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
         public CreateModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
@@ -23,8 +26,10 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 
         public IActionResult OnGet()
         {
-       ;
-        ViewData["MaterialId"] = new SelectList(_context.Materials, "MaterialId", "Name");
+            ImportDate = DateTime.Parse(HttpContext.Session.GetString("ImportDate"));
+            string detailListJson = HttpContext.Session.GetString("detailList");
+            List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
+            ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
             return Page();
         }
 
@@ -47,15 +52,23 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             var continueCheckbox = Request.Form["continueCheckbox"];
             if (!string.IsNullOrEmpty(continueCheckbox))
             {
-                ViewData["MaterialId"] = new SelectList(_context.Materials, "MaterialId", "Name");
+                ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
                 string detailList = JsonConvert.SerializeObject(batchDetails);
                 HttpContext.Session.SetString("detailList", detailList);
+                if (!_materialRepo.GetOthersMaterial(batchDetails).Any())
+                {
+                    HttpContext.Session.SetString("detailList", detailList);
+                    //HttpContext.Session.Remove("ImportDate");
+                    return RedirectToPage("./CheckOutBatch");
+                }
                 return Page();
             }else
             {
-                _repo.CreateBatch(ImportDate, batchDetails);
-                HttpContext.Session.Remove("ImportDate");
-                return RedirectToPage("./Index");
+                //_repo.CreateBatch(ImportDate, batchDetails);
+                string detailList = JsonConvert.SerializeObject(batchDetails);
+                HttpContext.Session.SetString("detailList", detailList);
+                //HttpContext.Session.Remove("ImportDate");
+                return RedirectToPage("./CheckOutBatch");
             }
            
         }

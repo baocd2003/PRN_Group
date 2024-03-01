@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository;
 
 namespace ICQS_Management.Pages.BatchsManagement
 {
     public class EditModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private BatchManagementRepository _repo = new BatchManagementRepository();
 
         public EditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
@@ -25,12 +27,12 @@ namespace ICQS_Management.Pages.BatchsManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null || _context.Batches == null)
+            if (id == null )
             {
                 return NotFound();
             }
 
-            var batch =  await _context.Batches.FirstOrDefaultAsync(m => m.BatchId == id);
+            var batch = _repo.GetBatchById((Guid)id);
             if (batch == null)
             {
                 return NotFound();

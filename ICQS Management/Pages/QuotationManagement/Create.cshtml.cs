@@ -78,9 +78,6 @@ namespace ICQS_Management.Pages.QuotationManagement
         public float EstimatePrice { get; set; } = default!;
         private Quotation CreatedQuotation { get; set; } = new Quotation();
 
-
-
-
         [BindProperty]
         public Project Project { get; set; } = default!;
         [BindProperty]

@@ -34,4 +34,13 @@ public class MaterialManagementService : applicationDbContext
     {
         return this.Materials.ToList();
     }
+
+    public IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails)
+    {
+        var selectedMaterials = batchDetails.Select(b => b.MaterialId);
+
+        var otherMaterials = this.Materials.Where(m => !selectedMaterials.Contains(m.MaterialId));
+
+        return otherMaterials;
+    }
 }

@@ -15,4 +15,9 @@ public class MaterialManagementRepository : IMaterialManagementRepository
     {
         return MaterialManagementService.Instance.GetAllMaterials();
     }
+
+    public IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails)
+    {
+        return MaterialManagementService.Instance.GetOthersMaterial(batchDetails);
+    }
 }

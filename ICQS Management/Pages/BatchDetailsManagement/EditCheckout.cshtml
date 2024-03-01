@@ -1,11 +1,11 @@
 ﻿@page
-@model ICQS_Management.Pages.BatchDetailsManagement.EditModel
+@model ICQS_Management.Pages.BatchDetailsManagement.EditCheckoutModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "EditCheckout";
 }
 
-<h1>Edit</h1>
+<h1>EditCheckout</h1>
 
 <h4>BatchDetail</h4>
 <hr />
@@ -23,6 +23,16 @@
                 <label asp-for="BatchDetail.Price" class="control-label"></label>
                 <input asp-for="BatchDetail.Price" class="form-control" />
                 <span asp-validation-for="BatchDetail.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BatchDetail.BatchId" class="control-label"></label>
+                <select asp-for="BatchDetail.BatchId" class="form-control" asp-items="ViewBag.BatchId"></select>
+                <span asp-validation-for="BatchDetail.BatchId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BatchDetail.MaterialId" class="control-label"></label>
+                <select asp-for="BatchDetail.MaterialId" class="form-control" asp-items="ViewBag.MaterialId"></select>
+                <span asp-validation-for="BatchDetail.MaterialId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

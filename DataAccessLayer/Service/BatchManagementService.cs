@@ -74,5 +74,18 @@ namespace DataAccessLayer.Service
             Batch batch = _db.Batches.FirstOrDefault(b => b.BatchId == batchId);
             return batch;
         }
+
+        public void UpdateBatchDetail(BatchDetail batchDetail)
+        {
+            BatchDetail selectedDetail = _db.BatchDetails.FirstOrDefault(bd => bd.BatchDetailId == batchDetail.BatchDetailId);
+            if (selectedDetail != null)
+            {
+                selectedDetail.Price = batchDetail.Price;
+                selectedDetail.Quantity = batchDetail.Quantity;
+            }
+            _db.SaveChanges();
+        }
+
+        
     }
 }

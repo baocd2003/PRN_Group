@@ -29,7 +29,7 @@ namespace Repository
         public Batch GetLastBatch()
         =>BatchManagementService.Instance.GetLastBatch();
 
-
-
+        public void UpdateBatchDetail(BatchDetail batchDetail)
+        =>BatchManagementService.Instance.UpdateBatchDetail(batchDetail);
     }
 }

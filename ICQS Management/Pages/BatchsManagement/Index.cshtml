@@ -16,9 +16,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Batch[0].ImportDate)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Batch[0].AdminId)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -27,12 +24,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ImportDate)
-            </td>
+            </td>                    
             <td>
-                @Html.DisplayFor(modelItem => item.AdminId)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.BatchId">Edit</a> |
+                <a asp-page="./Edit" asp-route-id="@item.BatchId">Edit</a> |       
                 <a asp-page="./Details" asp-route-id="@item.BatchId">Details</a> |
                 <a asp-page="./Delete" asp-route-id="@item.BatchId">Delete</a>
             </td>

@@ -10,4 +10,5 @@ namespace Repository.Interface;
 public interface IMaterialManagementRepository
 {
     IEnumerable<Material> GetAllMaterials();
+    IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails);
 }

@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository;
 
 namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class EditModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private BatchManagementRepository _repo = new BatchManagementRepository();
 
         public EditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
@@ -25,10 +27,6 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null || _context.BatchDetails == null)
-            {
-                return NotFound();
-            }
 
             var batchdetail =  await _context.BatchDetails.FirstOrDefaultAsync(m => m.BatchDetailId == id);
             if (batchdetail == null)
@@ -36,8 +34,6 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                 return NotFound();
             }
             BatchDetail = batchdetail;
-           ViewData["BatchId"] = new SelectList(_context.Batches, "BatchId", "BatchId");
-           ViewData["MaterialId"] = new SelectList(_context.Materials, "MaterialId", "Name");
             return Page();
         }
 
@@ -45,35 +41,8 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(BatchDetail).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BatchDetailExists(BatchDetail.BatchDetailId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool BatchDetailExists(Guid id)
-        {
-          return (_context.BatchDetails?.Any(e => e.BatchDetailId == id)).GetValueOrDefault();
+            _repo.UpdateBatchDetail(BatchDetail);
+            return RedirectToPage("/BatchsManagement/Index");
         }
     }
 }

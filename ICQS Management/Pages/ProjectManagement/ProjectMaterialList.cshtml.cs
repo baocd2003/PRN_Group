@@ -17,6 +17,7 @@ namespace ICQS_Management.Pages.ProjectManagement
     {
         private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
         private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
+        [BindProperty]
         public List<ProjectMaterialDTO> ProjectMaterialList { get;set; }
         [BindProperty]
         public byte Status { get; set; }

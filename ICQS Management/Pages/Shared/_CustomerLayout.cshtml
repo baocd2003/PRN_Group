@@ -1,0 +1,139 @@
+﻿
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Teaser</title>
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css" />
+
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700|Raleway:400,700&display=swap" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="~/css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/ICQS Management.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="hero_area">
+        <!-- header section strats -->
+        <header class="header_section">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg custom_nav-container">
+                    <a class="navbar-brand" href="index.html">
+                        <img src="images/logo.png" alt="" />
+                    </a>
+                    <div class="navbar-collapse" id="">
+                        <ul class="navbar-nav justify-content-between ">
+                            <div class="User_option">
+                            <li class="">
+                                <a class="mr-4" href="Authentication/LoginView">
+                                    Login
+                                </a>
+                                <a class="" href="Authentication/CustomerRegister">
+                                    Sign up
+                                </a>
+                            </li>
+                    </div>
+                    </ul>q2
+
+                    <div class="custom_menu-btn">
+                        <button onclick="openNav()">
+                            <span class="s-1">
+
+                            </span>
+                            <span class="s-2">
+
+                            </span>
+                            <span class="s-3">
+
+                            </span>
+                        </button>
+                    </div>
+                    <div id="myNav" class="overlay">
+                        <div class="overlay-content">
+                            <a href="/Index">PROFILE</a>
+                            <a href="~/CustomerManagement/ProjectManagement/ProjectList">PROJECT</a>
+                            <a href="#">MY QUOTATION</a>
+                        </div>
+                    </div>
+            </div>
+            </nav>
+    </div>
+    </header>
+    <!-- end header section -->
+    <!-- slider section -->
+    <section class="slider_section ">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 offset-md-1">
+                    <div class="detail-box">
+                        <h1>
+                            <span> Modern</span> <br>
+                            Apartment <br>
+                            House
+                        </h1>
+                        <p>
+                            It is a long established fact that a reader will be distracted by the readable content of
+                        </p>
+                        <div class="btn-box">
+                            <a href="" class="">
+                                Read More
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end slider section -->
+    </div>
+
+    
+    <!-- about section -->
+
+    <section class="about_section layout_padding-bottom">
+        <div class="square-box">
+            <img src="images/square.png" alt="">
+        </div>
+        <div class="container">
+            @RenderBody()
+            @RenderSection("scripts", required: false)
+        </div>
+    </section>
+
+
+    <!-- end info_section -->
+    <!-- footer section -->
+    <section class="container-fluid footer_section ">
+        <div class="container">
+            <p>
+                &copy; <span id="displayYear"></span> All Rights Reserved By
+                <a href="https://html.design/">Free Html Templates</a>
+            </p>
+        </div>
+    </section>
+    <!-- end  footer section -->
+
+
+    <script type="text/javascript" src="~/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap.js"></script>
+    <script type="text/javascript" src="~/js/custom.js"></script>
+
+
+</body>
+
+</html>

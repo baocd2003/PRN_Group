@@ -1,0 +1,54 @@
+﻿@page
+@model ICQS_Management.Pages.CustomerManagement.ProjectManagement.ProjectListModel
+
+@{
+    ViewData["Title"] = "ProjectList";
+    Layout = "~/Pages/Shared/_CustomerLayout.cshtml";
+}
+
+<h1 style="margin-bottom: 2vh; text-align: center">Project List</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].ProjectName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].AreaPerFloor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].NumOfFloors)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Project) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AreaPerFloor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumOfFloors)
+            </td>
+            <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 400px">
+                <a asp-page="./ProjectMaterialList" asp-route-id="@item.ProjectID" asp-route-status="@item.Status" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Details</a>
+                <a asp-page="./QuotationManagement/Create" asp-route-id="@item.ProjectID" class="btn btn-danger" style="display: flex; justify-content: center; align-items: center">Add Quotation</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

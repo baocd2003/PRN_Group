@@ -1,0 +1,39 @@
+﻿@page
+@model ICQS_Management.Pages.CustomerManagement.ProjectManagement.ProjectMaterialListModel
+
+@{
+    ViewData["Title"] = "ProjectMaterialList";
+    Layout = "~/Pages/Shared/_CustomerLayout.cshtml";
+}
+
+<h1 style="margin-bottom: 2vh; text-align: center">Project Material Management</h1>
+<h3 style="margin-bottom: 2vh; text-align: center">Project Name: @Model.ProjectName</h3>
+
+<p>
+    <a asp-page="ProjectList" class="btn btn-primary">Back to Project List</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectMaterialList[0].MaterialName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectMaterialList[0].Quantity)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProjectMaterialList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaterialName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,54 @@
+﻿@page
+@model ICQS_Management.Pages.ProjectManagement.ChangeStatusModel
+
+@{
+    ViewData["Title"] = "ChangeStatus";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Change Status</h1>
+
+<h3>Are you sure you want to change status?</h3>
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Project.ProjectName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Project.ProjectName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Project.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Project.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Project.AreaPerFloor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Project.AreaPerFloor)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Project.NumOfFloors)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Project.NumOfFloors)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Project.ProjectID" />
+        @if(Model.status == 0)
+        {
+            <input type="submit" value="Enable" class="btn btn-success"/>
+        }
+        else if (Model.status == 1)
+        {
+            <input type="submit" value="Disable" class="btn btn-danger" />
+        }
+        <a asp-page="./Index" class="btn btn-primary">Back to List</a>
+    </form>
+</div>

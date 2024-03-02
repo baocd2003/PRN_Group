@@ -12,6 +12,7 @@ using Repository;
 using static ICQS_Management.Pages.ProjectManagement.ProjectMaterialListModel;
 using Microsoft.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using BusinessObject.DTO;
 
 namespace ICQS_Management.Pages.ProjectManagement
 {
@@ -20,20 +21,23 @@ namespace ICQS_Management.Pages.ProjectManagement
         private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
         private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
         [BindProperty]
-        public ProjectMaterialCombined ProjectMaterialList { get; set; }
+        public ProjectMaterialDTO ProjectMaterialList { get; set; }
         [BindProperty]
         public Guid ProjectId { get; set; }
         [BindProperty]
+        public byte status { get; set; }
+        [BindProperty]
         public string message { get; set; } = string.Empty;
-        public void OnGet(Guid id)
+        public void OnGet(Guid id, string? Message)
         {
-            ProjectId = id;
+            message = Message != null ? Message : string.Empty;
             var projectMaterial = _pmRepository.GetProjectMaterialByProjectMaterialId(id);
             var materials = _materialRepository.GetAllMaterials();
-            ViewData["MaterialName"] = new SelectList(_materialRepository.GetAllMaterials(), "Name", "Name");
+            ProjectId = projectMaterial.ProjectId;
+            status = _pmRepository.GetProjectById(ProjectId).Status;
             if (projectMaterial != null)
             {
-                ProjectMaterialList = new ProjectMaterialCombined
+                ProjectMaterialList = new ProjectMaterialDTO
                 {
                     ProjectMaterialId = projectMaterial.ProjectMaterialId,
                     ProjectId = projectMaterial.ProjectId,
@@ -41,19 +45,28 @@ namespace ICQS_Management.Pages.ProjectManagement
                     MaterialName = materials.FirstOrDefault(m => m.MaterialId == projectMaterial.MaterialId)?.Name,
                     Quantity = projectMaterial.Quantity
                 };
+                //--Combobox
+                var projectMaterials = _pmRepository.GetProjectMaterialByProjectId(ProjectId);
+                var availableMaterials = _materialRepository.GetAllMaterials()
+                .Where(material => !projectMaterials.Any(pm => pm.MaterialId == material.MaterialId) ||
+                               material.MaterialId == projectMaterial.MaterialId);
+                ViewData["MaterialId"] = new SelectList(availableMaterials, "MaterialId", "Name", ProjectMaterialList.MaterialId);
+                //--
             }
             else
             {
                 ProjectMaterialList = null;
             }
         }
-        public class ProjectMaterialCombined
+        public IActionResult OnPost()
         {
-            public Guid ProjectMaterialId { get; set; }
-            public Guid ProjectId { get; set; }
-            public Guid MaterialId { get; set; }
-            public string MaterialName { get; set; }
-            public int Quantity { get; set; }
+            ProjectMaterial projectMaterial = new ProjectMaterial();
+            projectMaterial.ProjectMaterialId = ProjectMaterialList.ProjectMaterialId;
+            projectMaterial.MaterialId = ProjectMaterialList.MaterialId;
+            projectMaterial.ProjectId = ProjectMaterialList.ProjectId;
+            projectMaterial.Quantity = ProjectMaterialList.Quantity;
+            _pmRepository.UpdateProjectMaterial(projectMaterial);
+            return RedirectToPage("./ProjectMaterialDetail", new { id = projectMaterial.ProjectMaterialId, Message = "Update successfully." });
         }
     }
 }

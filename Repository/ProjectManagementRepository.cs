@@ -21,6 +21,11 @@ public class ProjectManagementRepository : IProjectManagementRepository
         ProjectManagementService.Instance.AddProjectMaterial(projetMaterial);
     }
 
+    public void ChangeProjectStatus(Project project)
+    {
+        ProjectManagementService.Instance.ChangeProjectStatus(project);
+    }
+
     public bool checkProjectExist(Project project)
     {
         return ProjectManagementService.Instance.checkProjectExist(project);
@@ -29,6 +34,11 @@ public class ProjectManagementRepository : IProjectManagementRepository
     public bool checkUpdatedProjectExist(Project project)
     {
         return ProjectManagementService.Instance.checkUpdatedProjectExist(project);
+    }
+
+    public void DeleteProjectMaterial(Guid projectMaterialID)
+    {
+        ProjectManagementService.Instance.DeleteProjectMaterial(projectMaterialID);
     }
 
     public IEnumerable<ProjectMaterial> GetAllProjectMaterial()
@@ -59,5 +69,10 @@ public class ProjectManagementRepository : IProjectManagementRepository
     public void UpdateProject(Project project)
     {
         ProjectManagementService.Instance.UpdateProject(project);
+    }
+
+    public void UpdateProjectMaterial(ProjectMaterial projectMaterial)
+    {
+        ProjectManagementService.Instance.UpdateProjectMaterial(projectMaterial);
     }
 }

@@ -45,7 +45,7 @@ namespace ICQS_Management.Pages.ProjectManagement
                     ModelState.AddModelError("Project.ProjectName", "Project Name already exists!");
                     return Page();
                 }
-                Project.Status = 0;
+                Project.Status = 1;
                 _pmRepository.UpdateProject(Project);
                 message = "Update successfully.";
                 return Page();

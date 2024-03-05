@@ -1,0 +1,110 @@
+﻿@page
+@model ICQS_Management.Pages.Account_Staff.ApplyBatchModel
+
+@{
+    ViewData["Title"] = "ApplyBatch";
+}
+
+<h1>ApplyBatch</h1>
+
+<h4>Quotation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-page-handler="Form1">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Quotation.QuotationId" />
+            @* <div class="form-group">
+                <label asp-for="Quotation.ProjectId" class="control-label"></label>
+                <input asp-for="Quotation.RequestDate" class="form-control" />
+                <select asp-for="Quotation.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                <span asp-validation-for="Quotation.ProjectId" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="Quotation.RequestDate" class="control-label"></label>
+                <input asp-for="Quotation.RequestDate" class="form-control" />
+                <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quotation.EstimatePrice" class="control-label"></label>
+                <input asp-for="Quotation.EstimatePrice" class="form-control" />
+                <span asp-validation-for="Quotation.EstimatePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quotation.Status" class="control-label"></label>
+                <input asp-for="Quotation.Status" class="form-control" />
+                <span asp-validation-for="Quotation.Status" class="text-danger"></span>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProjectMaterials[0].MaterialName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProjectMaterials[0].Quantity)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ProjectMaterials)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MaterialName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="form-group">
+                <input type="submit" name="form1" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+
+       
+    </div>
+    <div class="col-md-4">
+        <form method="post" asp-page-handler="Form2">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Batches[0].ImportDate)
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Batches)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ImportDate)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="SelectedItems" value="@item.BatchId" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <input type="submit" name="form2" value="Save" class="btn btn-primary" />
+
+        </form>
+       
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

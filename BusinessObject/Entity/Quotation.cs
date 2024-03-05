@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 namespace BussinessObject.Entity
 {
     public class Quotation
     {
-        public Quotation() {
+        public Quotation()
+        {
             this.Batchs = new HashSet<Batch>();
         }
         [Key]

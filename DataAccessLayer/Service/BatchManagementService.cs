@@ -1,7 +1,9 @@
 ﻿using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,6 +62,12 @@ namespace DataAccessLayer.Service
             return batchDetails;
         }
 
+        //public List<BatchDetail> GetBatchDetailsByBatchIdWithMaterial(Guid batchId)
+        //{
+        //    List<BatchDetail> batchDetails = _db.BatchDetails.Where(bd => bd.BatchId == batchId).Include(bd => bd.MaterialId).ToList();
+        //    return batchDetails;
+        //}
+
         public void AddMoreDetailsInBatch(List<BatchDetail> batchDetails)
         {
             foreach(BatchDetail batchDetail in batchDetails)
@@ -86,6 +94,66 @@ namespace DataAccessLayer.Service
             _db.SaveChanges();
         }
 
+        public IEnumerable<Quotation> GetRequestQuotation()
+        {
+            return _db.Quotations.Where(q => q.Status == 0).Include(q => q.Project).OrderByDescending(q => q.RequestDate).ToList();
+        }
+
+        public List<Batch> GetBatchesDateAsc()
+        {
+            return _db.Batches.OrderBy(b => b.ImportDate).ToList();
+        }
         
+        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds)
+        {
+            Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
+            List<ProjectMaterial> quoteMaterials = ProjectManagementService.Instance.GetProjectMaterialByProjectId(_selectedQuotation.ProjectId).ToList();
+
+            List<Guid> remainingBatchIds = new List<Guid>(batchIds);
+            List<Batch> affectedBatchs = new List<Batch>();
+            foreach (var quoteMaterial in quoteMaterials)
+            {
+                double remainingQuantity = quoteMaterial.Quantity;
+                foreach (Guid batchId in remainingBatchIds)
+                {
+                    Batch batch = _db.Batches.FirstOrDefault(q => q.BatchId == batchId);
+                    List<BatchDetail> batchDetails = GetBatchDetailsByBatchId(batch.BatchId);
+                    BatchDetail batchDetail = batchDetails.FirstOrDefault(bd => bd.MaterialId == quoteMaterial.MaterialId);
+                    if (batchDetail != null)
+                    {
+                        if (batchDetail.Quantity >= remainingQuantity)
+                        {
+                            batchDetail.Quantity -= remainingQuantity;
+                            affectedBatchs.Add(batch);
+                            _db.SaveChanges();
+                            remainingQuantity = 0;
+                        }
+                        else
+                        {
+                            if(remainingQuantity > 0)
+                            {
+                                remainingQuantity -= batchDetail.Quantity;
+                                batchDetail.Quantity = 0;
+                                affectedBatchs.Add(batch);
+                                _db.SaveChanges();
+                            }
+                            else
+                            {
+                                remainingQuantity -= batchDetail.Quantity;
+                                batchDetail.Quantity = 0;
+                                _db.SaveChanges();
+                            }
+
+                        }
+                    }
+                    if (remainingQuantity == 0)
+                    {
+                        break;
+                    }
+                }
+            }
+            _selectedQuotation.Batchs = affectedBatchs;
+            _db.SaveChanges();
+        }
     }
 }

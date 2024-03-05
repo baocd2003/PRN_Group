@@ -1,0 +1,51 @@
+﻿@page
+@model ICQS_Management.Pages.Account_Staff.RequestQuotationModel
+
+@{
+    ViewData["Title"] = "RequestQuotation";
+}
+
+<h1>RequestQuotation</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].RequestDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].EstimatePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].Project)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Quotation) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimatePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Description)
+            </td>
+            <td>
+                <a asp-page="./ApplyBatch" asp-route-id="@item.QuotationId">Apply quotation</a> |
+@*                 <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.QuotationId">Delete</a> *@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

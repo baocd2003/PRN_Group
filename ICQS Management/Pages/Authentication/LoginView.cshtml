@@ -1,38 +1,149 @@
 ﻿@page
 @model ICQS_Management.Pages.Authentication.LoginViewModel
 @{
-    Layout = "~/Pages/Shared/_Layout.cshtml";
-
+    Layout = null;
 }
-<div style ="background:lightgrey; padding: 50px; border-radius: 10px">
-    <form asp-controller="OnPostAsync" method="post" class="login-form">
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger">
-                <p>@TempData["ErrorMessage"]</p>
-            </div>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Home</title>
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css" />
+
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700|Raleway:400,700&display=swap" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="~/css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <style>
+        .wrapper {
+            position: relative;
         }
-        <div class="form-group">
-            <input asp-for="LoginDTO.email" class="form-control" type="text" name="email" placeholder="Email">
-            <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-        </div>
 
-        <div class="form-group">
-            <input asp-for="LoginDTO.password" class="form-control" type="password" name="password" placeholder="Password">
-            <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
-        </div>
+        .login_frm {
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(.15rem);
+            min-height: 40vh;
+            border-radius: .3rem;
+        }
+    </style>
+</head>
 
-        <div class="form-group">
-            <button type="submit" value="Login" class="btn btn-primary btn-block">
-                Login
-            </button>
+<body>
+    <div class="wrapper">
+        <div class="hero_area">
+            <!-- header section strats -->
+            <header class="header_section">
+                <div class="container-fluid">
+                    <nav class="navbar navbar-expand-lg custom_nav-container">
+                        @* <a class="navbar-brand" href="index.html">
+                        <img src="images/logo.png" alt="" />
+                        </a> *@
+                        <div class="navbar-collapse" id="">
+                            <ul class="navbar-nav justify-content-between ">
+                                <div class="User_option">
+                                <li class="">
+                                    <a class="mr-4" href="LoginView" style="font-weight: bold;">
+                                        Login
+                                    </a>
+                                    <a class="" href="CustomerRegister" style="font-weight: bold;">
+                                        Sign up
+                                    </a>
+                                </li>
+                        </div>
+                        </ul>
+                </div>
+                </nav>
         </div>
+        </header>
 
-        <div class="form-group">
-            <a class="btn btn-link" asp-page="/Authentication/CustomerRegister">
-                Create your Account <i class="fa fa-long-arrow-right ml-2" aria-hidden="true"></i>
-            </a>
-        </div>
-    </form>
-</div>
+        <section class="slider_section ">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4 offset-md-1">
+                        <div class="detail-box">
+                            <h1>
+                                <span> Construction</span> <br>
+                                Quotation <br>
+                                System
+                            </h1>
+                            <p>
+                                Build your dream house
+                            </p>
+                            <div class="btn-box">
+                                <a href="#  " class="">
+                                    Read More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+
+    <div class="login_frm">
+        <form asp-controller="OnPostAsync" method="post" class="login-form">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                <div class="alert alert-danger">
+                    <p>@TempData["ErrorMessage"]</p>
+                </div>
+                }
+            <h3 class="text-center font-weight-bold mb-4">Login</h3>
+            <div class="form-group">
+                <input asp-for="LoginDTO.email" class="form-control" type="text" name="email" placeholder="Email">
+                <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="LoginDTO.password" class="form-control" type="password" name="password" placeholder="Password">
+                <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" value="Login" class="btn btn-primary btn-block">
+                    Login
+                </button>
+            </div>
+
+            <div class="form-group">
+                <span>Don't' have an account? Sign up <a asp-page="/Authentication/CustomerRegister">here</a></span>
+            </div>
+        </form>
+    </div>
+
+    </div>
+    
+
+
+    <script type="text/javascript" src="~/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap.js"></script>
+    <script type="text/javascript" src="~/js/custom.js"></script>
+
+
+</body>
+
+</html>
+
 

@@ -25,10 +25,12 @@
     <!-- responsive style -->
     <link href="~/css/responsive.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/ICQS Management.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ICQS_Management.styles.css" asp-append-version="true" />
+
 </head>
 
 <body>
-    <div class="hero_area">
+    <div class="">
         <!-- header section strats -->
         <header class="header_section">
             <div class="container-fluid">
@@ -47,8 +49,8 @@
                                     Sign up
                                 </a>
                             </li>
+                        </ul>
                     </div>
-                    </ul>
 
                     <div class="custom_menu-btn">
                         <button onclick="openNav()">
@@ -72,45 +74,16 @@
                             <a href="contact.html">CONTACT US</a>
                         </div>
                     </div>
+                </nav>
+
             </div>
-            </nav>
-    </div>
-    </header>
-    <!-- end header section -->
-    <!-- slider section -->
-    <section class="slider_section ">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4 offset-md-1">
-                    <div class="detail-box">
-                        <h1>
-                            <span> Modern</span> <br>
-                            Apartment <br>
-                            House
-                        </h1>
-                        <p>
-                            It is a long established fact that a reader will be distracted by the readable content of
-                        </p>
-                        <div class="btn-box">
-                            <a href="" class="">
-                                Read More
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- end slider section -->
+        </header>
+
     </div>
 
-    
-    <!-- about section -->
 
     <section class="about_section layout_padding-bottom">
-        <div class="square-box">
-            <img src="images/square.png" alt="">
-        </div>
+
         <div class="container">
             @RenderBody()
             @RenderSection("scripts", required: false)
@@ -118,17 +91,14 @@
     </section>
 
 
-    <!-- end info_section -->
-    <!-- footer section -->
-    <section class="container-fluid footer_section ">
+   @*  <section class="container-fluid footer_section ">
         <div class="container">
             <p>
                 &copy; <span id="displayYear"></span> All Rights Reserved By
                 <a href="https://html.design/">Free Html Templates</a>
             </p>
         </div>
-    </section>
-    <!-- end  footer section -->
+    </section> *@
 
 
     <script type="text/javascript" src="~/js/jquery-3.4.1.min.js"></script>

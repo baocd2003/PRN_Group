@@ -25,7 +25,7 @@ namespace ICQS_Management.Pages.Authentication
                 if (loginDTO.password.Equals(password))
                 {
                     HttpContext.Session.SetString("LoggedEmail", loginDTO.email);
-                    return RedirectToPage("/Admin_View/Index");
+                    return RedirectToPage("/AdminManagement/Admin_View/Index");
                 }
             }
             var user = await _authRepository.Login(loginDTO);
@@ -43,9 +43,9 @@ namespace ICQS_Management.Pages.Authentication
 
             if (role.Equals("Staff"))
             {
-                return RedirectToPage("/Account_Staff/Index", new { id = user.UserId });
+                return RedirectToPage("/StaffManagement/Account_Staff/Index", new { id = user.UserId });
             }
-            return RedirectToPage("/Account/Index", new { id = user.UserId });
+            return RedirectToPage("/CustomerManagement/Account/Index", new { id = user.UserId });
         }
     }
 }

@@ -1,0 +1,53 @@
+﻿@page
+@model ICQS_Management.Pages.BatchDetailsManagement.CheckOutBatchModel
+
+@{
+    ViewData["Title"] = "CheckOutBatch";
+}
+
+<h1>CheckOutBatch</h1>
+
+<p>
+@*     <form method="post" asp-page-handler="createMoreDetails">
+        <button type="submit">Create more</button>
+    </form> *@
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchDetail[0].Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchDetail[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchDetail[0].Materials.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.BatchDetail) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaterialId)
+            </td>
+            <td>
+                <a asp-page="./EditCheckout" asp-route-index="@Model.BatchDetail.IndexOf(item)">Edit</a> |
+                    <a asp-page="./RemoveCheckout" asp-route-index="@Model.BatchDetail.IndexOf(item)">Delete</a>
+            </td>
+        </tr>
+}
+    <form method="post">
+        <button type="submit">Create Batch</button>
+    </form>
+    </tbody>
+</table>

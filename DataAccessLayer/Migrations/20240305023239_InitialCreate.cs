@@ -5,10 +5,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class Bao_Migrate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Batches",
+                columns: table => new
+                {
+                    BatchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AdminId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Batches", x => x.BatchId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Materials",
                 columns: table => new
@@ -37,6 +50,33 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BatchDetails",
+                columns: table => new
+                {
+                    BatchDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    BatchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BatchDetails", x => x.BatchDetailId);
+                    table.ForeignKey(
+                        name: "FK_BatchDetails_Batches_BatchId",
+                        column: x => x.BatchId,
+                        principalTable: "Batches",
+                        principalColumn: "BatchId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BatchDetails_Materials_MaterialId",
+                        column: x => x.MaterialId,
+                        principalTable: "Materials",
+                        principalColumn: "MaterialId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -124,49 +164,26 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Batches",
+                name: "BatchQuotation",
                 columns: table => new
                 {
-                    BatchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AdminId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    QuotationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    BatchsBatchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuotationsQuotationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Batches", x => x.BatchId);
+                    table.PrimaryKey("PK_BatchQuotation", x => new { x.BatchsBatchId, x.QuotationsQuotationId });
                     table.ForeignKey(
-                        name: "FK_Batches_Quotations_QuotationId",
-                        column: x => x.QuotationId,
-                        principalTable: "Quotations",
-                        principalColumn: "QuotationId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BatchDetails",
-                columns: table => new
-                {
-                    BatchDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<double>(type: "float", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    BatchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BatchDetails", x => x.BatchDetailId);
-                    table.ForeignKey(
-                        name: "FK_BatchDetails_Batches_BatchId",
-                        column: x => x.BatchId,
+                        name: "FK_BatchQuotation_Batches_BatchsBatchId",
+                        column: x => x.BatchsBatchId,
                         principalTable: "Batches",
                         principalColumn: "BatchId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BatchDetails_Materials_MaterialId",
-                        column: x => x.MaterialId,
-                        principalTable: "Materials",
-                        principalColumn: "MaterialId",
+                        name: "FK_BatchQuotation_Quotations_QuotationsQuotationId",
+                        column: x => x.QuotationsQuotationId,
+                        principalTable: "Quotations",
+                        principalColumn: "QuotationId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -181,9 +198,9 @@ namespace DataAccessLayer.Migrations
                 column: "MaterialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Batches_QuotationId",
-                table: "Batches",
-                column: "QuotationId");
+                name: "IX_BatchQuotation_QuotationsQuotationId",
+                table: "BatchQuotation",
+                column: "QuotationsQuotationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectMaterials_MaterialId",
@@ -222,16 +239,19 @@ namespace DataAccessLayer.Migrations
                 name: "BatchDetails");
 
             migrationBuilder.DropTable(
+                name: "BatchQuotation");
+
+            migrationBuilder.DropTable(
                 name: "ProjectMaterials");
 
             migrationBuilder.DropTable(
                 name: "Batches");
 
             migrationBuilder.DropTable(
-                name: "Materials");
+                name: "Quotations");
 
             migrationBuilder.DropTable(
-                name: "Quotations");
+                name: "Materials");
 
             migrationBuilder.DropTable(
                 name: "Projects");

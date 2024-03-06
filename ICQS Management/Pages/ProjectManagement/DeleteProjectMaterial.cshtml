@@ -1,0 +1,37 @@
+﻿@page
+@model ICQS_Management.Pages.ProjectManagement.DeleteProjectMaterialModel
+
+@{
+    ViewData["Title"] = "DeleteProjectMaterial";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>DeleteProjectMateria</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ProjectMaterial</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProjectMaterial.MaterialName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProjectMaterial.MaterialName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProjectMaterial.Quantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProjectMaterial.Quantity)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input asp-for="@Model.ProjectMaterialId" hidden/>
+        <input asp-for="@Model.status" hidden />
+        <input asp-for="@Model.ProjectId" hidden />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-page="./ProjectMaterialList" asp-route-id="@Model.ProjectId" asp-route-status="@Model.status" class="btn btn-primary">Back to List</a>
+    </form>
+</div>

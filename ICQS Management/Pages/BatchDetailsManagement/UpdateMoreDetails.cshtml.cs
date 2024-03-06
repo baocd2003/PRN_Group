@@ -28,12 +28,12 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
         public Guid BatchId { get; set; }
 
 
-        public IActionResult OnGet(Guid id)
+        public IActionResult OnGet()
         {
-            //List<BatchDetail> list = _repo.GetBatchDetailsByBatchId(id);
-            List<BatchDetail> list = _context.BatchDetails.Where(bd => bd.BatchId == id).ToList();
+            var id = HttpContext.Session.GetString("selectedBatchId");
+            List<BatchDetail> list = _repo.GetBatchDetailsByBatchId(Guid.Parse(id));
+            //List<BatchDetail> list = _context.BatchDetails.Where(bd => bd.BatchId == id).ToList();
             ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(list), "MaterialId", "Name");
-            BatchId = id;
             return Page();
         }
 

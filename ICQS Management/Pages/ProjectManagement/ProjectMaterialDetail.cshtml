@@ -11,32 +11,32 @@
 <div>
     <h4>Project</h4>
     <hr />
-    <div class="row">
-        @{
-            if (Model.message != string.Empty)
-            {
-                <div class="alert alert-primary" role="alert">
-                    @Model.message
-                </div>
-            }
+    @{
+        if (Model.message != string.Empty)
+        {
+            <div class="alert alert-primary" role="alert">
+                @Model.message
+            </div>
         }
+    }
+    <div class="row">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ProjectMaterialList.ProjectMaterialId" />
             <input type="hidden" asp-for="ProjectMaterialList.ProjectId" />
             <div class="form-group">
-                <label asp-for="ProjectMaterialList.MaterialName" class="control-label"></label>
-                <select asp-for="ProjectMaterialList.MaterialName" class="form-control" asp-items="ViewBag.MaterialName"></select>
-                <span asp-validation-for="ProjectMaterialList.MaterialName" class="text-danger"></span>
+                <label asp-for="ProjectMaterialList.MaterialId" class="control-label"></label>
+                <select asp-for="ProjectMaterialList.MaterialId" class="form-control" asp-items="ViewBag.MaterialId"></select>
+                <span asp-validation-for="ProjectMaterialList.MaterialId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProjectMaterialList.Quantity" class="control-label"></label>
-                <input asp-for="ProjectMaterialList.Quantity" class="form-control" />
+                <input asp-for="ProjectMaterialList.Quantity" class="form-control" min="1" required/>
                 <span asp-validation-for="ProjectMaterialList.Quantity" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-page="./Index" class="btn btn-primary">Back to List</a>
+                <a asp-page="./ProjectMaterialList" asp-route-id="@Model.ProjectId" asp-route-status="@Model.status" class="btn btn-primary">Back to List</a>
             </div>
         </form>
 </div>

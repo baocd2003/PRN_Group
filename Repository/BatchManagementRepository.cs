@@ -26,10 +26,19 @@ namespace Repository
         public List<BatchDetail> GetBatchDetailsByBatchId(Guid batchId)
         => BatchManagementService.Instance.GetBatchDetailsByBatchId(batchId);
 
+        public List<Batch> GetBatchesDateAsc()
+        => BatchManagementService.Instance.GetBatchesDateAsc();
+
         public Batch GetLastBatch()
         =>BatchManagementService.Instance.GetLastBatch();
 
+        public IEnumerable<Quotation> GetRequestQuotation()
+       => BatchManagementService.Instance.GetRequestQuotation();
+
         public void UpdateBatchDetail(BatchDetail batchDetail)
         =>BatchManagementService.Instance.UpdateBatchDetail(batchDetail);
+
+        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds)
+       => BatchManagementService.Instance.UpdateQuantityInBatch(quotationId, batchIds);
     }
 }

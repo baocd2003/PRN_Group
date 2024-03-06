@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(applicationDbContext))]
-    [Migration("20240229053124_Bao_Migrate")]
-    partial class Bao_Migrate
+    [Migration("20240305023239_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,21 @@ namespace DataAccessLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("BatchQuotation", b =>
+                {
+                    b.Property<Guid>("BatchsBatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuotationsQuotationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BatchsBatchId", "QuotationsQuotationId");
+
+                    b.HasIndex("QuotationsQuotationId");
+
+                    b.ToTable("BatchQuotation");
+                });
 
             modelBuilder.Entity("BussinessObject.Entity.Batch", b =>
                 {
@@ -36,12 +51,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("ImportDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("QuotationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("BatchId");
-
-                    b.HasIndex("QuotationId");
 
                     b.ToTable("Batches");
                 });
@@ -233,12 +243,19 @@ namespace DataAccessLayer.Migrations
                     b.HasDiscriminator().HasValue("Staff");
                 });
 
-            modelBuilder.Entity("BussinessObject.Entity.Batch", b =>
+            modelBuilder.Entity("BatchQuotation", b =>
                 {
+                    b.HasOne("BussinessObject.Entity.Batch", null)
+                        .WithMany()
+                        .HasForeignKey("BatchsBatchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("BussinessObject.Entity.Quotation", null)
-                        .WithMany("Batchs")
-                        .HasForeignKey("QuotationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithMany()
+                        .HasForeignKey("QuotationsQuotationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BussinessObject.Entity.BatchDetail", b =>
@@ -321,11 +338,6 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("BussinessObject.Entity.Project", b =>
                 {
                     b.Navigation("ProjectMaterials");
-                });
-
-            modelBuilder.Entity("BussinessObject.Entity.Quotation", b =>
-                {
-                    b.Navigation("Batchs");
                 });
 
             modelBuilder.Entity("BussinessObject.Entity.User", b =>

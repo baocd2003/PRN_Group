@@ -30,10 +30,10 @@ namespace ICQS_Management.Pages.ProjectManagement
                     ModelState.AddModelError("Project.ProjectName", "Project Name already exists!");
                     return Page();
                 }
-                Project.Status = 0;
+                Project.Status = 1;
                 _pmRepository.AddProject(Project);
                 message = "Add successfully.";
-                return Page();
+                return RedirectToPage("./CreateProjectMaterial", new { ProjectId = Project.ProjectID });
             }
             return Page();
         }

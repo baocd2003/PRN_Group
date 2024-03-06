@@ -279,7 +279,7 @@ a:focus {
   position: fixed;
   z-index: 1;
   top: 0;
-  left: 0;
+  right: 0;
   background-color: rgb(0, 0, 0);
   background-color: rgba($color: $primary1, $alpha: .9);
   overflow-x: hidden;
@@ -294,17 +294,17 @@ a:focus {
 }
 
 .overlay a {
-  padding: 0px;
-  text-decoration: none;
-  font-size: 22px;
-  color: #f1f1f1;
-  display: block;
-  transition: 0.3s;
-  margin-bottom: 15px;
+    padding: 0px;
+    text-decoration: none;
+    font-size: 22px;
+    color: rgba(255, 255, 255, 1);
+    display: block;
+    transition: 0.3s;
+    margin-bottom: 15px;
 
-  &:hover {
-    color: $black;
-  }
+    &:hover {
+        color: $black;
+    }
 }
 
 .overlay-content {
@@ -316,7 +316,7 @@ a:focus {
 }
 
 .menu_width {
-  width: 100%;
+  width: 30%;
 }
 
 /*end header section*/

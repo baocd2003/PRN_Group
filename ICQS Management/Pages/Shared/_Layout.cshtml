@@ -1,4 +1,4 @@
-﻿
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 <!DOCTYPE html>
 <html>
 
@@ -36,18 +36,23 @@
             <div class="container-fluid">
                 <nav class="navbar navbar-expand-lg custom_nav-container">
                     <a class="navbar-brand" href="index.html">
-                        <img src="images/logo.png" alt="" />
                     </a>
                     <div class="navbar-collapse" id="">
-                        <ul class="navbar-nav justify-content-between ">
+                        <ul class="navbar-nav justify-content-end ">
                             <div class="User_option">
                             <li class="">
-                                <a class="mr-4" href="Authentication/LoginView">
-                                    Login
-                                </a>
-                                <a class="" href="Authentication/CustomerRegister">
-                                    Sign up
-                                </a>
+                                    @if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == "admin@ICQS.com")
+                                    {
+                                        var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
+                                        <a class="mr-4" href="#">@email</a>
+                                    }
+                                    else if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == null){}
+                                    else
+                                    {
+                                        var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
+                                        <a class="mr-4" asp-page="Account/Details?email=@email">@email</a>
+                                    }
+                                    <a class="mr-4" href="Authentication/Logout">Logout</a>
                             </li>
                         </ul>
                     </div>
@@ -67,11 +72,11 @@
                     </div>
                     <div id="myNav" class="overlay">
                         <div class="overlay-content">
-                            <a href="/TestUI">HOME</a>
+                            <a href="/HomePage">HOME</a>
                             <a href="about.html">ABOUT</a>
                             <a href="house.html">HOUSE</a>
                             <a href="price.html">PRICING</a>
-                            <a href="contact.html">CONTACT US</a>
+                            <a asp-page="ProjectManagement/Index">PROJECT</a>
                         </div>
                     </div>
                 </nav>

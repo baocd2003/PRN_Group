@@ -21,7 +21,7 @@ namespace ICQS_Management
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
+            builder.Services.AddHttpContextAccessor();
             //Scope
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             var app = builder.Build();

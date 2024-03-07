@@ -20,7 +20,7 @@ namespace ICQS_Management.Pages.Account_Staff
             _context = context;
         }
 
-        public IList<Quotation> Quotation { get;set; }
+        public IList<Quotation> Quotation { get; set; }
 
         public async Task OnGetAsync()
         {

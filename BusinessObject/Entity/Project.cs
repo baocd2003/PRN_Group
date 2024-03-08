@@ -12,6 +12,10 @@ namespace BussinessObject.Entity
         public string Description { get; set; }
         public float AreaPerFloor { get; set; }
         public int NumOfFloors { get; set; }
+        public int NumOfLabors { get; set; }
+        public float LaborSalaryPerMonth { get; set; }
+        public int MonthDuration { get; set; }
+        public float TotalPrice { get; set; }
         public byte Status { get; set; }
         public virtual ICollection<ProjectMaterial> ProjectMaterials { get; set;}
 

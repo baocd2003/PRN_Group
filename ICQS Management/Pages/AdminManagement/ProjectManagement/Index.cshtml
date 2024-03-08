@@ -27,6 +27,9 @@
                 @Html.DisplayNameFor(model => model.Project[0].NumOfFloors)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Project[0].TotalPrice)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Project[0].Status)
             </th>
             <th></th>
@@ -42,12 +45,17 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-
                 @Html.DisplayFor(modelItem => item.AreaPerFloor)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NumOfFloors)
             </td>
+                <td>
+                    @{
+                        var formattedTotalPrice = string.Format("{0:N0}", item.TotalPrice); // Format with commas
+                    }
+                    @formattedTotalPrice
+                </td>
             <td>
                     @if (item.Status == 1)
                     {
@@ -62,7 +70,7 @@
                         <span>Disabled</span>
                     }
             </td>
-            <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 400px">
+            <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 320px">
                 @if (item.Status == 1)
                 {
                     <a asp-page="./EditProject" asp-route-id="@item.ProjectID" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Edit</a>
@@ -75,10 +83,6 @@
                 @if (item.Status == 0)
                 {
                     <a asp-page="./ChangeStatus" asp-route-id="@item.ProjectID" class="btn btn-success" style="display: flex; justify-content: center; align-items: center">Enable</a>
-                }
-                @if (item.Status == 1 || item.Status == 2)
-                {
-                    <a asp-page="../QuotationManagement/Create" asp-route-id="@item.ProjectID" class="btn btn-danger" style="display: flex; justify-content: center; align-items: center">Add Quotation</a>
                 }
             </td>
         </tr>

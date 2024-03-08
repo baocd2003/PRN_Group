@@ -109,7 +109,16 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("LaborSalaryPerMonth")
+                        .HasColumnType("real");
+
+                    b.Property<int>("MonthDuration")
+                        .HasColumnType("int");
+
                     b.Property<int>("NumOfFloors")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumOfLabors")
                         .HasColumnType("int");
 
                     b.Property<string>("ProjectName")
@@ -118,6 +127,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
+
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");

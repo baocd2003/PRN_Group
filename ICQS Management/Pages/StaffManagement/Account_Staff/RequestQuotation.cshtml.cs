@@ -9,7 +9,7 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository;
 
-namespace ICQS_Management.Pages.Account_Staff
+namespace ICQS_Management.Pages.StaffManagement.Account_Staff
 {
     public class RequestQuotationModel : PageModel
     {

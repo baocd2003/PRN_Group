@@ -159,6 +159,9 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<double>("CompletePrice")
+                        .HasColumnType("float");
+
                     b.Property<Guid?>("CustomerUserId")
                         .HasColumnType("uniqueidentifier");
 

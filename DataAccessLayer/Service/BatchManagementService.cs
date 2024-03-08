@@ -135,13 +135,22 @@ namespace DataAccessLayer.Service
             }
             return true;
         }
+
+        public List<Guid> SortBatchsIdByDate(List<Guid> batchIds)
+        {
+            
+            List<Batch> batches = _db.Batches.Where(b => batchIds.Contains(b.BatchId)).ToList();
+            batches = batches.OrderBy(b => b.ImportDate).ToList();
+            List<Guid> sortedBatchIds = batches.Select(b => b.BatchId).ToList();
+            return sortedBatchIds;
+        }
         
         public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds)
         {
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
             List<ProjectMaterial> quoteMaterials = ProjectManagementService.Instance.GetProjectMaterialByProjectId(_selectedQuotation.ProjectId).ToList();
 
-            List<Guid> remainingBatchIds = new List<Guid>(batchIds);
+            List<Guid> remainingBatchIds = SortBatchsIdByDate(batchIds);
             List<Batch> affectedBatchs = new List<Batch>();
             double price = 0;
             foreach (var quoteMaterial in quoteMaterials)
@@ -189,9 +198,92 @@ namespace DataAccessLayer.Service
                     }
                 }
             }
-            //_selectedQuotation.Batchs = affectedBatchs;
-            _selectedQuotation.EstimatePrice = price;
+            _selectedQuotation.Batchs = affectedBatchs;
+            _selectedQuotation.CompletePrice = price;
+            _selectedQuotation.Status = 1;
+            _db.Entry(_selectedQuotation).State = EntityState.Modified;
             _db.SaveChanges();
         }
+
+
+        public void MinusQuantityInBatch(Guid quotationId)
+        {
+            Quotation _selectedQuotation = _db.Quotations
+                                  .Include(q => q.Batchs)
+                                  .FirstOrDefault(q => q.QuotationId == quotationId); ;
+            List<ProjectMaterial> quoteMaterials = ProjectManagementService.Instance.GetProjectMaterialByProjectId(_selectedQuotation.ProjectId).ToList();
+
+            List<Batch> batchesInQuote = _selectedQuotation.Batchs.OrderBy(b => b.ImportDate).ToList();
+            List<Guid> remainingBatchIds = new List<Guid>();
+            foreach (Batch batch in batchesInQuote)
+            {
+                remainingBatchIds.Add(batch.BatchId);
+            }
+            double price = 0;
+            foreach (var quoteMaterial in quoteMaterials)
+            {
+                double remainingQuantity = quoteMaterial.Quantity;
+                //double materialBatchQuantity = 
+                foreach (Guid batchId in remainingBatchIds)
+                {
+                    Batch batch = _db.Batches.FirstOrDefault(q => q.BatchId == batchId);
+                    List<BatchDetail> batchDetails = GetBatchDetailsByBatchId(batch.BatchId);
+                    BatchDetail batchDetail = batchDetails.FirstOrDefault(bd => bd.MaterialId == quoteMaterial.MaterialId);
+                    if (batchDetail != null)
+                    {
+                        if (batchDetail.Quantity >= remainingQuantity)
+                        {
+                            batchDetail.Quantity -= remainingQuantity;
+                            price += remainingQuantity * batchDetail.Price;
+                            _db.SaveChanges();
+                            remainingQuantity = 0;
+                        }
+                        else
+                        {
+                            if (batchDetail.Quantity > 0)
+                            {
+                                remainingQuantity -= batchDetail.Quantity;
+                                price += batchDetail.Quantity * batchDetail.Price;
+                                batchDetail.Quantity = 0;
+                                _db.SaveChanges();
+                            }
+                            else
+                            {
+                                remainingQuantity -= batchDetail.Quantity;
+                                batchDetail.Quantity = 0;
+                                _db.SaveChanges();
+                            }
+
+                        }
+                    }
+                    if (remainingQuantity == 0)
+                    {
+                        break;
+                    }
+                }
+            }
+            _selectedQuotation.Status = 2;
+            _db.SaveChanges();
+        }
+
+        public void ClearAffectedBatches(Guid quotationId)
+        {
+            Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
+            _selectedQuotation.Batchs.Clear();
+            _db.SaveChanges();
+        }
+        public void DeleteQuotation(Guid quotationId)
+        {
+            Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
+            ClearAffectedBatches(quotationId);
+            _selectedQuotation.Status = 4;
+            _db.SaveChanges();
+        }
+        public void EditQuotation()
+        {
+
+        }
+
+
     }
 }

@@ -17,6 +17,8 @@ namespace BussinessObject.Entity
         //public int TotalArea { get; set; }
         public DateTime RequestDate { get; set; }
         public double EstimatePrice { get; set; }
+        public double CompletePrice { get; set; }
+
         public int Status { get; set; }
         public virtual Project Project { get; set; } = null!;
         public virtual ICollection<Batch> Batchs { get; set; }

@@ -14,11 +14,17 @@ namespace Repository
         public void AddMoreDetailsInBatch(List<BatchDetail> batchDetails)
         => BatchManagementService.Instance.AddMoreDetailsInBatch(batchDetails);
 
+        public void ClearAffectedBatches(Guid quotationId)
+        => BatchManagementService.Instance.ClearAffectedBatches(quotationId);
+
         public void CreateBatch(DateTime importDate, List<BatchDetail> batchDetails)
        => BatchManagementService.Instance.CreateBatch(importDate,batchDetails);
 
         public void CreateBatchDetails(BatchDetail batchDetail)
         =>BatchManagementService.Instance.CreateBatchDetails(batchDetail);
+
+        public void DeleteQuotation(Guid quotationId)
+        => BatchManagementService.Instance.DeleteQuotation(quotationId);
 
         public Batch GetBatchById(Guid batchId)
         =>BatchManagementService.Instance.GetBatchById(batchId);
@@ -34,6 +40,9 @@ namespace Repository
 
         public IEnumerable<Quotation> GetRequestQuotation()
        => BatchManagementService.Instance.GetRequestQuotation();
+
+        public void MinusQuantityInBatch(Guid quotationId)
+       => BatchManagementService.Instance.MinusQuantityInBatch(quotationId);
 
         public void UpdateBatchDetail(BatchDetail batchDetail)
         =>BatchManagementService.Instance.UpdateBatchDetail(batchDetail);

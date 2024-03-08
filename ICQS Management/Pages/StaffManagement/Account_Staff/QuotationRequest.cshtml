@@ -1,11 +1,11 @@
 ﻿@page
-@model ICQS_Management.Pages.StaffManagement.Account_Staff.RequestQuotationModel
+@model ICQS_Management.Pages.StaffManagement.Account_Staff.QuotationRequestModel
 
 @{
-    ViewData["Title"] = "RequestQuotation";
+    ViewData["Title"] = "QuotationRequest";
 }
 
-<h1>RequestQuotation</h1>
+<h1>QuotationRequest</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -44,9 +44,7 @@
                 @Html.DisplayFor(modelItem => item.Project.Description)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.QuotationId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.QuotationId">Delete</a>
+                <a asp-page="./ApplyBatch" asp-route-id="@item.QuotationId">Aply</a> |
             </td>
         </tr>
 }

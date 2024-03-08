@@ -9,22 +9,22 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository;
 
-namespace ICQS_Management.Pages.Account_Staff
+namespace ICQS_Management.Pages.StaffManagement.Account_Staff
 {
-    public class RequestQuotationModel : PageModel
+    public class QuotationRequestModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-        private BatchManagementRepository _repo = new BatchManagementRepository();
-        public RequestQuotationModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        private BatchManagementRepository _batchManagementRepository = new BatchManagementRepository();
+        public QuotationRequestModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
         }
 
-        public IList<Quotation> Quotation { get; set; }
+        public IList<Quotation> Quotation { get;set; }
 
         public async Task OnGetAsync()
         {
-            Quotation = _repo.GetRequestQuotation().ToList();
+            Quotation = _batchManagementRepository.GetRequestQuotation().ToList();
         }
     }
 }

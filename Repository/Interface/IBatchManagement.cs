@@ -19,5 +19,9 @@ namespace Repository.Interface
         public IEnumerable<Quotation> GetRequestQuotation();
         public List<Batch> GetBatchesDateAsc();
         public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds);
+
+        public void MinusQuantityInBatch(Guid quotationId);
+        public void ClearAffectedBatches(Guid quotationId);
+        public void DeleteQuotation(Guid quotationId);
     }
 }

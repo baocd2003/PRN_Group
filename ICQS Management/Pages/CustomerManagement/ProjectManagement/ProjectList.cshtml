@@ -46,7 +46,7 @@
             </td>
             <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 400px">
                 <a asp-page="./ProjectMaterialList" asp-route-id="@item.ProjectID" asp-route-status="@item.Status" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Details</a>
-                <a asp-page="./QuotationManagement/Create" asp-route-id="@item.ProjectID" class="btn btn-danger" style="display: flex; justify-content: center; align-items: center">Add Quotation</a>
+                <a asp-page="/CustomerManagement/QuotationManagement/Create" asp-route-id="@item.ProjectID" class="btn btn-danger" style="display: flex; justify-content: center; align-items: center">Add Quotation</a>
             </td>
         </tr>
 }

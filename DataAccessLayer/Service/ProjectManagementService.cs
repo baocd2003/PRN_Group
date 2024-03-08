@@ -69,6 +69,10 @@ public class ProjectManagementService : applicationDbContext
             updatedProject.AreaPerFloor = project.AreaPerFloor;
             updatedProject.NumOfFloors = project.NumOfFloors;
             updatedProject.Description = project.Description;
+            updatedProject.NumOfLabors = project.NumOfLabors;
+            updatedProject.LaborSalaryPerMonth = project.LaborSalaryPerMonth;
+            updatedProject.MonthDuration = project.MonthDuration;
+            updatedProject.TotalPrice = project.TotalPrice;
             updatedProject.Status = project.Status;
             this.SaveChanges(true);
         }

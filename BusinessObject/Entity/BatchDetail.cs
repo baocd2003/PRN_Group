@@ -14,7 +14,5 @@ namespace BussinessObject.Entity
         public Guid MaterialId { get; set; }
         public virtual Material Materials { get; set; }
         public virtual Batch Batch { get; set; }
-
-
     }
 }

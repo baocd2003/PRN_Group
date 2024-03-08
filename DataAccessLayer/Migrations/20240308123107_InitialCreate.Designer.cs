@@ -4,6 +4,7 @@ using DataAccessLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(applicationDbContext))]
-    partial class applicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240308123107_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,16 +111,7 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("LaborSalaryPerMonth")
-                        .HasColumnType("real");
-
-                    b.Property<int>("MonthDuration")
-                        .HasColumnType("int");
-
                     b.Property<int>("NumOfFloors")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumOfLabors")
                         .HasColumnType("int");
 
                     b.Property<string>("ProjectName")
@@ -127,9 +120,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
-
-                    b.Property<float>("TotalPrice")
-                        .HasColumnType("real");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");

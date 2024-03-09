@@ -14,16 +14,24 @@ namespace ICQS_Management.Pages.Admin_View
     public class IndexModel : PageModel
     {
         private readonly IBaseRepository<User> _baseRepository;
+        //Paging
+        private const int PageSize = 10;
+        public int PageNumber { get; set; }
+        public int PageCount => (int)Math.Ceiling((double)TotalRecords / PageSize);
+        public int TotalRecords { get; set; }
 
         public IndexModel(IBaseRepository<User> baseRepository)
         {
+
             _baseRepository = baseRepository;
         }
         public IList<User> User { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? pageNumber)
         {
-            User = _baseRepository.GetAll().ToList();
+            PageNumber = pageNumber ?? 1;
+            TotalRecords = _baseRepository.GetTotalCount();
+            User = _baseRepository.GetAll(PageNumber, PageSize).ToList();
         }
     }
 }

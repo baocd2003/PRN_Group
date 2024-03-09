@@ -88,6 +88,10 @@ namespace DataAccessLayer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AreaPerFloor = table.Column<float>(type: "real", nullable: false),
                     NumOfFloors = table.Column<int>(type: "int", nullable: false),
+                    NumOfLabors = table.Column<int>(type: "int", nullable: false),
+                    LaborSalaryPerMonth = table.Column<float>(type: "real", nullable: false),
+                    MonthDuration = table.Column<int>(type: "int", nullable: false),
+                    TotalPrice = table.Column<float>(type: "real", nullable: false),
                     Status = table.Column<byte>(type: "tinyint", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },

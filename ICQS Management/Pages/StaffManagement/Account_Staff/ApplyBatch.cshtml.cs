@@ -73,7 +73,7 @@ namespace ICQS_Management.Pages.Account_Staff
         {
             Guid QuotationId = (Guid)TempData["QuotationId"];
             _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems);
-            return RedirectToPage("/BatchsManagement/Index");
+            return RedirectToPage("/AdminManagement/BatchsManagement/Index");
         }
 
     }

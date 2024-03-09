@@ -62,7 +62,7 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
             }
             else
             {
-                _repo.ClearAffectedBatches(quoteId);
+                _repo.DeleteQuotation(quoteId);
             }
             return RedirectToPage("./Index");
         }

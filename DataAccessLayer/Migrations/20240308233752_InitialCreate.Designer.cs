@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(applicationDbContext))]
-    [Migration("20240308123107_InitialCreate")]
+    [Migration("20240308233752_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,7 +111,16 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("LaborSalaryPerMonth")
+                        .HasColumnType("real");
+
+                    b.Property<int>("MonthDuration")
+                        .HasColumnType("int");
+
                     b.Property<int>("NumOfFloors")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumOfLabors")
                         .HasColumnType("int");
 
                     b.Property<string>("ProjectName")
@@ -120,6 +129,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
+
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");

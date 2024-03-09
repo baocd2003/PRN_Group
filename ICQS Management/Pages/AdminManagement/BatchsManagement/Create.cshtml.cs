@@ -40,7 +40,7 @@ namespace ICQS_Management.Pages.BatchsManagement
             string detailList = JsonConvert.SerializeObject(batchDetail);
             HttpContext.Session.SetString("detailList", detailList);
             HttpContext.Session.SetString("ImportDate" , Batch.ImportDate.ToString());
-            return RedirectToPage("/BatchDetailsManagement/Create");
+            return RedirectToPage("/AdminManagement/BatchDetailsManagement/Create");
         }
 
 

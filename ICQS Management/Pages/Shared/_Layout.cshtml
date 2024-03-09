@@ -31,78 +31,63 @@
 
 <body>
     <div class="">
-        <!-- header section strats -->
         <header class="header_section">
-            <div class="container-fluid">
-                <nav class="navbar navbar-expand-lg custom_nav-container">
-                    <a class="navbar-brand" href="index.html">
-                    </a>
-                    <div class="navbar-collapse" id="">
-                        <ul class="navbar-nav justify-content-end ">
-                            <div class="User_option">
-                            <li class="">
-                                    @if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == "admin@ICQS.com")
-                                    {
-                                        var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
-                                        <a class="mr-4" href="#">@email</a>
-                                    }
-                                    else if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == null){}
-                                    else
-                                    {
-                                        var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
-                                        <a class="mr-4" asp-page="Account/Details?email=@email">@email</a>
-                                    }
-                                    <a class="mr-4" href="Authentication/Logout">Logout</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="custom_menu-btn">
-                        <button onclick="openNav()">
-                            <span class="s-1">
-
-                            </span>
-                            <span class="s-2">
-
-                            </span>
-                            <span class="s-3">
-
-                            </span>
-                        </button>
-                    </div>
-                    <div id="myNav" class="overlay">
-                        <div class="overlay-content">
-                            <a href="/HomePage">HOME</a>
-                            <a href="about.html">ABOUT</a>
-                            <a href="house.html">HOUSE</a>
-                            <a href="price.html">PRICING</a>
-                            <a asp-page="ProjectManagement/Index">PROJECT</a>
-                        </div>
-                    </div>
+            <div class="container-fluid p-0 position-relative">
+                <nav class="navbar navbar-expand-lg custom_nav-container my_navbar">
+                    <img src="/images/iqcs_logo.png" />
                 </nav>
+                <div id="myNav" class="overlay">
+                    <div class="overlay-content">
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == "admin@ICQS.com")
+                        {
+                            var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
+                            <a class="mr-4 text-center text-white text-uppercase" href="#">@email</a>
+                        }
+                        else if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == null) { }
+                        else
+                        {
+                            var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
+                            <a class="fa-solid fa-user text-center text-white text-uppercase">@email</a>
+                        }
+                        <a href="/HomePage">HOME</a>
+                        <a href="/CustomerManagement/Account/Details?id=@HttpContextAccessor.HttpContext.Session.GetString("userId")">PROFILE</a>
+                        <a asp-page="/CustomerManagement/ProjectManagement/ProjectList">PROJECTS</a>
+                        <a asp-page="/Authentication/Logout">LOGOUT</a>
+                    </div>
+                </div>
+
+                <div class="custom_menu-btn">
+                    <button onclick="openNav()">
+                        <span class="s-1">
+
+                        </span>
+                        <span class="s-2">
+
+                        </span>
+                        <span class="s-3">
+
+                        </span>
+                    </button>
+                </div>
 
             </div>
         </header>
-
     </div>
-
-
-    <section class="about_section layout_padding-bottom">
-
-        <div class="container">
+    <div class="container">
+        <div class="render_body">
             @RenderBody()
             @RenderSection("scripts", required: false)
         </div>
-    </section>
+    </div>
 
 
-   @*  <section class="container-fluid footer_section ">
-        <div class="container">
-            <p>
-                &copy; <span id="displayYear"></span> All Rights Reserved By
-                <a href="https://html.design/">Free Html Templates</a>
-            </p>
-        </div>
+    @*  <section class="container-fluid footer_section ">
+    <div class="container">
+    <p>
+    &copy; <span id="displayYear"></span> All Rights Reserved By
+    <a href="https://html.design/">Free Html Templates</a>
+    </p>
+    </div>
     </section> *@
 
 

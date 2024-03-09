@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(applicationDbContext))]
-    [Migration("20240308153911_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20240308210911_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -172,6 +172,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<Guid>("QuotationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("CompletePrice")
+                        .HasColumnType("float");
 
                     b.Property<Guid?>("CustomerUserId")
                         .HasColumnType("uniqueidentifier");

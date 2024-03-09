@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class InitialCreate2 : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -140,6 +140,7 @@ namespace DataAccessLayer.Migrations
                     ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EstimatePrice = table.Column<double>(type: "float", nullable: false),
+                    CompletePrice = table.Column<double>(type: "float", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CustomerUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     StaffUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)

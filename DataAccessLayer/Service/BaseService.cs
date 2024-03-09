@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,19 +33,18 @@ namespace DataAccessLayer.Service
                 }
             }
         }
+        public int GetTotalCount()
+        {
+            return _db.Set<T>().Count();
+        }
         public IEnumerable<T> GetAll()
         {
-            try
-            {
-                return table.ToList();
-                
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-
+            return table.ToList();
+        }
+        public IEnumerable<T> GetAll(int pageNumber, int pageSize)
+        {
+            IQueryable<T> query = _db.Set<T>();
+            return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
         public T GetById(object id)
         {

@@ -1,0 +1,104 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Teaser</title>
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css" />
+
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700|Raleway:400,700&display=swap" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="~/css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/ICQS Management.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ICQS_Management.styles.css" asp-append-version="true" />
+
+</head>
+
+<body>
+    <div class="">
+        <header class="header_section">
+            <div class="container-fluid p-0 position-relative">
+                <nav class="navbar navbar-expand-lg custom_nav-container my_navbar">
+                    <img src="/images/iqcs_logo.png" />
+                </nav>
+                <div id="myNav" class="overlay">
+                    <div class="overlay-content">
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == "admin@ICQS.com")
+                        {
+                            var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
+                            <a class="mr-4 text-center text-white text-uppercase" href="#">@email</a>
+
+                        }
+                        else if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == null) { }
+                        else
+                        {
+                            var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
+                            <a class="fa-solid fa-user text-center text-white text-uppercase">@email</a>
+                            <a asp-page="/CustomerManagement/ProjectManagement/ProjectList">PROJECTS</a>
+
+                        }
+                        <a asp-page="/AdminManagement/ProjectManagement/Index">PROJECTS</a>
+                        <a href="/HomePage">HOME</a>
+                        <a href="/CustomerManagement/Account/Details?id=@HttpContextAccessor.HttpContext.Session.GetString("userId")">PROFILE</a>
+                        <a asp-page="/Authentication/Logout">LOGOUT</a>
+                    </div>
+                </div>
+
+                <div class="custom_menu-btn">
+                    <button onclick="openNav()">
+                        <span class="s-1">
+
+                        </span>
+                        <span class="s-2">
+
+                        </span>
+                        <span class="s-3">
+
+                        </span>
+                    </button>
+                </div>
+
+            </div>
+        </header>
+    </div>
+    <div class="container">
+        <div class="render_body">
+            @RenderBody()
+            @RenderSection("scripts", required: false)
+        </div>
+    </div>
+
+
+    @*  <section class="container-fluid footer_section ">
+    <div class="container">
+    <p>
+    &copy; <span id="displayYear"></span> All Rights Reserved By
+    <a href="https://html.design/">Free Html Templates</a>
+    </p>
+    </div>
+    </section> *@
+
+
+    <script type="text/javascript" src="~/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap.js"></script>
+    <script type="text/javascript" src="~/js/custom.js"></script>
+
+
+</body>
+
+</html>

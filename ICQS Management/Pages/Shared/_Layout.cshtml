@@ -42,16 +42,20 @@
                         {
                             var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
                             <a class="mr-4 text-center text-white text-uppercase" href="#">@email</a>
+                            <a asp-page="/AdminManagement/ProjectManagement/Index">PROJECTS</a>
+
                         }
                         else if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == null) { }
                         else
                         {
                             var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
                             <a class="fa-solid fa-user text-center text-white text-uppercase">@email</a>
+                            <a asp-page="/CustomerManagement/ProjectManagement/ProjectList">PROJECTS</a>
+                            <a href="/CustomerManagement/Account/Details?id=@HttpContextAccessor.HttpContext.Session.GetString("userId")">PROFILE</a>
+
+
                         }
                         <a href="/HomePage">HOME</a>
-                        <a href="/CustomerManagement/Account/Details?id=@HttpContextAccessor.HttpContext.Session.GetString("userId")">PROFILE</a>
-                        <a asp-page="/CustomerManagement/ProjectManagement/ProjectList">PROJECTS</a>
                         <a asp-page="/Authentication/Logout">LOGOUT</a>
                     </div>
                 </div>

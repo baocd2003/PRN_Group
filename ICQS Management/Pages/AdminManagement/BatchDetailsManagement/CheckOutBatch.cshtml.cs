@@ -10,6 +10,8 @@ using DataAccessLayer.ApplicationDbContext;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Repository;
+using BusinessObject.DTO;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.BatchDetailsManagement
 {
@@ -17,13 +19,14 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
         private BatchManagementRepository _repo = new BatchManagementRepository();
+        private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
 
         public CheckOutBatchModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
         }
 
-        public IList<BatchDetail> BatchDetail { get;set; }
+        public IList<BatchDetailDTO> BatchDetail { get;set; }
 
         public DateTime ImportDate { get; set; }
 
@@ -31,8 +34,17 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
         public async Task OnGetAsync()
         {
             string detailListJson = HttpContext.Session.GetString("detailList");
-            List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);   
-            BatchDetail = batchDetails.ToList();
+            List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
+            var materials = _materialRepo.GetAllMaterials();
+            BatchDetail = (from bd in batchDetails
+                            join m in materials on bd.MaterialId equals m.MaterialId
+                            select new BatchDetailDTO
+                            {
+                                BatchDetailId = bd.BatchDetailId,
+                                Quantity = bd.Quantity,
+                                Price = bd.Price,
+                                MaterialName = m.Name
+                            }).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync()

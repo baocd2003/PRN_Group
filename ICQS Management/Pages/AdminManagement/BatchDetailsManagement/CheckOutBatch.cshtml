@@ -23,7 +23,7 @@
                 @Html.DisplayNameFor(model => model.BatchDetail[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BatchDetail[0].Materials.Name)
+                @Html.DisplayNameFor(model => model.BatchDetail[0].MaterialName)
             </th>
             <th></th>
         </tr>
@@ -38,7 +38,7 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MaterialId)
+                @Html.DisplayFor(modelItem => item.MaterialName)
             </td>
             <td>
                 <a asp-page="./EditCheckout" asp-route-index="@Model.BatchDetail.IndexOf(item)">Edit</a> |

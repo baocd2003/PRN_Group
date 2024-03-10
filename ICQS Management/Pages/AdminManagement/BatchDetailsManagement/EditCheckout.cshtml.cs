@@ -59,7 +59,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             {
                index = (int)TempData["IndexValue"];
             }
-                batchDetails[index] = BatchDetail;
+            batchDetails[index] = BatchDetail;
             string detailList = JsonConvert.SerializeObject(batchDetails);
             HttpContext.Session.SetString("detailList", detailList);
             return RedirectToPage("./CheckOutBatch");

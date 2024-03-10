@@ -11,6 +11,7 @@ using Repository;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using Repository.Interface;
+using BusinessObject.DTO;
 
 namespace ICQS_Management.Pages.BatchDetailsManagement
 {
@@ -24,12 +25,25 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             _context = context;
         }
 
+        public IList<BatchDetailDTO> BatchDetails { get; set; } = default!;
+
         public IActionResult OnGet()
         {
             ImportDate = DateTime.Parse(HttpContext.Session.GetString("ImportDate"));
             string detailListJson = HttpContext.Session.GetString("detailList");
             List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
+
+            var materials = _materialRepo.GetAllMaterials();
             ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
+            BatchDetails = (from bd in batchDetails 
+                            join m in materials on bd.MaterialId equals m.MaterialId
+                            select new BatchDetailDTO
+                            {
+                                BatchDetailId = bd.BatchDetailId,
+                                Quantity = bd.Quantity,
+                                Price = bd.Price,
+                                MaterialName = m.Name
+                            }).ToList();
             return Page();
         }
 
@@ -61,6 +75,16 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                     //HttpContext.Session.Remove("ImportDate");
                     return RedirectToPage("./CheckOutBatch");
                 }
+                var materials = _materialRepo.GetAllMaterials();
+                BatchDetails = (from bd in batchDetails
+                                join m in materials on bd.MaterialId equals m.MaterialId
+                                select new BatchDetailDTO
+                                {
+                                    BatchDetailId = bd.BatchDetailId,
+                                    Quantity = bd.Quantity,
+                                    Price = bd.Price,
+                                    MaterialName = m.Name
+                                }).ToList();
                 return Page();
             }else
             {

@@ -1,3 +1,21 @@
-﻿@{
-    Layout = "_Layout";
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("userRole");
+    string layout = "";
+    switch (userRole)
+    {
+        case "Customer":
+            layout = "_Layout";
+            break;
+        case "Staff":
+            layout = "_StaffLayout";
+            break;
+        default:
+            layout = "_Layout";
+            break;
+
+    }
+
+    Layout = layout;
 }

@@ -38,13 +38,14 @@ namespace ICQS_Management.Pages.Authentication
             {
                 HttpContext.Session.SetString("LoggedEmail", loginDTO.email);
                 HttpContext.Session.SetString("userId", user.UserId.ToString());
+                HttpContext.Session.SetString("userRole", user.GetType().Name);
             }
             //role-base
             var role = user.GetType().Name;
 
             if (role.Equals("Staff"))
             {
-                return RedirectToPage("/StaffManagement/Account_Staff/Index", new { id = user.UserId });
+                return RedirectToPage("/StaffManagement/Account_Staff/Details", new { id = user.UserId });
             }
             return RedirectToPage("/CustomerManagement/Account/Details", new { id = user.UserId });
         }

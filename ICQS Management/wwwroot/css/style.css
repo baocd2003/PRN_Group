@@ -4,6 +4,34 @@ body {
   background-color: #ffffff;
 }
 
+.nav_wrapper {
+    background: linear-gradient(to bottom right, #002D62, #0066b2);
+    height: 4rem;
+}
+
+.nav_wrapper_staff {
+    background: linear-gradient(to bottom right,#00563B, #018749);
+    height: 4rem;
+}
+
+.navbar {
+    height: 4rem;
+}
+
+.nav-item {
+    margin-right: .5rem;
+    a{
+        color: white !important;
+     }
+}
+
+.navbar-brand{
+    img{
+           scale: 1.6;
+           margin-top: -.1rem;
+    }
+}
+
 .layout_padding {
   padding-top: 90px;
   padding-bottom: 90px;
@@ -952,23 +980,3 @@ a:focus {
 
 /* end footer section*/
 /*# sourceMappingURL=style.css.map */
-
-.my_navbar {
-    height: 5rem;
-    position: relative;
-    z-index: 0;
-    box-shadow: 0 .5rem 3rem -1rem rgba(0, 0, 0, .3);
-    background: black;
-    display: flex;
-    justify-content: center;
-    img{
-           width: 12rem;
-           height: 12rem;
-       }
-}
-
-.render_body{
-    background: white;
-    padding: 2rem;
-    border-radius: .5rem;
-}

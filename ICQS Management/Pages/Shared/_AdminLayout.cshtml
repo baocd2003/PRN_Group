@@ -3,85 +3,86 @@
 <html>
 
 <head>
-    <!-- Basic -->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- Mobile Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <!-- Site Metas -->
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-
-    <title>Teaser</title>
-
-    <!-- bootstrap core css -->
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css" />
-
-    <!-- fonts style -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700|Raleway:400,700&display=swap" rel="stylesheet">
-    <!-- Custom styles for this template -->
     <link href="~/css/style.css" rel="stylesheet" />
-    <!-- responsive style -->
     <link href="~/css/responsive.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/ICQS Management.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ICQS_Management.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="~/css/admin_layout.css" />
 
 </head>
 
 <body>
     <div class="">
-        <header class="header_section">
-            <div class="container-fluid p-0 position-relative">
-                <nav class="navbar navbar-expand-lg custom_nav-container my_navbar">
-                    <img src="/images/iqcs_logo.png" />
-                </nav>
-                <div id="myNav" class="overlay">
-                    <div class="overlay-content">
-                        @if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == "admin@ICQS.com")
-                        {
-                            var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
-                            <a class="mr-4 text-center text-white text-uppercase" href="#">@email</a>
-
-                        }
-                        else if (HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail") == null) { }
-                        else
-                        {
-                            var email = HttpContextAccessor.HttpContext.Session.GetString("LoggedEmail");
-                            <a class="fa-solid fa-user text-center text-white text-uppercase">@email</a>
-                            <a asp-page="/CustomerManagement/ProjectManagement/ProjectList">PROJECTS</a>
-
-                        }
-                        <a asp-page="/AdminManagement/ProjectManagement/Index">PROJECTS</a>
-                        <a href="/HomePage">HOME</a>
-                        <a href="/CustomerManagement/Account/Details?id=@HttpContextAccessor.HttpContext.Session.GetString("userId")">PROFILE</a>
-                        <a asp-page="/Authentication/Logout">LOGOUT</a>
+        <div class="row">
+            <div class="col-md-2 p-0 side_bar">
+                <div class="text-center logo_section">
+                    <div class="logo_wrapper">
+                        <img src="/images/iqcs_logo.png" />
+                    </div>
+                    <p class="text-white fw-bold">Civil Construction</p>
+                    <p class="text-white fw-bold">Quotation System</p>
+                </div>
+                <div class="sidebar_nav_wrapper">
+                    <a class="nav_tab" asp-page="/AdminManagement/Admin_View/Index">
+                        <div class="nav_icon">
+                            <img src="https://i.ibb.co/WtPZ3LC/user.png" width="40" height="40" />
+                        </div>
+                        <span>Users</span>
+                    </a>
+                    <a class="nav_tab" asp-page="/AdminManagement/ProjectManagement/Index">
+                        <div class="nav_icon">
+                            <img src="https://i.ibb.co/Rb5xFM4/blueprint.png" width="40" height="40" />
+                        </div>
+                        <span>Projects</span>
+                    </a>
+                    <a class="nav_tab" asp-page="/AdminManagement/BatchsManagement/Index">
+                        <div class="nav_icon">
+                            <img src="https://i.ibb.co/4mpvQVV/batch-picking.png" width="40" height="40" />
+                        </div>
+                        <span>Batches</span>
+                    </a>
+                    <a class="nav_tab" asp-page="/AdminManagement/MaterialManagement/Index">
+                        <div class="nav_icon">
+                            <img src="https://i.ibb.co/7Qk6Hbw/brick.png" width="40" height="40" />
+                        </div>
+                        <span>Materials</span>
+                    </a>
+                    <a class="nav_tab" asp-page="/StaffManagement/AccountStaff/QuotationRequest">
+                        <div class="nav_icon">
+                            <img src="https://i.ibb.co/dj4n5XM/file.png" width="40" height="40" />
+                        </div>
+                        <span>Quotations</span>
+                    </a>
+                    <a class="nav_tab" asp-page="/Authentication/Logout">
+                        <div class="nav_icon">
+                            <img src="https://i.ibb.co/4S9XYpb/exit.png" width="40" height="40" />
+                        </div>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-10 p-0">
+                <div class="dashboard_header">
+                    <h3>Admin dashboard</h3>
+                </div>
+                <div class="container">
+                    <div class="render_body">
+                        @RenderBody()
+                        @RenderSection("scripts", required: false)
                     </div>
                 </div>
-
-                <div class="custom_menu-btn">
-                    <button onclick="openNav()">
-                        <span class="s-1">
-
-                        </span>
-                        <span class="s-2">
-
-                        </span>
-                        <span class="s-3">
-
-                        </span>
-                    </button>
-                </div>
-
             </div>
-        </header>
-    </div>
-    <div class="container">
-        <div class="render_body">
-            @RenderBody()
-            @RenderSection("scripts", required: false)
         </div>
     </div>
+   
 
 
     @*  <section class="container-fluid footer_section ">

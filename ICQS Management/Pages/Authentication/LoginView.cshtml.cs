@@ -25,6 +25,7 @@ namespace ICQS_Management.Pages.Authentication
                 if (loginDTO.password.Equals(password))
                 {
                     HttpContext.Session.SetString("LoggedEmail", loginDTO.email);
+                    HttpContext.Session.SetString("userRole", "admin");
                     return RedirectToPage("/AdminManagement/Admin_View/Index");
                 }
             }

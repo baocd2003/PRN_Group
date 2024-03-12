@@ -20,5 +20,8 @@ namespace Repository
         {
             return QuotationManagementService.Instance.GetAllQuotations();
         }
+
+        public Quotation GetQuotation(Guid id)
+       => QuotationManagementService.Instance.GetQuotation(id);
     }
 }

@@ -94,6 +94,18 @@ namespace DataAccessLayer.Service
             _db.SaveChanges();
         }
 
+        public bool CheckOverlapBatch(Batch batch)
+        {
+            if(_db.Batches.FirstOrDefault(b => b.ImportDate == batch.ImportDate) != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public IEnumerable<Quotation> GetRequestQuotation()
         {
             return _db.Quotations.Where(q => q.Status == 0).Include(q => q.Project).OrderByDescending(q => q.RequestDate).ToList();
@@ -101,38 +113,40 @@ namespace DataAccessLayer.Service
 
         public List<Batch> GetBatchesDateAsc()
         {
-            return _db.Batches.OrderBy(b => b.ImportDate).Include(b => b.BatchDetails).ToList();
+            return _db.Batches
+          .OrderBy(b => b.ImportDate)
+          .Include(b => b.BatchDetails)  
+              .ThenInclude(bd => bd.Materials) 
+          .ToList();
         }
-
         public bool CheckAvailableBatchForQuote(Guid quotationId, List<Guid> batchIds)
         {
-            bool check = false;
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
             List<ProjectMaterial> quoteMaterials = ProjectManagementService.Instance.GetProjectMaterialByProjectId(_selectedQuotation.ProjectId).ToList();
 
-            List<Guid> remainingBatchIds = new List<Guid>(batchIds);
-            List<Batch> affectedBatchs = new List<Batch>();
             foreach (var quoteMaterial in quoteMaterials)
             {
                 double remainingQuantity = quoteMaterial.Quantity;
-                foreach (Guid batchId in remainingBatchIds)
+                double totalBatchQuantity = 0;
+
+                foreach (Guid batchId in batchIds)
                 {
                     Batch batch = _db.Batches.FirstOrDefault(q => q.BatchId == batchId);
                     List<BatchDetail> batchDetails = GetBatchDetailsByBatchId(batch.BatchId);
                     BatchDetail batchDetail = batchDetails.FirstOrDefault(bd => bd.MaterialId == quoteMaterial.MaterialId);
+
                     if (batchDetail != null)
                     {
-                        if (batchDetail.Quantity >= remainingQuantity)
-                        {
-                            check = true;
-                        }
-                        else
-                        {
-                           
-                        }
+                        totalBatchQuantity += batchDetail.Quantity;
                     }
                 }
+
+                if (totalBatchQuantity < remainingQuantity)
+                {
+                    return false;
+                }
             }
+
             return true;
         }
 

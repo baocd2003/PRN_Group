@@ -42,5 +42,10 @@ namespace DataAccessLayer.Service
         {
             return _db.Quotations.ToList();
         }
+
+        public Quotation GetQuotation(Guid id)
+        {
+            return _db.Quotations.FirstOrDefault(q => q.QuotationId == id);
+        }
     }
 }

@@ -36,9 +36,7 @@
                     @Html.DisplayFor(modelItem => item.Materials.Name)
                 </td>
                 <td>
-                    <a asp-page="/BatchDetailsManagement/Edit" asp-route-id="@item.BatchDetailId">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.BatchDetailId">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.BatchDetailId">Delete</a>
+                    <a asp-page="/AdminManagement/BatchDetailsManagement/Edit" asp-route-id="@item.BatchDetailId">Edit</a> |
                 </td>
             </tr>
         }

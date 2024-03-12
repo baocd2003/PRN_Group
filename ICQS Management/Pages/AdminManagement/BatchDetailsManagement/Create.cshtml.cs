@@ -34,7 +34,9 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
 
             var materials = _materialRepo.GetAllMaterials();
+            Materials = _materialRepo.GetAllMaterials().ToList();
             ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
+            
             BatchDetails = (from bd in batchDetails 
                             join m in materials on bd.MaterialId equals m.MaterialId
                             select new BatchDetailDTO
@@ -42,14 +44,15 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                                 BatchDetailId = bd.BatchDetailId,
                                 Quantity = bd.Quantity,
                                 Price = bd.Price,
-                                MaterialName = m.Name
+                                MaterialName = m.Name,
+                                Unit = m.UnitType
                             }).ToList();
             return Page();
         }
 
         [BindProperty]
         public BatchDetail BatchDetail { get; set; } = default!;
-        
+        public List<Material> Materials { get; set; }
         public DateTime ImportDate { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD

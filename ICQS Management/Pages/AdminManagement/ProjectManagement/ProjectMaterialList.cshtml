@@ -11,7 +11,7 @@
 <p>
     @if (Model.Status == 1)
     {
-        <a asp-page="./CreateProjectMaterial" asp-route-Projectid="@Model.ProjectId" class="btn btn-primary">Create New</a>
+        <a asp-page="./CreateProjectMaterial" asp-route-Projectid="@Model.ProjectId" class="btn btn-primary">Add</a>
     }
     <a asp-page="Index" class="btn btn-primary">Back to Project List</a>
 </p>
@@ -23,6 +23,12 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProjectMaterialList[0].Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectMaterialList[0].MediumPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectMaterialList[0].UnitType)
             </th>
             <th></th>
         </tr>
@@ -36,6 +42,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MediumPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitType)
             </td>
             <td>
                 @if (Model.Status == 1)

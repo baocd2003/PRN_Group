@@ -41,7 +41,10 @@ namespace ICQS_Management.Pages.ProjectManagement
                                  ProjectId = pm.ProjectId,
                                  MaterialId = pm.MaterialId,
                                  MaterialName = m.Name,
-                                 Quantity = pm.Quantity
+                                 Quantity = pm.Quantity,
+                                 MediumPrice = m.MediumPrice,
+                                 UnitType = m.UnitType,
+                                 TotalPrice = _pmRepository.GetProjectById(pm.ProjectId).TotalPrice
                              }).ToList();
         }
     }

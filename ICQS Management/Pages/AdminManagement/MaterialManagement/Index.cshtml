@@ -8,13 +8,19 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-primary">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Material[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Material[0].MediumPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Material[0].UnitType)
             </th>
             <th></th>
         </tr>
@@ -26,9 +32,14 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.MaterialId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.MaterialId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.MaterialId">Delete</a>
+                @Html.DisplayFor(modelItem => item.MediumPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitType)
+            </td>
+            <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 320px">
+                <a asp-page="./Edit" asp-route-id="@item.MaterialId" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Edit</a>
+                <a asp-page="./ProjectMaterialList" asp-route-id="@item.MaterialId" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Details</a>
             </td>
         </tr>
 }

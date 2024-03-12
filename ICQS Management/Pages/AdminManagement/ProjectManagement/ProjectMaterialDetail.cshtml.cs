@@ -32,7 +32,7 @@ namespace ICQS_Management.Pages.ProjectManagement
         {
             message = Message != null ? Message : string.Empty;
             var projectMaterial = _pmRepository.GetProjectMaterialByProjectMaterialId(id);
-            var materials = _materialRepository.GetAllMaterials();
+            var materials = _materialRepository.GetAllMaterials().Where(materials => materials.MaterialId == projectMaterial.MaterialId).SingleOrDefault();
             ProjectId = projectMaterial.ProjectId;
             status = _pmRepository.GetProjectById(ProjectId).Status;
             if (projectMaterial != null)
@@ -42,8 +42,11 @@ namespace ICQS_Management.Pages.ProjectManagement
                     ProjectMaterialId = projectMaterial.ProjectMaterialId,
                     ProjectId = projectMaterial.ProjectId,
                     MaterialId = projectMaterial.MaterialId,
-                    MaterialName = materials.FirstOrDefault(m => m.MaterialId == projectMaterial.MaterialId)?.Name,
-                    Quantity = projectMaterial.Quantity
+                    MaterialName = materials.Name,
+                    Quantity = projectMaterial.Quantity,
+                    MediumPrice = materials.MediumPrice,
+                    UnitType = materials.UnitType,
+                    TotalPrice = _pmRepository.GetProjectById(projectMaterial.ProjectId).TotalPrice
                 };
                 //--Combobox
                 var projectMaterials = _pmRepository.GetProjectMaterialByProjectId(ProjectId);

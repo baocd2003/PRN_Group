@@ -7,23 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
+using Repository;
 
 namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 {
     public class IndexModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
 
-        public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public IList<Material> Material { get;set; }
+        public List<Material> Material { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Material = await _context.Materials.ToListAsync();
+            Material = await Task.Run(() => _materialRepository.GetAllMaterials().ToList());
         }
     }
 }

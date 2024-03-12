@@ -3,7 +3,6 @@
 
 @{
     ViewData["Title"] = "ProjectList";
-    
 }
 
 <h1 style="margin-bottom: 2vh; text-align: center">Project List</h1>
@@ -16,9 +15,6 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Project[0].ProjectName)
-
-
-
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Project[0].Description)
@@ -51,7 +47,10 @@
                 @Html.DisplayFor(modelItem => item.NumOfFloors)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
+                @{
+                    var formattedTotalPrice = string.Format("{0:N0}", item.TotalPrice); // Format with commas
+                }
+                @formattedTotalPrice
             </td>
             <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 400px">
                 <a asp-page="./ProjectMaterialList" asp-route-id="@item.ProjectID" asp-route-status="@item.Status" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Details</a>

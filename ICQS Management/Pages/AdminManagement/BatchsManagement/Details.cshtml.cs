@@ -43,7 +43,7 @@ namespace ICQS_Management.Pages.BatchsManagement
             string detailList = JsonConvert.SerializeObject(batchDetail);
             HttpContext.Session.SetString("moreDetailList", detailList);
             HttpContext.Session.SetString("selectedBatchId", BId.ToString());
-            return RedirectToPage("/BatchDetailsManagement/UpdateMoreDetails");
+            return RedirectToPage("/AdminManagement/BatchDetailsManagement/UpdateMoreDetails");
         }
     }
 }

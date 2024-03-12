@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Newtonsoft.Json;
+using Repository;
 
 namespace ICQS_Management.Pages.BatchsManagement
 {
     public class CreateModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private BatchManagementRepository _repo = new BatchManagementRepository();
 
         public CreateModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
@@ -34,6 +36,11 @@ namespace ICQS_Management.Pages.BatchsManagement
         {
           if (Batch == null)
             {
+                return Page();
+            }
+            if (!_repo.CheckOverlapBatch(Batch))
+            {
+                TempData["ErrorMessage"] = "This batch in this date was created";
                 return Page();
             }
             List<BatchDetail> batchDetail = new List<BatchDetail>();

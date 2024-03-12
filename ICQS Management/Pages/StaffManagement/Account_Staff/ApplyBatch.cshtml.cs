@@ -20,6 +20,7 @@ namespace ICQS_Management.Pages.Account_Staff
         private IBatchManagement _batchRepo = new BatchManagementRepository();
         private IProjectManagementRepository _projectRepo = new ProjectManagementRepository();
         private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
+        private IQuotationManagementRepository _quoteRepo = new QuotationManagementRepository();
         public ApplyBatchModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
@@ -60,6 +61,10 @@ namespace ICQS_Management.Pages.Account_Staff
                                        Quantity = pm.Quantity
                                    }).ToList();
             Batches = _batchRepo.GetBatchesDateAsc();
+            //foreach (var batch in Batches)
+            //{
+            //    batch.BatchDetails = _context.BatchDetails.Where(bd => bd.BatchId == batch.BatchId).Include(bd => bd.Materials).ToList();
+            //}
             return Page();
         }
 
@@ -72,6 +77,27 @@ namespace ICQS_Management.Pages.Account_Staff
         public IActionResult OnPostForm2()
         {
             Guid QuotationId = (Guid)TempData["QuotationId"];
+            if (!_batchRepo.CheckAvailableBatchForQuote(QuotationId, SelectedItems))
+            {
+                TempData["QuotationId"] = QuotationId;
+                Quotation = _quoteRepo.GetQuotation(QuotationId);
+                TempData["ErrorMessage"] = "Materials in selected batchs not enough";
+                var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
+                var materials = _materialRepo.GetAllMaterials();
+                ProjectMaterials = (from pm in projectMaterials
+                                    join m in materials on pm.MaterialId equals m.MaterialId
+                                    where pm.ProjectId == Quotation.ProjectId
+                                    select new ProjectMaterialDTO
+                                    {
+                                        ProjectMaterialId = pm.ProjectMaterialId,
+                                        ProjectId = pm.ProjectId,
+                                        MaterialId = pm.MaterialId,
+                                        MaterialName = m.Name,
+                                        Quantity = pm.Quantity
+                                    }).ToList();
+                Batches = _batchRepo.GetBatchesDateAsc();
+                return Page();
+            }
             _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems);
             return RedirectToPage("/AdminManagement/BatchsManagement/Index");
         }

@@ -23,5 +23,7 @@ namespace Repository.Interface
         public void MinusQuantityInBatch(Guid quotationId);
         public void ClearAffectedBatches(Guid quotationId);
         public void DeleteQuotation(Guid quotationId);
+        public bool CheckOverlapBatch(Batch batch);
+        public bool CheckAvailableBatchForQuote(Guid quotationId, List<Guid> batchIds);
     }
 }

@@ -13,5 +13,6 @@ namespace BusinessObject.DTO
         public double Price { get; set; }
         public Guid BatchId { get; set; }
         public string MaterialName { get; set; }
+        public string Unit {  get; set; }   
     }
 }

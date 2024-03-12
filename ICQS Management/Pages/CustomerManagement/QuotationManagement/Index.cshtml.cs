@@ -23,7 +23,7 @@ namespace ICQS_Management.Pages.QuotationManagement
 
         public async Task OnGetAsync()
         {
-            Quotation = await _context.Quotations
+            Quotation = await _context.Quotations.Where(q => q.Status == 1)
                 .Include(q => q.Project).ToListAsync();
         }
     }

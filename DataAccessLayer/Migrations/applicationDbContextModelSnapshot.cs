@@ -87,7 +87,14 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<float>("MediumPrice")
+                        .HasColumnType("real");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UnitType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

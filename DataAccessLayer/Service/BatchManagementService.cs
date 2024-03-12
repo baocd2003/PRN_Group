@@ -101,7 +101,7 @@ namespace DataAccessLayer.Service
 
         public List<Batch> GetBatchesDateAsc()
         {
-            return _db.Batches.OrderBy(b => b.ImportDate).ToList();
+            return _db.Batches.OrderBy(b => b.ImportDate).Include(b => b.BatchDetails).ToList();
         }
 
         public bool CheckAvailableBatchForQuote(Guid quotationId, List<Guid> batchIds)

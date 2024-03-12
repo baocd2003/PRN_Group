@@ -86,7 +86,34 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => item.ImportDate)
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample-@item.BatchId" aria-expanded="false" aria-controls="collapseExample-@item.BatchId">
+                                   View details
+                                </button>
+                                <div class="collapse" id="collapseExample-@item.BatchId">
+                                    <div class="card card-body">
+                                        <table class="table">
+                                            <thead>
+                                            <th>Material Name</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var bd in item.BatchDetails)
+                                                {
+                                                    <tr>
+                                                        <td>@bd.BatchDetailId</td>
+                                                        <td>@bd.Quantity</td>
+                                                        <td>@bd.Price</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                           
+                                            
+                                        </table>
+                                    </div>
+                                </div>
                             </td>
+
                             <td>
                                 <input type="checkbox" name="SelectedItems" value="@item.BatchId" />
                             </td>
@@ -108,3 +135,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+@* <script src="~/lib/@popperjs/core/dist/umd/popper.min.js"></script> *@
+

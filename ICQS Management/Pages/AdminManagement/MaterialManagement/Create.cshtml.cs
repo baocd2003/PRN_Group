@@ -7,38 +7,37 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
+using Repository;
 
 namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 {
     public class CreateModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-
-        public CreateModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
-
+        private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
+        [BindProperty]
+        public Material Material { get; set; } = default!;
+        [BindProperty]
+        public string message { get; set; } = string.Empty;
         public IActionResult OnGet()
         {
             return Page();
         }
 
-        [BindProperty]
-        public Material Material { get; set; }
-
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (Material != null)
             {
+                if (_materialRepository.checkUpdatedMaterialExist(Material))
+                {
+                    ModelState.AddModelError("Material.Name", "Material Name already exists!");
+                    return Page();
+                }
+                _materialRepository.AddMaterial(Material);
+                message = "Add successfully.";
                 return Page();
             }
-
-            _context.Materials.Add(Material);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            return Page();
         }
     }
 }

@@ -11,6 +11,14 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @{
+            if (Model.message != string.Empty)
+            {
+                <div class="alert alert-primary" role="alert">
+                    @Model.message
+                </div>
+            }
+        }
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -19,14 +27,21 @@
                 <span asp-validation-for="Material.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Material.MediumPrice" class="control-label"></label>
+                <input asp-for="Material.MediumPrice" class="form-control" />
+                <span asp-validation-for="Material.MediumPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Material.UnitType" class="control-label"></label>
+                <input asp-for="Material.UnitType" class="form-control" />
+                <span asp-validation-for="Material.UnitType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-page="Index" class="btn btn-primary">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-page="Index">Back to List</a>
 </div>
 
 @section Scripts {

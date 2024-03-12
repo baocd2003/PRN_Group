@@ -11,4 +11,7 @@ public interface IMaterialManagementRepository
 {
     IEnumerable<Material> GetAllMaterials();
     IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails);
+    Material AddMaterial(Material material);
+    bool checkMaterialExist(Material material);
+    bool checkUpdatedMaterialExist(Material material);
 }

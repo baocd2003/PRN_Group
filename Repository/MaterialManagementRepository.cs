@@ -11,6 +11,21 @@ namespace Repository;
 
 public class MaterialManagementRepository : IMaterialManagementRepository
 {
+    public Material AddMaterial(Material material)
+    {
+        return MaterialManagementService.Instance.AddMaterial(material);
+    }
+
+    public bool checkMaterialExist(Material material)
+    {
+        return MaterialManagementService.Instance.checkMaterialExist(material);
+    }
+
+    public bool checkUpdatedMaterialExist(Material material)
+    {
+        return MaterialManagementService.Instance.checkUpdatedMaterialExist(material);
+    }
+
     public IEnumerable<Material> GetAllMaterials()
     {
         return MaterialManagementService.Instance.GetAllMaterials();

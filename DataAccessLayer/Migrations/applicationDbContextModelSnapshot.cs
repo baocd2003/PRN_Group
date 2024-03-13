@@ -37,6 +37,21 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("BatchQuotation");
                 });
 
+            modelBuilder.Entity("BusinessObject.Entity.MaterialType", b =>
+                {
+                    b.Property<Guid>("MaterialTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MaterialTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MaterialTypeId");
+
+                    b.ToTable("MaterialType");
+                });
+
             modelBuilder.Entity("BussinessObject.Entity.Batch", b =>
                 {
                     b.Property<Guid>("BatchId")
@@ -87,6 +102,9 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("MaterialTypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<float>("MediumPrice")
                         .HasColumnType("real");
 
@@ -99,6 +117,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MaterialId");
+
+                    b.HasIndex("MaterialTypeId");
 
                     b.ToTable("Materials");
                 });
@@ -297,6 +317,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Materials");
                 });
 
+            modelBuilder.Entity("BussinessObject.Entity.Material", b =>
+                {
+                    b.HasOne("BusinessObject.Entity.MaterialType", "MaterialTypes")
+                        .WithMany("Materials")
+                        .HasForeignKey("MaterialTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("MaterialTypes");
+                });
+
             modelBuilder.Entity("BussinessObject.Entity.Project", b =>
                 {
                     b.HasOne("BussinessObject.Entity.User", null)
@@ -343,6 +374,11 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entity.MaterialType", b =>
+                {
+                    b.Navigation("Materials");
                 });
 
             modelBuilder.Entity("BussinessObject.Entity.Batch", b =>

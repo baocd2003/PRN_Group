@@ -8,30 +8,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
+using Repository;
 
 namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-
-        public EditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
-
+        private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
         [BindProperty]
-        public Material Material { get; set; }
-
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public Material Material { get; set; } = default!;
+        [BindProperty]
+        public string message { get; set; } = string.Empty;
+        public IActionResult OnGetAsync(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Material = await _context.Materials.FirstOrDefaultAsync(m => m.MaterialId == id);
-
+            Material = _materialRepository.GetMaterialById(id);
             if (Material == null)
             {
                 return NotFound();
@@ -39,39 +35,20 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (Material != null)
             {
+                if (_materialRepository.checkUpdatedMaterialExist(Material))
+                {
+                    ModelState.AddModelError("Material.Name", "Material Name already exists!");
+                    return Page();
+                }
+                _materialRepository.UpdateMaterial(Material);
+                message = "Update successfully.";
                 return Page();
             }
-
-            _context.Attach(Material).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MaterialExists(Material.MaterialId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool MaterialExists(Guid id)
-        {
-            return _context.Materials.Any(e => e.MaterialId == id);
+            return Page();
         }
     }
 }

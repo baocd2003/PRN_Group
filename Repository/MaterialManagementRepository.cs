@@ -31,8 +31,18 @@ public class MaterialManagementRepository : IMaterialManagementRepository
         return MaterialManagementService.Instance.GetAllMaterials();
     }
 
+    public Material GetMaterialById(Guid id)
+    {
+        return MaterialManagementService.Instance.GetMaterialById(id);
+    }
+
     public IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails)
     {
         return MaterialManagementService.Instance.GetOthersMaterial(batchDetails);
+    }
+
+    public void UpdateMaterial(Material material)
+    {
+        MaterialManagementService.Instance.UpdateMaterial(material);
     }
 }

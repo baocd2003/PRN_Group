@@ -34,6 +34,10 @@ public class MaterialManagementService : applicationDbContext
     {
         return this.Materials.ToList();
     }
+    public Material GetMaterialById(Guid id)
+    {
+        return this.Materials.SingleOrDefault(c => c.MaterialId.Equals(id));
+    }
     public IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails)
     {
         var selectedMaterials = batchDetails.Select(b => b.MaterialId);
@@ -56,5 +60,16 @@ public class MaterialManagementService : applicationDbContext
     {
         var allMaterials = GetAllMaterials();
         return allMaterials.Any(m => m.Name == material.Name && m.MaterialId != material.MaterialId);
+    }
+    public void UpdateMaterial(Material material)
+    {
+        var updatedMaterial = GetMaterialById(material.MaterialId);
+        if (updatedMaterial != null)
+        {
+            updatedMaterial.Name = material.Name;
+            updatedMaterial.MediumPrice = material.MediumPrice;
+            updatedMaterial.UnitType = material.UnitType;
+            this.SaveChanges(true);
+        }
     }
 }

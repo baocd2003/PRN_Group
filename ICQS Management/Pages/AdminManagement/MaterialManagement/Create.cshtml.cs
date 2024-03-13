@@ -28,7 +28,7 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
         {
             if (Material != null)
             {
-                if (_materialRepository.checkUpdatedMaterialExist(Material))
+                if (_materialRepository.checkMaterialExist(Material))
                 {
                     ModelState.AddModelError("Material.Name", "Material Name already exists!");
                     return Page();

@@ -5,7 +5,6 @@ namespace BussinessObject.Entity
 {
     public class User
     {
-       
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid UserId { get; set; }

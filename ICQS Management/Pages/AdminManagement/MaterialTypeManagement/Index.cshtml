@@ -1,0 +1,43 @@
+﻿@page
+@model ICQS_Management.Pages.AdminManagement.MaterialTypeManagement.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaterialType[0].MaterialTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaterialType[0].UnitType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.MaterialType) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaterialTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitType)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.MaterialTypeId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.MaterialTypeId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.MaterialTypeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

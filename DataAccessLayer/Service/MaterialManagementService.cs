@@ -68,7 +68,6 @@ public class MaterialManagementService : applicationDbContext
         {
             updatedMaterial.Name = material.Name;
             updatedMaterial.MediumPrice = material.MediumPrice;
-            updatedMaterial.UnitType = material.UnitType;
             this.SaveChanges(true);
         }
     }

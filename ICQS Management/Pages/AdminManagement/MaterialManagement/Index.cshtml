@@ -19,9 +19,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Material[0].MediumPrice)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Material[0].UnitType)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -33,9 +30,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MediumPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitType)
             </td>
             <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 320px">
                 <a asp-page="./Edit" asp-route-id="@item.MaterialId" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Edit</a>

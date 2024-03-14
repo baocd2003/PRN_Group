@@ -15,6 +15,7 @@ namespace BusinessObject.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid MaterialTypeId { get; set; }
         public string MaterialTypeName { get; set; }
+        public string UnitType { get; set; }
         public virtual ICollection<Material> Materials { get; set; }
     }
 }

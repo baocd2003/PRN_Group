@@ -1,4 +1,5 @@
 ﻿
+using BusinessObject.Entity;
 using BussinessObject.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,5 +45,6 @@ namespace DataAccessLayer.ApplicationDbContext
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectMaterial> ProjectMaterials { get; set; }
         public DbSet<Quotation> Quotations { get; set; }
+        public DbSet<MaterialType> MaterialTypes { get; set; }
     }
 }

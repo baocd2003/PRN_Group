@@ -47,9 +47,13 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UnitType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("MaterialTypeId");
 
-                    b.ToTable("MaterialType");
+                    b.ToTable("MaterialTypes");
                 });
 
             modelBuilder.Entity("BussinessObject.Entity.Batch", b =>
@@ -109,10 +113,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnitType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

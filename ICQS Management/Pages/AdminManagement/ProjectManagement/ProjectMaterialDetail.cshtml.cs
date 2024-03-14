@@ -20,6 +20,7 @@ namespace ICQS_Management.Pages.ProjectManagement
     {
         private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
         private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
+        private IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
         [BindProperty]
         public ProjectMaterialDTO ProjectMaterialList { get; set; }
         [BindProperty]
@@ -45,7 +46,7 @@ namespace ICQS_Management.Pages.ProjectManagement
                     MaterialName = materials.Name,
                     Quantity = projectMaterial.Quantity,
                     MediumPrice = materials.MediumPrice,
-                    UnitType = materials.UnitType,
+                    UnitType = _materialTypeRepository.GetMaterialTypeById(materials.MaterialTypeId).UnitType,
                     TotalPrice = _pmRepository.GetProjectById(projectMaterial.ProjectId).TotalPrice
                 };
                 //--Combobox

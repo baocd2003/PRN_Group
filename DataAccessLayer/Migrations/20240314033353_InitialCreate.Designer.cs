@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(applicationDbContext))]
-    [Migration("20240313161329_InitialCreate")]
+    [Migration("20240314033353_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,9 +49,13 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UnitType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("MaterialTypeId");
 
-                    b.ToTable("MaterialType");
+                    b.ToTable("MaterialTypes");
                 });
 
             modelBuilder.Entity("BussinessObject.Entity.Batch", b =>
@@ -111,10 +115,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnitType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

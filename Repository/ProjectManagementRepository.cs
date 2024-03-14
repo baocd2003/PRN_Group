@@ -80,4 +80,9 @@ public class ProjectManagementRepository : IProjectManagementRepository
     {
         ProjectManagementService.Instance.UpdateProjectMaterial(projectMaterial);
     }
+
+    public void UpdateProjectTotalPrice(Guid id)
+    {
+        ProjectManagementService.Instance.UpdateProjectTotalPrice(id);
+    }
 }

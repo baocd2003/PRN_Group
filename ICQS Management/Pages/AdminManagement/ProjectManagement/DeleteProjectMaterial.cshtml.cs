@@ -18,6 +18,7 @@ namespace ICQS_Management.Pages.ProjectManagement
     {
         private IProjectManagementRepository _projectManagementRepository = new ProjectManagementRepository();
         private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
+        private IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
         [BindProperty]
         public ProjectMaterialDTO ProjectMaterial { get; set; }
         [BindProperty]
@@ -41,7 +42,9 @@ namespace ICQS_Management.Pages.ProjectManagement
                     ProjectId = projectMaterial.ProjectId,
                     MaterialId = projectMaterial.MaterialId,
                     MaterialName = materials.FirstOrDefault(m => m.MaterialId == projectMaterial.MaterialId)?.Name,
-                    Quantity = projectMaterial.Quantity
+                    Quantity = projectMaterial.Quantity,
+                    MediumPrice = _materialRepository.GetMaterialById(projectMaterial.MaterialId).MediumPrice,
+                    UnitType = _materialTypeRepository.GetMaterialTypeById(_materialRepository.GetMaterialById(projectMaterial.MaterialId).MaterialTypeId).UnitType
                 };
             }
             else
@@ -53,6 +56,7 @@ namespace ICQS_Management.Pages.ProjectManagement
         public IActionResult OnPost()
         {
             _projectManagementRepository.DeleteProjectMaterial(ProjectMaterialId);
+            _projectManagementRepository.UpdateProjectTotalPrice(ProjectId);
             return RedirectToPage("./ProjectMaterialList", new { id = ProjectId, status = status });
         }
     }

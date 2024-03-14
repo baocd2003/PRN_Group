@@ -23,15 +23,16 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MaterialType",
+                name: "MaterialTypes",
                 columns: table => new
                 {
                     MaterialTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MaterialTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    MaterialTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UnitType = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MaterialType", x => x.MaterialTypeId);
+                    table.PrimaryKey("PK_MaterialTypes", x => x.MaterialTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,16 +60,15 @@ namespace DataAccessLayer.Migrations
                     MaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MaterialTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MediumPrice = table.Column<float>(type: "real", nullable: false),
-                    UnitType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    MediumPrice = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Materials", x => x.MaterialId);
                     table.ForeignKey(
-                        name: "FK_Materials_MaterialType_MaterialTypeId",
+                        name: "FK_Materials_MaterialTypes_MaterialTypeId",
                         column: x => x.MaterialTypeId,
-                        principalTable: "MaterialType",
+                        principalTable: "MaterialTypes",
                         principalColumn: "MaterialTypeId",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -288,7 +288,7 @@ namespace DataAccessLayer.Migrations
                 name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "MaterialType");
+                name: "MaterialTypes");
 
             migrationBuilder.DropTable(
                 name: "Users");

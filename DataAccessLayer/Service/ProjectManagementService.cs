@@ -118,4 +118,16 @@ public class ProjectManagementService : applicationDbContext
             this.SaveChanges();
         }
     }
+    public float CalculateProjectMaterialPrice(Guid projectID)
+    {
+        List<ProjectMaterial> projectMaterials = GetProjectMaterialByProjectId(projectID).ToList();
+        float sum = 0;
+        foreach(ProjectMaterial projectMaterial in projectMaterials)
+        {
+            int quantity = projectMaterial.Quantity;
+            Material material = MaterialManagementService.Instance.GetMaterialById(projectMaterial.MaterialId);
+            sum += quantity * material.MediumPrice;
+        }
+        return sum;
+    }
 }

@@ -12,7 +12,6 @@ namespace BussinessObject.Entity
         public Guid MaterialTypeId { get; set; }
         public string Name { get; set; }
         public float MediumPrice { get; set; }
-        public string UnitType { get; set; }
         public virtual MaterialType MaterialTypes { get; set; }
         public virtual ICollection<ProjectMaterial> ProjectMaterials { get; set; }
     }

@@ -45,7 +45,6 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                                 Quantity = bd.Quantity,
                                 Price = bd.Price,
                                 MaterialName = m.Name,
-                                Unit = m.UnitType
                             }).ToList();
             return Page();
         }

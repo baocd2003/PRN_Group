@@ -21,6 +21,11 @@ public class ProjectManagementRepository : IProjectManagementRepository
         ProjectManagementService.Instance.AddProjectMaterial(projetMaterial);
     }
 
+    public float CalculateProjectMaterialPrice(Guid projectID)
+    {
+        return ProjectManagementService.Instance.CalculateProjectMaterialPrice(projectID);
+    }
+
     public void ChangeProjectStatus(Project project)
     {
         ProjectManagementService.Instance.ChangeProjectStatus(project);

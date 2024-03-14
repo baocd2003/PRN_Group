@@ -21,6 +21,7 @@ namespace ICQS_Management.Pages.ProjectManagement
         public Project Project { get; set; }
         [BindProperty]
         public string message { get; set; } = string.Empty;
+        public float materialPrice { get; set; }
 
         public IActionResult OnGet(Guid id)
         {
@@ -30,6 +31,7 @@ namespace ICQS_Management.Pages.ProjectManagement
             }
 
             Project = _pmRepository.GetProjectById(id);
+            materialPrice = _pmRepository.CalculateProjectMaterialPrice(id);
             if (Project == null)
             {
                 return NotFound();

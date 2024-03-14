@@ -70,6 +70,7 @@ namespace ICQS_Management.Pages.ProjectManagement
             projectMaterial.ProjectId = ProjectMaterialList.ProjectId;
             projectMaterial.Quantity = ProjectMaterialList.Quantity;
             _pmRepository.UpdateProjectMaterial(projectMaterial);
+            _pmRepository.UpdateProjectTotalPrice(projectMaterial.ProjectId);
             return RedirectToPage("./ProjectMaterialDetail", new { id = projectMaterial.ProjectMaterialId, Message = "Update successfully." });
         }
     }

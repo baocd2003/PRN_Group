@@ -65,19 +65,23 @@ namespace ICQS_Management.Pages.ProjectManagement
         {
             ProjectMaterial.ProjectId = projectId;
             _projectManagementRepository.AddProjectMaterial(ProjectMaterial);
+            _projectManagementRepository.UpdateProjectTotalPrice(ProjectMaterial.ProjectId);
             return RedirectToPage("./CreateProjectMaterial", new { ProjectId = ProjectMaterial.ProjectId });
         }
 
         public IActionResult OnPostEditAsync(Guid id, int editedQuantity)
         {
             ProjectMaterial projectMaterial = _projectManagementRepository.GetProjectMaterialByProjectMaterialId(id);
+            int quantityDifferences = editedQuantity - projectMaterial.Quantity;
             projectMaterial.Quantity = editedQuantity;
             _projectManagementRepository.UpdateProjectMaterial(projectMaterial);
+            _projectManagementRepository.UpdateProjectTotalPrice(projectMaterial.ProjectId);
             return RedirectToPage("./CreateProjectMaterial", new { ProjectId = projectId });
         }
         public IActionResult OnPostDeleteAsync(Guid id)
         {
             _projectManagementRepository.DeleteProjectMaterial(id);
+            _projectManagementRepository.UpdateProjectTotalPrice(projectId);
             return RedirectToPage("./CreateProjectMaterial", new { ProjectId = projectId });
         }
     }

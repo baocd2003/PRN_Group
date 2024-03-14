@@ -130,4 +130,14 @@ public class ProjectManagementService : applicationDbContext
         }
         return sum;
     }
+    public void UpdateProjectTotalPrice(Guid projectId)
+    {
+        var updatedProject = GetProjectById(projectId);
+        float projectMaterialPrice = CalculateProjectMaterialPrice(projectId);
+        if (updatedProject != null)
+        {
+            updatedProject.TotalPrice = projectMaterialPrice + (updatedProject.LaborSalaryPerMonth * updatedProject.MonthDuration * updatedProject.NumOfLabors);
+            this.SaveChanges();
+        }
+    }
 }

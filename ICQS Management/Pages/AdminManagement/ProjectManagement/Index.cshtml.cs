@@ -15,12 +15,20 @@ namespace ICQS_Management.Pages.ProjectManagement
     public class IndexModel : PageModel
     {
         private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
+        private readonly IBaseRepository<Project> _projectRepository = new BaseRepository<Project>();
+        //Paging
+        private const int PageSize = 1;
+        public int PageNumber { get; set; }
+        public int PageCount => (int)Math.Ceiling((double)TotalRecords / PageSize);
+        public int TotalRecords { get; set; }
 
         public List<Project> Project { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? pageNumber)
         {
-            Project = await Task.Run(() => _pmRepository.GetAllProjects().ToList());
+            PageNumber = pageNumber ?? 1;
+            TotalRecords = _projectRepository.GetTotalCount();
+            Project = _projectRepository.GetAll(PageNumber, PageSize).ToList();           
         }
     }
 }

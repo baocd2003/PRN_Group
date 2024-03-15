@@ -8,17 +8,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
+using Repository;
 
 namespace ICQS_Management.Pages.Admin_View
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private readonly IBaseRepository<User> _baseRepository = new BaseRepository<User>();
 
-        public EditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
+
 
         [BindProperty]
         public User User { get; set; }
@@ -30,7 +29,7 @@ namespace ICQS_Management.Pages.Admin_View
                 return NotFound();
             }
 
-            User = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            User = _baseRepository.GetById(id);
 
             if (User == null)
             {
@@ -43,35 +42,21 @@ namespace ICQS_Management.Pages.Admin_View
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(User).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                _baseRepository.Update(User, User.UserId);
+                _baseRepository.Save();
+                return Page();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!UserExists(User.UserId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw new Exception(ex.Message);
             }
 
-            return RedirectToPage("./Index");
+           
         }
 
-        private bool UserExists(Guid id)
-        {
-            return _context.Users.Any(e => e.UserId == id);
-        }
+
     }
 }

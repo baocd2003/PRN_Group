@@ -43,7 +43,7 @@ namespace DataAccessLayer.Service
         }
         public IEnumerable<T> GetAll(int pageNumber, int pageSize)
         {
-            IQueryable<T> query = _db.Set<T>();
+            IQueryable<T> query = _db.Set<T>();          
             return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
         public T GetById(object id)

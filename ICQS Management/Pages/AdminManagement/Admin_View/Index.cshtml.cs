@@ -15,7 +15,7 @@ namespace ICQS_Management.Pages.Admin_View
     {
         private readonly IBaseRepository<User> _baseRepository;
         //Paging
-        private const int PageSize = 10;
+        private const int PageSize = 6;
         public int PageNumber { get; set; }
         public int PageCount => (int)Math.Ceiling((double)TotalRecords / PageSize);
         public int TotalRecords { get; set; }

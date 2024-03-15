@@ -16,6 +16,7 @@ namespace ICQS_Management.Pages.ProjectManagement
     public class EditProjectModel : PageModel
     {
         private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
+        private readonly IBaseRepository<Project> _projectRepository = new BaseRepository<Project>();
 
         [BindProperty]
         public Project Project { get; set; }
@@ -48,7 +49,8 @@ namespace ICQS_Management.Pages.ProjectManagement
                     return Page();
                 }
                 Project.Status = 1;
-                _pmRepository.UpdateProject(Project);
+                _projectRepository.Update(Project, Project.ProjectID);
+                _projectRepository.Save();
                 message = "Update successfully.";
                 return Page();
             }

@@ -18,12 +18,13 @@ namespace Repository.Interface
         public void UpdateBatchDetail(BatchDetail batchDetail);
         public IEnumerable<Quotation> GetRequestQuotation();
         public List<Batch> GetBatchesDateAsc();
-        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds);
+        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds,Guid staffId);
 
         public void MinusQuantityInBatch(Guid quotationId);
         public void ClearAffectedBatches(Guid quotationId);
         public void DeleteQuotation(Guid quotationId);
         public bool CheckOverlapBatch(Batch batch);
         public bool CheckAvailableBatchForQuote(Guid quotationId, List<Guid> batchIds);
+        public void StaffApplyQuote(Guid staffId, Quotation quote);
     }
 }

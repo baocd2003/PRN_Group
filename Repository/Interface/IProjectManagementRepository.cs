@@ -24,4 +24,5 @@ public interface IProjectManagementRepository
     void DeleteProjectMaterial(Guid projectMaterialID);
     float CalculateProjectMaterialPrice(Guid projectID);
     void UpdateProjectTotalPrice(Guid id);
+    public Project GetProjectByQuoteId(Guid quoteid);
 }

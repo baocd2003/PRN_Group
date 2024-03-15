@@ -34,6 +34,10 @@ public class MaterialManagementService : applicationDbContext
     {
         return this.Materials.ToList();
     }
+    public async Task<List<Material>> GetMaterialsPaged(int pageNumber, int pageSize)
+    {
+        return this.Materials.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+    }
     public Material GetMaterialById(Guid id)
     {
         return this.Materials.SingleOrDefault(c => c.MaterialId.Equals(id));

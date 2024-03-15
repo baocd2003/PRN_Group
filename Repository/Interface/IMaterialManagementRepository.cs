@@ -10,6 +10,7 @@ namespace Repository.Interface;
 public interface IMaterialManagementRepository
 {
     IEnumerable<Material> GetAllMaterials();
+    Task<List<Material>> GetMaterialsPaged(int pageNumber, int pageSize);
     IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails);
     Material AddMaterial(Material material);
     bool checkMaterialExist(Material material);

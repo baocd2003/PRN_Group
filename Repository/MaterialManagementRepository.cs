@@ -36,6 +36,9 @@ public class MaterialManagementRepository : IMaterialManagementRepository
         return MaterialManagementService.Instance.GetMaterialById(id);
     }
 
+    public async Task<List<Material>> GetMaterialsPaged(int pageNumber, int pageSize)
+    => await MaterialManagementService.Instance.GetMaterialsPaged(pageNumber, pageSize);
+
     public IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails)
     {
         return MaterialManagementService.Instance.GetOthersMaterial(batchDetails);

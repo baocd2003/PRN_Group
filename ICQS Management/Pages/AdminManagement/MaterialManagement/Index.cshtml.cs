@@ -15,12 +15,23 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
     public class IndexModel : PageModel
     {
         private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
+        private readonly IBaseRepository<Material> _baseRepository = new BaseRepository<Material>();
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 6;
+        public int PageCount => (int)Math.Ceiling((double)TotalRecords / PageSize);
+        public int TotalRecords { get; set; }
 
         public List<Material> Material { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? pageNumber)
         {
-            Material = await Task.Run(() => _materialRepository.GetAllMaterials().ToList());
+            if (pageNumber.HasValue)
+            {
+                PageNumber = pageNumber.Value;
+            }
+            PageNumber = pageNumber ?? 1;
+            TotalRecords = _baseRepository.GetTotalCount();
+            Material = await _materialRepository.GetMaterialsPaged(PageNumber, PageSize);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace ICQS_Management.Pages.ProjectManagement
         private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
         private readonly IBaseRepository<Project> _projectRepository = new BaseRepository<Project>();
         //Paging
-        private const int PageSize = 1;
+        private const int PageSize = 6;
         public int PageNumber { get; set; }
         public int PageCount => (int)Math.Ceiling((double)TotalRecords / PageSize);
         public int TotalRecords { get; set; }

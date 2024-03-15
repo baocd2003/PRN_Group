@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository;
 
 namespace ICQS_Management.Pages.BatchsManagement
 {
     public class IndexModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private BatchManagementRepository _repo = new BatchManagementRepository();
 
         public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
@@ -24,10 +26,7 @@ namespace ICQS_Management.Pages.BatchsManagement
         public async Task OnGetAsync()
         {
 
-            if (_context.Batches != null)
-            {
-                Batch = await _context.Batches.ToListAsync();
-            }
+           Batch  = _repo.GetBatchesDateAsc().ToList();
         }
     }
 }

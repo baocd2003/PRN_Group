@@ -14,16 +14,23 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Material[0].Name)
+                @Html.DisplayNameFor(model => model.MaterialDTO[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Material[0].MediumPrice)
+                @Html.DisplayNameFor(model => model.MaterialDTO[0].MediumPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaterialDTO[0].MaterialTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaterialDTO[0].UnitType)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Material) {
+        @foreach (var item in Model.MaterialDTO)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -31,9 +38,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.MediumPrice)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaterialTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitType)
+            </td>
             <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 320px">
                 <a asp-page="./Edit" asp-route-id="@item.MaterialId" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Edit</a>
-                <a asp-page="./ProjectMaterialList" asp-route-id="@item.MaterialId" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Details</a>
+                <a asp-page="./Details" asp-route-id="@item.MaterialId" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Details</a>
             </td>
         </tr>
 }

@@ -12,16 +12,24 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @{
+            if (Model.message != string.Empty)
+            {
+                <div class="alert alert-primary" role="alert">
+                    @Model.message
+                </div>
+            }
+        }
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="MaterialType.MaterialTypeName" class="control-label"></label>
-                <input asp-for="MaterialType.MaterialTypeName" class="form-control" />
+                <input asp-for="MaterialType.MaterialTypeName" class="form-control" required />
                 <span asp-validation-for="MaterialType.MaterialTypeName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MaterialType.UnitType" class="control-label"></label>
-                <input asp-for="MaterialType.UnitType" class="form-control" />
+                <input asp-for="MaterialType.UnitType" class="form-control" required/>
                 <span asp-validation-for="MaterialType.UnitType" class="text-danger"></span>
             </div>
             <div class="form-group">

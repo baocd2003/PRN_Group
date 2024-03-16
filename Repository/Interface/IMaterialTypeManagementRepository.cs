@@ -11,4 +11,8 @@ public interface IMaterialTypeManagementRepository
 {
     IEnumerable<MaterialType> GetAllMaterialTypes();
     MaterialType GetMaterialTypeById(Guid id);
+    void AddMaterialType(MaterialType materialType);
+    void UpdateMaterialType(MaterialType materialType);
+    bool checkMaterialTypeExist(MaterialType materialType);
+    bool checkUpdatedMaterialTypeExist(MaterialType materialType);
 }

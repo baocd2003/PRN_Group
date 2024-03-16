@@ -1,4 +1,5 @@
-﻿using BussinessObject.Entity;
+﻿using BusinessObject.DTO;
+using BussinessObject.Entity;
 using DataAccessLayer.Service;
 using Repository.Interface;
 using System;
@@ -36,8 +37,8 @@ public class MaterialManagementRepository : IMaterialManagementRepository
         return MaterialManagementService.Instance.GetMaterialById(id);
     }
 
-    public async Task<List<Material>> GetMaterialsPaged(int pageNumber, int pageSize)
-    => await MaterialManagementService.Instance.GetMaterialsPaged(pageNumber, pageSize);
+    public async Task<List<MaterialDTO>> GetMaterialDTOsPaged(int pageNumber, int pageSize)
+    => await MaterialManagementService.Instance.GetMaterialDTOsPaged(pageNumber, pageSize);
 
     public IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails)
     {

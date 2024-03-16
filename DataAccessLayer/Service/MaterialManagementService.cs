@@ -1,4 +1,5 @@
-﻿using BussinessObject.Entity;
+﻿using BusinessObject.DTO;
+using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -35,9 +36,21 @@ public class MaterialManagementService : applicationDbContext
     {
         return this.Materials.Include(m => m.MaterialTypes).ToList();
     }
-    public async Task<List<Material>> GetMaterialsPaged(int pageNumber, int pageSize)
+    public async Task<List<MaterialDTO>> GetMaterialDTOsPaged(int pageNumber, int pageSize)
     {
-        return this.Materials.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        return this.Materials
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Select(material => new MaterialDTO
+            {
+                MaterialId = material.MaterialId,
+                MaterialTypeId = material.MaterialTypeId,
+                Name = material.Name,
+                MediumPrice = material.MediumPrice,
+                MaterialTypeName = material.MaterialTypes.MaterialTypeName,
+                UnitType = material.MaterialTypes.UnitType
+            })
+            .ToList();
     }
     public Material GetMaterialById(Guid id)
     {
@@ -73,6 +86,7 @@ public class MaterialManagementService : applicationDbContext
         {
             updatedMaterial.Name = material.Name;
             updatedMaterial.MediumPrice = material.MediumPrice;
+            updatedMaterial.MaterialTypeId = material.MaterialTypeId;
             this.SaveChanges(true);
         }
     }

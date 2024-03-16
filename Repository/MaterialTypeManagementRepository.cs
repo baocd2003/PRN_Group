@@ -11,6 +11,21 @@ namespace Repository;
 
 public class MaterialTypeManagementRepository : IMaterialTypeManagementRepository
 {
+    public void AddMaterialType(MaterialType materialType)
+    {
+        MaterialTypeManagementService.Instance.AddMaterialType(materialType);
+    }
+
+    public bool checkMaterialTypeExist(MaterialType materialType)
+    {
+        return MaterialTypeManagementService.Instance.checkMaterialTypeExist(materialType);
+    }
+
+    public bool checkUpdatedMaterialTypeExist(MaterialType materialType)
+    {
+        return MaterialTypeManagementService.Instance.checkUpdatedMaterialTypeExist(materialType);
+    }
+
     public IEnumerable<MaterialType> GetAllMaterialTypes()
     {
         return MaterialTypeManagementService.Instance.GetAllMaterialTypes();
@@ -19,5 +34,10 @@ public class MaterialTypeManagementRepository : IMaterialTypeManagementRepositor
     public MaterialType GetMaterialTypeById(Guid id)
     {
         return MaterialTypeManagementService.Instance.GetMaterialTypeById(id);
+    }
+
+    public void UpdateMaterialType(MaterialType materialType)
+    {
+        MaterialTypeManagementService.Instance.UpdateMaterialType(materialType);
     }
 }

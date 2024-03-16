@@ -25,5 +25,7 @@ namespace Repository.Interface
         public bool CheckOverlapBatch(Batch batch);
         public bool CheckAvailableBatchForQuote(Guid quotationId, List<Guid> batchIds);
         public void StaffApplyQuote(Guid staffId, Quotation quote);
+
+        public double PreviewPrice(Guid quotationId, List<Guid> batchIds);
     }
 }

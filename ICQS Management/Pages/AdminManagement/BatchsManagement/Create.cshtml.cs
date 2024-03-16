@@ -9,12 +9,18 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Newtonsoft.Json;
 using Repository;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.BatchsManagement
 {
     public class CreateModel : PageModel
     {
-        private BatchManagementRepository _repo = new BatchManagementRepository();
+        private IBatchManagement _repo;
+
+        public CreateModel(IBatchManagement repo)
+        {
+            _repo = repo;
+        }
 
         public IActionResult OnGet()
         {

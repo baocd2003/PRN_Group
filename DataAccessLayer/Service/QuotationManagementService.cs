@@ -1,5 +1,6 @@
 ﻿using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
@@ -30,9 +31,7 @@ namespace DataAccessLayer.Service
             }
         }
 
-        public Quotation AddQuotation (Quotation quotation, Project project, List<ProjectMaterial> projectMaterial) {
-            project.ProjectMaterials.AddRange(projectMaterial);
-            quotation.Project = project;
+        public Quotation AddQuotation (Quotation quotation) {
             _db.Quotations.Add(quotation);
             _db.SaveChanges();
             return quotation;
@@ -47,5 +46,22 @@ namespace DataAccessLayer.Service
         {
             return _db.Quotations.FirstOrDefault(q => q.QuotationId == id);
         }
+
+        public Customer GetCustomerByEmail(string email)
+        {
+            return _db.Customers.FirstOrDefault(c => c.Email == email);
+        }
+
+        public List<Quotation> GetProcessingQuotes()
+        {
+            return _db.Quotations.Include(q => q.Project).Where(q => q.Status == 0).ToList();
+        }
+
+        public List<Quotation> GetAppliedQuotes()
+        {
+            return _db.Quotations.Include(q => q.Project).Where(q => q.Status == 1).ToList();
+        }
+
+
     }
 }

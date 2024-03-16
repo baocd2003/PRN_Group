@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
+using Repository;
 
 namespace ICQS_Management.Pages.QuotationManagement
 {
     public class IndexModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-
+        private IQuotationManagementRepository _quoteRepo = new QuotationManagementRepository();
         public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
@@ -36,11 +38,11 @@ namespace ICQS_Management.Pages.QuotationManagement
                 }
                 else
                 {
-                    Quotation = await _context.Quotations.Where(q => q.Status == 1)
-                .Include(q => q.Project).ToListAsync();
+                      Quotation =_quoteRepo.GetProcessingQuotes();
                     return Page();
                 }
             }
+
         }
     }
 }

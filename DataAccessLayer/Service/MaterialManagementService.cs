@@ -1,6 +1,7 @@
 ﻿using BusinessObject.DTO;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ public class MaterialManagementService : applicationDbContext
     }
     public IEnumerable<Material> GetAllMaterials()
     {
-        return this.Materials.ToList();
+        return this.Materials.Include(m => m.MaterialTypes).ToList();
     }
     public async Task<List<MaterialDTO>> GetMaterialDTOsPaged(int pageNumber, int pageSize)
     {

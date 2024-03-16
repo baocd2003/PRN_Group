@@ -11,9 +11,9 @@ namespace Repository
 {
     public class QuotationManagementRepository : IQuotationManagementRepository
     {
-        public Quotation AddQuotation(Quotation quotation, Project project, List<ProjectMaterial> projectMaterial)
+        public Quotation AddQuotation(Quotation quotation)
         {
-            return QuotationManagementService.Instance.AddQuotation(quotation, project, projectMaterial);
+            return QuotationManagementService.Instance.AddQuotation(quotation);
         }
 
         public IEnumerable<Quotation> GetAllQuotations()
@@ -21,7 +21,22 @@ namespace Repository
             return QuotationManagementService.Instance.GetAllQuotations();
         }
 
+        public List<Quotation> GetAppliedQuotes()
+        {
+            return QuotationManagementService.Instance.GetAppliedQuotes();
+        }
+
+        public List<Quotation> GetProcessingQuotes()
+        {
+            return QuotationManagementService.Instance.GetProcessingQuotes();
+        }
+        public Customer GetCustomerByEmail(string email)
+        {
+            return QuotationManagementService.Instance.GetCustomerByEmail(email);
+        }
+
         public Quotation GetQuotation(Guid id)
        => QuotationManagementService.Instance.GetQuotation(id);
+
     }
 }

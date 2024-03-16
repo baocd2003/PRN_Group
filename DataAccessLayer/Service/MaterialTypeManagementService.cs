@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Entity;
+using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using System;
 using System.Collections.Generic;
@@ -38,5 +39,29 @@ public class MaterialTypeManagementService : applicationDbContext
     public MaterialType GetMaterialTypeById(Guid id)
     {
         return this.MaterialTypes.FirstOrDefault(c => c.MaterialTypeId.Equals(id));
+    }
+    public void AddMaterialType(MaterialType materialType)
+    {
+        this.MaterialTypes.Add(materialType);
+        this.SaveChanges();
+    }
+    public void UpdateMaterialType(MaterialType materialType)
+    {
+        var updatedMaterialType = GetMaterialTypeById(materialType.MaterialTypeId);
+        if (updatedMaterialType != null)
+        {
+            updatedMaterialType.MaterialTypeName = materialType.MaterialTypeName;
+            updatedMaterialType.UnitType = materialType.UnitType;
+            this.SaveChanges(true);
+        }
+    }
+    public bool checkMaterialTypeExist(MaterialType materialType)
+    {
+        return (GetAllMaterialTypes().Where(m => (m.MaterialTypeName.Equals(materialType.MaterialTypeName))).Count() > 0);
+    }
+    public bool checkUpdatedMaterialTypeExist(MaterialType materialType)
+    {
+        var allMaterialTypes = GetAllMaterialTypes();
+        return allMaterialTypes.Any(m => m.MaterialTypeName == materialType.MaterialTypeName && m.MaterialTypeId != materialType.MaterialTypeId);
     }
 }

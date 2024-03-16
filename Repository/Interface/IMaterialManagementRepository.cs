@@ -1,4 +1,5 @@
-﻿using BussinessObject.Entity;
+﻿using BusinessObject.DTO;
+using BussinessObject.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Repository.Interface;
 public interface IMaterialManagementRepository
 {
     IEnumerable<Material> GetAllMaterials();
-    Task<List<Material>> GetMaterialsPaged(int pageNumber, int pageSize);
+    Task<List<MaterialDTO>> GetMaterialDTOsPaged(int pageNumber, int pageSize);
     IEnumerable<Material> GetOthersMaterial(List<BatchDetail> batchDetails);
     Material AddMaterial(Material material);
     bool checkMaterialExist(Material material);

@@ -7,34 +7,46 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
+using Repository;
 
 namespace ICQS_Management.Pages.AdminManagement.MaterialTypeManagement
 {
     public class DetailsModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-
-        public DetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
+        private IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
 
         public MaterialType MaterialType { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-
-            MaterialType = await _context.MaterialTypes.FirstOrDefaultAsync(m => m.MaterialTypeId == id);
-
-            if (MaterialType == null)
+            else
             {
-                return NotFound();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    MaterialType = _materialTypeRepository.GetMaterialTypeById(id);
+
+                    if (MaterialType == null)
+                    {
+                        return NotFound();
+                    }
+                    return Page();
+                }
             }
-            return Page();
         }
     }
 }

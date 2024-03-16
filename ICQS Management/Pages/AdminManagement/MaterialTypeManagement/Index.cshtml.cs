@@ -7,23 +7,36 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
+using Repository;
 
 namespace ICQS_Management.Pages.AdminManagement.MaterialTypeManagement
 {
     public class IndexModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-
-        public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
+        private IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
 
         public IList<MaterialType> MaterialType { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            MaterialType = await _context.MaterialTypes.ToListAsync();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    MaterialType = _materialTypeRepository.GetAllMaterialTypes().ToList();
+                    return Page();
+                }
+            }
         }
     }
 }

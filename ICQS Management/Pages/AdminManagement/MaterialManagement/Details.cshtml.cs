@@ -7,21 +7,21 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using BusinessObject.DTO;
+using Repository.Interface;
+using Repository;
+using BusinessObject.Entity;
 
 namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 {
     public class DetailsModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
+        public IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
+        [BindProperty]
+        public MaterialDTO MaterialDTO { get; set; } = default!;
 
-        public DetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public Material Material { get; set; }
-
-        public async Task<IActionResult> OnGetAsync(Guid? id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
             if (HttpContext.Session == null)
             {
@@ -41,9 +41,19 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
                         return NotFound();
                     }
 
-                    Material = await _context.Materials.FirstOrDefaultAsync(m => m.MaterialId == id);
+                    Material material = _materialRepository.GetMaterialById(id);
+                    MaterialType materialType = _materialTypeRepository.GetMaterialTypeById(material.MaterialTypeId);
+                    MaterialDTO = new MaterialDTO
+                    {
+                        MaterialId = material.MaterialId,
+                        MaterialTypeId = material.MaterialTypeId,
+                        Name = material.Name,
+                        MediumPrice = material.MediumPrice,
+                        MaterialTypeName = materialType.MaterialTypeName,
+                        UnitType = materialType.UnitType
+                    };
 
-                    if (Material == null)
+                    if (MaterialDTO == null)
                     {
                         return NotFound();
                     }

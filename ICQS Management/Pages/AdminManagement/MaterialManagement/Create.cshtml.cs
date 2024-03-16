@@ -9,14 +9,16 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository.Interface;
 using Repository;
+using BusinessObject.DTO;
 
 namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 {
     public class CreateModel : PageModel
     {
         private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
+        public IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
         [BindProperty]
-        public Material Material { get; set; } = default!;
+        public MaterialDTO MaterialDTO { get; set; } = default!;
         [BindProperty]
         public string message { get; set; } = string.Empty;
         public IActionResult OnGet()
@@ -34,6 +36,7 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
                 }
                 else
                 {
+                    ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes(), "MaterialTypeId", "MaterialTypeName");
                     return Page();
                 }
             }
@@ -41,18 +44,25 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 
         public IActionResult OnPostAsync()
         {
-            if (Material != null)
+            if (MaterialDTO != null)
             {
-                if (_materialRepository.checkMaterialExist(Material))
+                Material updatedMaterial = new Material
                 {
-                    ModelState.AddModelError("Material.Name", "Material Name already exists!");
+                    Name = MaterialDTO.Name,
+                    MediumPrice = MaterialDTO.MediumPrice,
+                    MaterialTypeId = MaterialDTO.MaterialTypeId,
+                };
+                ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes(), "MaterialTypeId", "MaterialTypeName");
+                if (_materialRepository.checkMaterialExist(updatedMaterial))
+                {
+                    ModelState.AddModelError("MaterialDTO.Name", "Material Name already exists!");
                     return Page();
                 }
-                _materialRepository.AddMaterial(Material);
+                _materialRepository.AddMaterial(updatedMaterial);
                 message = "Add successfully.";
                 return Page();
             }
-            return Page();
+            return NotFound();
         }
     }
 }

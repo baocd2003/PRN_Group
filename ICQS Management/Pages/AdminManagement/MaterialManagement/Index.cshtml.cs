@@ -9,6 +9,7 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository.Interface;
 using Repository;
+using BusinessObject.DTO;
 
 namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 {
@@ -21,7 +22,7 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
         public int PageCount => (int)Math.Ceiling((double)TotalRecords / PageSize);
         public int TotalRecords { get; set; }
 
-        public List<Material> Material { get; set; } = default!;
+        public List<MaterialDTO> MaterialDTO { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? pageNumber)
         {
@@ -44,7 +45,7 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
                     }
                     PageNumber = pageNumber ?? 1;
                     TotalRecords = _baseRepository.GetTotalCount();
-                    Material = await _materialRepository.GetMaterialsPaged(PageNumber, PageSize);
+                    MaterialDTO = await _materialRepository.GetMaterialDTOsPaged(PageNumber, PageSize);
                     return Page();
                 }
             }

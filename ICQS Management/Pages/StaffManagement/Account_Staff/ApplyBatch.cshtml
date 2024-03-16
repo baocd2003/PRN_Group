@@ -24,16 +24,49 @@
                 <input asp-for="Quotation.RequestDate" class="form-control" />
                 <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
             </div>
-@*             <div class="form-group">
-                <label asp-for="Quotation.EstimatePrice" class="control-label"></label>
-                <input asp-for="Quotation.EstimatePrice" class="form-control" />
-                <span asp-validation-for="Quotation.EstimatePrice" class="text-danger"></span>
-            </div> *@
-@*             <div class="form-group">
-                <label asp-for="Quotation.Status" class="control-label"></label>
-                <input asp-for="Quotation.Status" class="form-control" />
-                <span asp-validation-for="Quotation.Status" class="text-danger"></span>
-            </div> *@
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Project.ProjectID" />
+            <div class="form-group">
+                <label asp-for="Project.ProjectName" class="control-label"></label>
+                <input asp-for="Project.ProjectName" class="form-control" readonly />
+                <span asp-validation-for="Project.ProjectName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.Description" class="control-label"></label>
+                <input asp-for="Project.Description" class="form-control" readonly />
+                <span asp-validation-for="Project.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.AreaPerFloor" class="control-label"></label>
+                <input asp-for="Project.AreaPerFloor" class="form-control" readonly />
+                <span asp-validation-for="Project.AreaPerFloor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.NumOfFloors" class="control-label"></label>
+                <input asp-for="Project.NumOfFloors" class="form-control" readonly />
+                <span asp-validation-for="Project.NumOfFloors" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.NumOfLabors" class="control-label"></label>
+                <input id="Project_NumOfLabors" asp-for="Project.NumOfLabors" class="form-control" />
+                <span asp-validation-for="Project.NumOfLabors" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.LaborSalaryPerMonth" class="control-label"></label>
+                <input id="Project_LaborSalaryPerMonth" asp-for="Project.LaborSalaryPerMonth" class="form-control" required min="1" />
+                <span asp-validation-for="Project.LaborSalaryPerMonth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.MonthDuration" class="control-label"></label>
+                <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" required min="1" />
+                <span asp-validation-for="Project.MonthDuration" class="text-danger"></span>
+            </div>
+            <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" />
+            <div class="form-group">
+                <label asp-for="Project.TotalPrice" class="control-label"></label>
+                <input id="Project_TotalPrice" asp-for="Project.TotalPrice" class="form-control" readonly />
+                <span asp-validation-for="Project.TotalPrice" class="text-danger"></span>
+            </div>
             <table class="table">
                 <thead>
                     <tr>

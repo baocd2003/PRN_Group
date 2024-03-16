@@ -38,7 +38,7 @@ namespace ICQS_Management.Pages.BatchsManagement
             {
                 return Page();
             }
-            if (!_repo.CheckOverlapBatch(Batch))
+            if (_repo.CheckOverlapBatch(Batch))
             {
                 TempData["ErrorMessage"] = "This batch in this date was created";
                 return Page();

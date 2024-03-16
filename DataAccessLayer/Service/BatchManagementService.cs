@@ -159,11 +159,11 @@ namespace DataAccessLayer.Service
             return sortedBatchIds;
         }
         
-        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds)
+        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId)
         {
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
             List<ProjectMaterial> quoteMaterials = ProjectManagementService.Instance.GetProjectMaterialByProjectId(_selectedQuotation.ProjectId).ToList();
-
+            Staff staff = _db.Staffs.FirstOrDefault(s => s.StaffId == staffId);
             List<Guid> remainingBatchIds = SortBatchsIdByDate(batchIds);
             List<Batch> affectedBatchs = new List<Batch>();
             double price = 0;
@@ -213,8 +213,13 @@ namespace DataAccessLayer.Service
                 }
             }
             _selectedQuotation.Batchs = affectedBatchs;
+            if (staff.Quotations == null)
+            {
+                staff.Quotations = new List<Quotation>();
+            }
             _selectedQuotation.CompletePrice = price;
             _selectedQuotation.Status = 1;
+            staff.Quotations.Add(_selectedQuotation);
             _db.Entry(_selectedQuotation).State = EntityState.Modified;
             _db.SaveChanges();
         }

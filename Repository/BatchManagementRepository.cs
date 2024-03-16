@@ -47,8 +47,8 @@ namespace Repository
         public void UpdateBatchDetail(BatchDetail batchDetail)
         =>BatchManagementService.Instance.UpdateBatchDetail(batchDetail);
 
-        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds)
-       => BatchManagementService.Instance.UpdateQuantityInBatch(quotationId, batchIds);
+        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId)
+       => BatchManagementService.Instance.UpdateQuantityInBatch(quotationId, batchIds,staffId);
 
         public bool CheckOverlapBatch(Batch batch)
         => BatchManagementService.Instance.CheckOverlapBatch(batch);

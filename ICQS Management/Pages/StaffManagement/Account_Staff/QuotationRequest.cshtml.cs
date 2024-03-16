@@ -8,13 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.StaffManagement.Account_Staff
 {
     public class QuotationRequestModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-        private BatchManagementRepository _batchManagementRepository = new BatchManagementRepository();
+        private IBatchManagement _batchManagementRepository = new BatchManagementRepository();
         public QuotationRequestModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;

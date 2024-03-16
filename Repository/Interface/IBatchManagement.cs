@@ -27,5 +27,6 @@ namespace Repository.Interface
         public void StaffApplyQuote(Guid staffId, Quotation quote);
 
         public double PreviewPrice(Guid quotationId, List<Guid> batchIds);
+        public Quotation GetQuotationWithProject(Guid id);
     }
 }

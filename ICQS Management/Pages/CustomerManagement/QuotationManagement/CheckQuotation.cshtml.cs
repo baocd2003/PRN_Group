@@ -10,6 +10,7 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository;
 using BusinessObject.DTO;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
 {
@@ -17,7 +18,9 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
 
-        private BatchManagementRepository _repo = new BatchManagementRepository();
+        private IBatchManagement _batchRepo = new BatchManagementRepository();
+        private IProjectManagementRepository _projectRepo = new ProjectManagementRepository();
+        private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
         public CheckQuotationModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
@@ -30,7 +33,7 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
         public Project Project { get; set; }
 
         [BindProperty]
-        public List<ProjectMaterialDTO> ProjectMaterials { get; set; }
+        public List<ProjectMaterialDTO> ProjectMaterialList { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (HttpContext.Session == null)
@@ -51,18 +54,27 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
                         return NotFound();
                     }
 
-                    Quotation = await _context.Quotations
-                        .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
-
-                    if (Quotation == null)
-                    {
-                        return NotFound();
-                    }
-                    TempData["id"] = id;
-                    ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "Description");
-                    return Page();
-                }
+            Quotation = _batchRepo .GetQuotationWithProject((Guid)id);
+            Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
+            var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
+            var materials = _materialRepo.GetAllMaterials();
+            ProjectMaterialList = (from pm in projectMaterials
+                                join m in materials on pm.MaterialId equals m.MaterialId
+                                where pm.ProjectId == Quotation.ProjectId
+                                select new ProjectMaterialDTO
+                                {
+                                    ProjectMaterialId = pm.ProjectMaterialId,
+                                    ProjectId = pm.ProjectId,
+                                    MaterialId = pm.MaterialId,
+                                    MaterialName = m.Name,
+                                    Quantity = pm.Quantity
+                                }).ToList();
+            if (Quotation == null)
+            {
+                return NotFound();
             }
+            TempData["id"] = id;
+            return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -72,12 +84,12 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
 
             Guid quoteId = (Guid)TempData["id"];
             if (Request.Form.ContainsKey("confirmBut"))
-            { 
-                _repo.MinusQuantityInBatch(quoteId);
+            {
+                _batchRepo.MinusQuantityInBatch(quoteId);
             }
             else
             {
-                _repo.DeleteQuotation(quoteId);
+                _batchRepo.DeleteQuotation(quoteId);
             }
             return RedirectToPage("./Index");
         }

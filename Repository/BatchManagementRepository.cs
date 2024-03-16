@@ -61,5 +61,8 @@ namespace Repository
 
         public double PreviewPrice(Guid quotationId, List<Guid> batchIds)
         => BatchManagementService.Instance.PreviewPrice(quotationId, batchIds);
+
+        public Quotation GetQuotationWithProject(Guid id)
+       => BatchManagementService.Instance.GetQuotationWithProject(id);
     }
 }

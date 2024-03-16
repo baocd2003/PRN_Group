@@ -21,6 +21,14 @@ namespace Repository
             return QuotationManagementService.Instance.GetAllQuotations();
         }
 
+        public List<Quotation> GetAppliedQuotes()
+        {
+            return QuotationManagementService.Instance.GetAppliedQuotes();
+        }
+
+        public List<Quotation> GetProcessingQuotes()
+        {
+            return QuotationManagementService.Instance.GetProcessingQuotes();
         public Customer GetCustomerByEmail(string email)
         {
             return QuotationManagementService.Instance.GetCustomerByEmail(email);

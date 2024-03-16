@@ -1,3 +1,4 @@
+
 ﻿using BussinessObject.Entity;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,10 @@ namespace Repository.Interface
     public interface IQuotationManagementRepository
     {
         IEnumerable<Quotation> GetAllQuotations();
-        Quotation AddQuotation (Quotation quotation);
+        Quotation AddQuotation (Quotation quotation, Project project, List<ProjectMaterial> projectMaterial);
         Quotation GetQuotation(Guid id);
+        List<Quotation> GetProcessingQuotes();
+        List<Quotation> GetAppliedQuotes();
         Customer GetCustomerByEmail(string email);
     }
 }

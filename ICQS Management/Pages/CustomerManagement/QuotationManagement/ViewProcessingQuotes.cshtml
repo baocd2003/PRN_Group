@@ -1,0 +1,56 @@
+﻿@page
+@model ICQS_Management.Pages.CustomerManagement.QuotationManagement.ViewProcessingQuotesModel
+
+@{
+    ViewData["Title"] = "ViewProcessingQuotes";
+}
+
+<h1>ViewProcessingQuotes</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].RequestDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].EstimatePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].CompletePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quotation[0].Project)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Quotation) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimatePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompletePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Description)
+            </td>
+            <td>
+                 <a asp-page="./CheckQuotation" asp-route-id="@item.QuotationId">Check your quotaion</a> |
+                <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a> |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

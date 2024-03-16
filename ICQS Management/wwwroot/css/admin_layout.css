@@ -23,18 +23,16 @@
 .logo_wrapper {
     width: 7em;
     height: 7rem;
-    border: 2px solid;
     box-sizing: border-box;
     padding: 0;
     overflow: hidden;
     display: flex;
-    margin: 1rem auto .5rem;
+    margin: 1rem auto -.5rem;
     border-radius: 50%;
-    background: black;
     img{
                width: 7rem;
                height: 7rem;
-               scale: 1.6;
+               scale: 1.8;
                transform: translateX(-.5rem);
            }
 }

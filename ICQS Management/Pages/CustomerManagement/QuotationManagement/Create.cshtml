@@ -28,7 +28,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label asp-for="EstimatePrice" class="control-label fw-bold">Estimated Price</label>
-                    <input asp-for="EstimatePrice" class="form-control" readonly placeholder="..." value=0/>
+                    <input asp-for="EstimatePrice" class="form-control" readonly placeholder="..." value=@Model.Project.TotalPrice/>
                     <span asp-validation-for="EstimatePrice" class="text-danger"></span>
                 </div>
             </div>
@@ -36,46 +36,112 @@
 
         @* Project + Project Materials Detail *@
         <div class="project_detail_wrapper">
-            <h5 class="font-weight-bold">Project Details</h5><hr />
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="ProjectName" class="control-label">Project Name</label>
-                        <input asp-for="ProjectName" class="form-control" placeholder="Your project name.."/>
-                        <span asp-validation-for="ProjectName" class="text-danger"></span>
-                    </div>
-                </div>
-                 <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="AreaPerFloor" class="control-label">Area per floor (m²)</label>
-                        <input asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor"/>
-                        <span asp-validation-for="AreaPerFloor" class="text-danger"></span>
-                    </div>
-                </div>
-                 <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="NumOfFloors" class="control-label">Number of floors</label>
-                        <input asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" />
-                        <span asp-validation-for="NumOfFloors" class="text-danger"></span>
-                    </div>
+                <div class="col-md4">
+
                 </div>
             </div>
-            <div class="form-group mb-5">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" placeholder="Project description..." />
-                <span asp-validation-for="Description" class="text-danger"></span>
+            <div class="d-flex justify-content-between mt-4 section_txt_wrapper">
+                <div class="d-flex justify-content-start section_txt">
+                    <img src="https://i.ibb.co/tbkC1zZ/blueprint.png" width="40" height="40" />
+                    <h5 class="font-weight-bold">Project Detail</h5>
+                </div>
+            </div>
+            <hr />
+            <div class="row mb-5">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="ProjectName" class="control-label">Project Name</label>
+                                <input asp-for="ProjectName" class="form-control" placeholder="Your project name.." />
+                                <span asp-validation-for="ProjectName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="AreaPerFloor" class="control-label">Area/floor (m²)</label>
+                                        <input asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor" />
+                                        <span asp-validation-for="AreaPerFloor" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="NumOfFloors" class="control-label">Floors</label>
+                                        <input asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" />
+                                        <span asp-validation-for="NumOfFloors" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col-md-8">
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" rows="5" class="form-control" placeholder="Project description..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
-            <h5 class="font-weight-bold">Materials</h5><hr />
+            <div class="row">
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+            <div class="d-flex justify-content-between section_txt_wrapper">
+                <div class="d-flex justify-content-start section_txt">
+                    <img src="https://i.ibb.co/Snqfnc1/worker.png" width="40" height="40" />
+                    <h5 class="font-weight-bold">Labor cost</h5>
+                </div>
+                <span>Estimated: $@(Model.Project.NumOfLabors * Model.Project.LaborSalaryPerMonth * Model.Project.MonthDuration)</span>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="Project.NumOfLabors" class="control-label">Workers amount (people)</label>
+                    <input asp-for="Project.NumOfLabors" class="form-control" value="@Model.Project.NumOfLabors" readonly/>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Project.LaborSalaryPerMonth" class="control-label">Worker salary/month ($)</label>
+                    <input asp-for="Project.LaborSalaryPerMonth" class="form-control" value="@Model.Project.NumOfLabors" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Project.MonthDuration" class="control-label">Construction duration</label>
+                    <input asp-for="Project.MonthDuration" class="form-control" value="@Model.Project.MonthDuration" readonly />
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4 section_txt_wrapper">
+                <div class="d-flex justify-content-start section_txt">
+                    <img src="https://i.ibb.co/XXXMhq4/brick.png" width="40" height="40" />
+                    <h5 class="font-weight-bold">Materials</h5>
+                </div>
+                <span>Estimated: </span>
+            </div>
+            <hr />
             <div class="row">
                 @{int count = 0;}
                 @foreach (var item in Model.ProjectMaterials)
                 {
-                    <input type="hidden" asp-for="NewProjectMaterials[count].MaterialId" value="@item.MaterialId" />
+                    @* <input type="hidden" asp-for="NewProjectMaterials[count].Materials.MaterialId" value="@item.MaterialId" /> *@
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label asp-for="NewProjectMaterials[count].Quantity" class="control-label">@item.Materials.Name</label>
-                            <input asp-for="NewProjectMaterials[count].Quantity" class="form-control" value="@item.Quantity" />
+                            <label asp-for="NewProjectMaterials" class="control-label">@item.Materials.MaterialTypes.MaterialTypeName</label>
+                            <div class="d-flex justify-content-between">
+                                <select asp-for="NewProjectMaterials[count].MaterialId" class="form-control">
+                                    @foreach (var material in Model.Materials.Where(m => m.MaterialTypeId == item.Materials.MaterialTypeId).Distinct())
+                                    {
+                                        <option value="@material.MaterialId">@material.Name</option>
+                                    }
+                                </select>
+                                <input asp-for="NewProjectMaterials[count].Quantity" class="form-control" value="@item.Quantity" />
+                            </div>
                             @* <span asp-validation-for="Project.Description" class="text-danger"></span> *@
                         </div>
                     </div>

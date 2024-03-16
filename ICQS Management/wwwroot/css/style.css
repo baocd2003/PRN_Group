@@ -82,6 +82,7 @@ body {
   background-repeat: no-repeat;
   background-position: top right;
   background-size: 60% 100%;
+  min-height: 100vh;
 }
 
 .sub_page .hero_area {

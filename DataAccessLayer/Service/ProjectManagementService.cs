@@ -1,5 +1,6 @@
 ﻿using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +84,7 @@ public class ProjectManagementService : applicationDbContext
     }
     public IEnumerable<ProjectMaterial> GetProjectMaterialByProjectId(Guid projectID)
     {
-        return this.ProjectMaterials.Where(pm => pm.ProjectId == projectID).ToList();
+        return this.ProjectMaterials.Include(p => p.Materials).ThenInclude(p => p.MaterialTypes).Where(pm => pm.ProjectId == projectID).ToList();
     }
     public ProjectMaterial GetProjectMaterialByProjectMaterialId(Guid projectMaterialID)
     {

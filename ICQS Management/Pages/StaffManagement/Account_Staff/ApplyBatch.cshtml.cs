@@ -89,11 +89,14 @@ namespace ICQS_Management.Pages.Account_Staff
                                     MaterialName = m.Name,
                                     Quantity = pm.Quantity
                                 }).ToList();
-                //_batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems);
-                //Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
-                //materialPrice = afterQuote.CompletePrice;
-                //Batches = _batchRepo.GetBatchesDateAsc();
-                TempData["QuotationId"] = QuotationId;
+
+            string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
+            Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
+            Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
+            _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId);
+            materialPrice = afterQuote.CompletePrice;
+            Batches = _batchRepo.GetBatchesDateAsc();
+            TempData["QuotationId"] = QuotationId;
             return Page();
         }
         public IActionResult OnPostForm2()

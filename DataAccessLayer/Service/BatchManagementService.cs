@@ -164,7 +164,7 @@ namespace DataAccessLayer.Service
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
             Project _selectedProject = _db.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
             List<ProjectMaterial> quoteMaterials = ProjectManagementService.Instance.GetProjectMaterialByProjectId(_selectedQuotation.ProjectId).ToList();
-
+            Staff staff = _db.Staffs.FirstOrDefault(s => s.StaffId == staffId);
             List<Guid> remainingBatchIds = SortBatchsIdByDate(batchIds);
             List<Batch> affectedBatchs = new List<Batch>();
             double price = 0;

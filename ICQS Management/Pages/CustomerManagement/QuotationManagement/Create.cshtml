@@ -99,7 +99,7 @@
                     <img src="https://i.ibb.co/Snqfnc1/worker.png" width="40" height="40" />
                     <h5 class="font-weight-bold">Labor cost</h5>
                 </div>
-                <span>Estimated: $@(Model.Project.NumOfLabors * Model.Project.LaborSalaryPerMonth * Model.Project.MonthDuration)</span>
+                <span>Estimated: <span class="font-weight-bold">$@(Model.Project.NumOfLabors * Model.Project.LaborSalaryPerMonth * Model.Project.MonthDuration)</span></span>
             </div>
             <hr/>
             <div class="row">
@@ -122,7 +122,7 @@
                     <img src="https://i.ibb.co/XXXMhq4/brick.png" width="40" height="40" />
                     <h5 class="font-weight-bold">Materials</h5>
                 </div>
-                <span>Estimated: </span>
+                <span>Estimated: <span class="font-weight-bold" id="estimated_material_cost"></span></span>
             </div>
             <hr />
             <div class="row">
@@ -134,10 +134,11 @@
                         <div class="form-group">
                             <label asp-for="NewProjectMaterials" class="control-label">@item.Materials.MaterialTypes.MaterialTypeName</label>
                             <div class="d-flex justify-content-between">
-                                <select asp-for="NewProjectMaterials[count].MaterialId" class="form-control">
+                                <select asp-for="NewProjectMaterials[count].MaterialId" class="form-control" onchange="updateEstimatedMaterialPrice()">
                                     @foreach (var material in Model.Materials.Where(m => m.MaterialTypeId == item.Materials.MaterialTypeId).Distinct())
                                     {
                                         <option value="@material.MaterialId">@material.Name</option>
+                                        <input type="hidden" class="materialPrices" name="forcalculatnig" value=@material.MediumPrice/>
                                     }
                                 </select>
                                 <input asp-for="NewProjectMaterials[count].Quantity" class="form-control" value="@item.Quantity" />
@@ -155,6 +156,22 @@
         </div>
     </form>
 </div>
+<script>
+    function updateEstimatedPrice() {
+        var sum = 0;
+        $(".materialPrices").each(function () {
+            var price = parseFloat($(this).val());
+            sum += price;
+        });
+        $("#estimated_material_cost").text(sum.toFixed(2));
+    }
+    $("select").on("change", function () {
+        updateEstimatedMaterialPrice();
+    });
+
+    // Call the updateEstimatedMaterialPrice() function when the page is loaded
+    updateEstimatedMaterialPrice();
+</script>
 
 @* <div>
     <a asp-page="Index">Back to List</a>

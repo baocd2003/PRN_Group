@@ -31,9 +31,7 @@ namespace DataAccessLayer.Service
             }
         }
 
-        public Quotation AddQuotation (Quotation quotation, Project project, List<ProjectMaterial> projectMaterial) {
-            project.ProjectMaterials.AddRange(projectMaterial);
-            quotation.Project = project;
+        public Quotation AddQuotation (Quotation quotation) {
             _db.Quotations.Add(quotation);
             _db.SaveChanges();
             return quotation;
@@ -47,6 +45,11 @@ namespace DataAccessLayer.Service
         public Quotation GetQuotation(Guid id)
         {
             return _db.Quotations.FirstOrDefault(q => q.QuotationId == id);
+        }
+
+        public Customer GetCustomerByEmail(string email)
+        {
+            return _db.Customers.FirstOrDefault(c => c.Email == email);
         }
 
         public List<Quotation> GetProcessingQuotes()

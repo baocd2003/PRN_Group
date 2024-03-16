@@ -26,6 +26,8 @@ namespace ICQS_Management.Pages.ProjectManagement
         public Guid ProjectId { get; set; }
         [BindProperty]
         public String ProjectName { get; set; }
+        [BindProperty]
+        public int countProjectMaterial { get; set; }
         public void OnGet(Guid id, byte status)
         {
             Status = status;
@@ -47,6 +49,7 @@ namespace ICQS_Management.Pages.ProjectManagement
                                  UnitType = _materialTypeRepository.GetMaterialTypeById(m.MaterialTypeId).UnitType,
                                  TotalPrice = _pmRepository.GetProjectById(pm.ProjectId).TotalPrice
                              }).ToList();
+            countProjectMaterial = ProjectMaterialList.Count;
         }
     }
 }

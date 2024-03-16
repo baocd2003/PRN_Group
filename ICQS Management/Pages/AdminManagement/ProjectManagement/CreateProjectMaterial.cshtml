@@ -27,7 +27,10 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Add" class="btn btn-primary" />
+                @if (Model.countProjectMaterial >= 1)
+                {
                 <a asp-page="./ProjectMaterialList" asp-route-id="@Model.projectId" asp-route-status="@Model.projectStatus" class="btn btn-primary">Done</a>
+                }
             </div>
         </form>
     </div>
@@ -76,10 +79,13 @@
                             @Html.DisplayFor(modelItem => item.UnitType)
                         </td>
                         <td>
+                            @if(Model.countProjectMaterial > 1)
+                            {
                             <form asp-page-handler="Delete" asp-route-id="@item.ProjectMaterialId" method="post" style="display: inline;">
-                                <input asp-for="@Model.projectId" class="form-control" hidden/>
+                                <input asp-for="@Model.projectId" class="form-control" hidden />
                                 <button type="submit" class="btn btn-danger" style="width: 40%; text-align: center">Delete</button>
                             </form>
+                            }
                         </td>
                     </tr>
                 }

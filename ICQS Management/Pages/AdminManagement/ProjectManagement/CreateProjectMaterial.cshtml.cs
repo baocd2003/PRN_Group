@@ -32,6 +32,8 @@ namespace ICQS_Management.Pages.ProjectManagement
         public float totalprice { get; set; }
         [BindProperty]
         public List<ProjectMaterialDTO> ProjectMaterialList { get; set; }
+        [BindProperty]
+        public int countProjectMaterial { get; set; }
         public IActionResult OnGet(Guid ProjectId)
         {
             projectName = _projectManagementRepository.GetProjectById(ProjectId).ProjectName;
@@ -55,7 +57,7 @@ namespace ICQS_Management.Pages.ProjectManagement
                                        TotalPrice = _projectManagementRepository.GetProjectById(pm.ProjectId).TotalPrice
                                    }).ToList();
             totalprice = _projectManagementRepository.GetProjectById(ProjectId).TotalPrice;
-
+            countProjectMaterial = ProjectMaterialList.Count;
             var availableMaterials = _mMRepository.GetAllMaterials()
                 .Where(material => !projectMaterials.Any(pm => pm.MaterialId == material.MaterialId));
             ViewData["MaterialId"] = new SelectList(availableMaterials, "MaterialId", "Name");

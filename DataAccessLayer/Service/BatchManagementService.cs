@@ -96,7 +96,7 @@ namespace DataAccessLayer.Service
 
         public bool CheckOverlapBatch(Batch batch)
         {
-            if(_db.Batches.FirstOrDefault(b => b.ImportDate == batch.ImportDate) != null)
+            if(_db.Batches.FirstOrDefault(b => b.ImportDate.Date == batch.ImportDate.Date) != null)
             {
                 return true;
             }

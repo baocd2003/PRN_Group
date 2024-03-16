@@ -14,14 +14,16 @@
     </div>
 }
 <hr />
-<div class="row">
+
+</div>
     <div class="col-md-4">
-        <form method="post" asp-page-handler="Form1">
+        <form method="post">
+        <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Quotation.QuotationId" />
             <div class="form-group">
                 <label asp-for="Quotation.RequestDate" class="control-label"></label>
-                <input asp-for="Quotation.RequestDate" class="form-control" readonly/>
+                <input asp-for="Quotation.RequestDate" class="form-control" readonly />
                 <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -97,12 +99,8 @@
             <div class="form-group">
                 <input type="submit" name="form1" value="Preview Price" class="btn btn-primary" />
             </div>
-        </form>
-
-       
-    </div>
-    <div class="col-md-4">
-        <form method="post" asp-page-handler="Form2">
+        </div>
+        <div class="col-md-4">
             <table class="table">
                 <thead>
                     <tr>
@@ -120,7 +118,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.ImportDate)
                                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample-@item.BatchId" aria-expanded="false" aria-controls="collapseExample-@item.BatchId">
-                                   View details
+                                    View details
                                 </button>
                                 <div class="collapse" id="collapseExample-@item.BatchId">
                                     <div class="card card-body">
@@ -140,8 +138,8 @@
                                                     </tr>
                                                 }
                                             </tbody>
-                                           
-                                            
+
+
                                         </table>
                                     </div>
                                 </div>
@@ -154,11 +152,11 @@
                     }
                 </tbody>
             </table>
-            <input type="submit" name="form2" value="Save" class="btn btn-primary" />
+                <input type="submit" name="saveBtn" value="Save" class="btn btn-primary" />
+                <input type="submit" name="previewBtn" value="Preview" class="btn btn-primary" />
 
         </form>
-       
-    </div>
+    </div>      
 </div>
 
 <div>
@@ -166,8 +164,7 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/calculateTotalPrice.js"></script>
-    <!-- Load jQuery library -->
+   <!-- Load jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Load jQuery Validate plugin -->

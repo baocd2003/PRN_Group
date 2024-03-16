@@ -213,7 +213,6 @@ namespace DataAccessLayer.Service
                     }
                 }
             }
-            Staff staff = _db.Staffs.FirstOrDefault(s => s.StaffId == staffId);
             if (staff.Quotations == null)
             {
                 staff.Quotations = new List<Quotation>();
@@ -221,11 +220,66 @@ namespace DataAccessLayer.Service
             staff.Quotations.Add(_selectedQuotation);
             _selectedQuotation.Batchs = affectedBatchs;
             _selectedQuotation.CompletePrice = price + (_selectedProject.LaborSalaryPerMonth * _selectedProject.MonthDuration * _selectedProject.NumOfLabors);
-            //_selectedQuotation.Status = 1;
+            _selectedQuotation.Status = 1;
             _db.Entry(_selectedQuotation).State = EntityState.Modified;
             _db.SaveChanges();
         }
 
+        public double PreviewPrice(Guid quotationId, List<Guid> batchIds)
+        {
+            Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
+            Project _selectedProject = _db.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
+            List<ProjectMaterial> quoteMaterials = ProjectManagementService.Instance.GetProjectMaterialByProjectId(_selectedQuotation.ProjectId).ToList();
+            List<Guid> remainingBatchIds = SortBatchsIdByDate(batchIds);
+            List<Batch> affectedBatchs = new List<Batch>();
+            double price = 0;
+            foreach (var quoteMaterial in quoteMaterials)
+            {
+                double remainingQuantity = quoteMaterial.Quantity;
+                //double materialBatchQuantity = 
+                foreach (Guid batchId in remainingBatchIds)
+                {
+                    Batch batch = _db.Batches.FirstOrDefault(q => q.BatchId == batchId);
+                    List<BatchDetail> batchDetails = GetBatchDetailsByBatchId(batch.BatchId);
+                    BatchDetail batchDetail = batchDetails.FirstOrDefault(bd => bd.MaterialId == quoteMaterial.MaterialId);
+                    if (batchDetail != null)
+                    {
+                        double quantityToUpdate = batchDetail.Quantity;
+                        if (quantityToUpdate >= remainingQuantity)
+                        {
+                            quantityToUpdate -= remainingQuantity;
+                            affectedBatchs.Add(batch);
+                            price += remainingQuantity * batchDetail.Price;
+                            //_db.SaveChanges();
+                            remainingQuantity = 0;
+                        }
+                        else
+                        {
+                            if (quantityToUpdate > 0)
+                            {
+                                remainingQuantity -= quantityToUpdate;
+                                price += quantityToUpdate * batchDetail.Price;
+                                quantityToUpdate = 0;
+                                affectedBatchs.Add(batch);
+                                //_db.SaveChanges();
+                            }
+                            else
+                            {
+                                remainingQuantity -= batchDetail.Quantity;
+                                quantityToUpdate = 0;
+                                //_db.SaveChanges();
+                            }
+
+                        }
+                    }
+                    if (remainingQuantity == 0)
+                    {
+                        break;
+                    }
+                }
+            }
+            return price + (_selectedProject.LaborSalaryPerMonth * _selectedProject.MonthDuration * _selectedProject.NumOfLabors);
+        }
 
         public void MinusQuantityInBatch(Guid quotationId)
         {
@@ -282,7 +336,7 @@ namespace DataAccessLayer.Service
                     }
                 }
             }
-            _selectedQuotation.Status = 1;
+            _selectedQuotation.Status = 2;
             _db.SaveChanges();
         }
 

@@ -58,5 +58,8 @@ namespace Repository
 
         public void StaffApplyQuote(Guid staffId, Quotation quote)
         => BatchManagementService.Instance.StaffApplyQuote(staffId, quote);
+
+        public double PreviewPrice(Guid quotationId, List<Guid> batchIds)
+        => BatchManagementService.Instance.PreviewPrice(quotationId, batchIds);
     }
 }

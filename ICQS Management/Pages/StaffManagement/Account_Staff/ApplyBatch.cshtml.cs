@@ -11,6 +11,7 @@ using DataAccessLayer.ApplicationDbContext;
 using Repository.Interface;
 using Repository;
 using BusinessObject.DTO;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ICQS_Management.Pages.Account_Staff
 {
@@ -66,47 +67,54 @@ namespace ICQS_Management.Pages.Account_Staff
                                        Quantity = pm.Quantity
                                    }).ToList();
             Batches = _batchRepo.GetBatchesDateAsc();
+            materialPrice = Quotation.CompletePrice;
             Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public IActionResult OnPostForm1()
-        {
-            _projectRepo.UpdateProject(Project);
-            Guid QuotationId = (Guid)TempData["QuotationId"];
-            var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
-            var materials = _materialRepo.GetAllMaterials();
-            ProjectMaterials = (from pm in projectMaterials
-                                join m in materials on pm.MaterialId equals m.MaterialId
-                                where pm.ProjectId == Quotation.ProjectId
-                                select new ProjectMaterialDTO
-                                {
-                                    ProjectMaterialId = pm.ProjectMaterialId,
-                                    ProjectId = pm.ProjectId,
-                                    MaterialId = pm.MaterialId,
-                                    MaterialName = m.Name,
-                                    Quantity = pm.Quantity
-                                }).ToList();
 
-            string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
-            Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
-            Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
-            _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId);
-            materialPrice = afterQuote.CompletePrice;
-            Batches = _batchRepo.GetBatchesDateAsc();
-            TempData["QuotationId"] = QuotationId;
-            return Page();
-        }
-        public IActionResult OnPostForm2()
+        public IActionResult OnPost()
         {
-            Guid QuotationId = (Guid)TempData["QuotationId"];
-            if (!_batchRepo.CheckAvailableBatchForQuote(QuotationId, SelectedItems))
+            if (Request.Form.ContainsKey("saveBtn"))
             {
-                TempData["QuotationId"] = QuotationId;
+                Guid QuotationId = (Guid)TempData["QuotationId"];
+                if (!_batchRepo.CheckAvailableBatchForQuote(QuotationId, SelectedItems))
+                {
+                    TempData["QuotationId"] = QuotationId;
+                    Quotation = _quoteRepo.GetQuotation(QuotationId);
+                    TempData["ErrorMessage"] = "Materials in selected batchs not enough";
+                    var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
+                    var materials = _materialRepo.GetAllMaterials();
+                    ProjectMaterials = (from pm in projectMaterials
+                                        join m in materials on pm.MaterialId equals m.MaterialId
+                                        where pm.ProjectId == Quotation.ProjectId
+                                        select new ProjectMaterialDTO
+                                        {
+                                            ProjectMaterialId = pm.ProjectMaterialId,
+                                            ProjectId = pm.ProjectId,
+                                            MaterialId = pm.MaterialId,
+                                            MaterialName = m.Name,
+                                            Quantity = pm.Quantity
+                                        }).ToList();
+                    Batches = _batchRepo.GetBatchesDateAsc();
+                    Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
+                    return Page();
+                }
+                //materialPrice = 
+                string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
+                Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
+                Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
+                //_batchRepo.StaffApplyQuote(selectedStaff.StaffId, afterQuote);
+                _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId);
+                return RedirectToPage("/AdminManagement/BatchsManagement/Index");
+            }
+            else
+            {
+                _projectRepo.UpdateProject(Project);
+                Guid QuotationId = (Guid)TempData["QuotationId"];
                 Quotation = _quoteRepo.GetQuotation(QuotationId);
-                TempData["ErrorMessage"] = "Materials in selected batchs not enough";
                 var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
                 var materials = _materialRepo.GetAllMaterials();
                 ProjectMaterials = (from pm in projectMaterials
@@ -120,18 +128,16 @@ namespace ICQS_Management.Pages.Account_Staff
                                         MaterialName = m.Name,
                                         Quantity = pm.Quantity
                                     }).ToList();
+
+                string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
+                Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
+                materialPrice = _batchRepo.PreviewPrice(QuotationId, SelectedItems);
                 Batches = _batchRepo.GetBatchesDateAsc();
-                Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
+                TempData["QuotationId"] = QuotationId;
                 return Page();
             }
-            //materialPrice = 
-            string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
-           Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
-            Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
-            //_batchRepo.StaffApplyQuote(selectedStaff.StaffId, afterQuote);
-            _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId);
-            return RedirectToPage("/AdminManagement/BatchsManagement/Index");
-        }
+        } 
+          
 
     }
 }

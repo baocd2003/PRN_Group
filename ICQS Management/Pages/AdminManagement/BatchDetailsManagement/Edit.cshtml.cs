@@ -27,14 +27,28 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-
-            var batchdetail =  await _context.BatchDetails.FirstOrDefaultAsync(m => m.BatchDetailId == id);
-            if (batchdetail == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-            BatchDetail = batchdetail;
-            return Page();
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin" && userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    var batchdetail = await _context.BatchDetails.FirstOrDefaultAsync(m => m.BatchDetailId == id);
+                    if (batchdetail == null)
+                    {
+                        return NotFound();
+                    }
+                    BatchDetail = batchdetail;
+                    return Page();
+                }
+            }
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.

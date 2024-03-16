@@ -31,21 +31,36 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
         private int DetailIndex { get; set; }
         public async Task<IActionResult> OnGetAsync(int index)
         {
-            if (index == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-            string detailListJson = HttpContext.Session.GetString("detailList");
-            List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
-            BatchDetail = batchDetails[index];
-            DetailIndex = index;
-            TempData["IndexValue"] = index;
-            if (BatchDetail == null)
+            else
             {
-                return NotFound();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin" && userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (index == null)
+                    {
+                        return NotFound();
+                    }
+                    string detailListJson = HttpContext.Session.GetString("detailList");
+                    List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
+                    BatchDetail = batchDetails[index];
+                    DetailIndex = index;
+                    TempData["IndexValue"] = index;
+                    if (BatchDetail == null)
+                    {
+                        return NotFound();
+                    }
+                    ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name", batchDetails[index].MaterialId);
+                    return Page();
+                }
             }
-           ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name", batchDetails[index].MaterialId);
-            return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.

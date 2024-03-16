@@ -30,11 +30,26 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 
         public IActionResult OnGet()
         {
-            var id = HttpContext.Session.GetString("selectedBatchId");
-            List<BatchDetail> list = _repo.GetBatchDetailsByBatchId(Guid.Parse(id));
-            //List<BatchDetail> list = _context.BatchDetails.Where(bd => bd.BatchId == id).ToList();
-            ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(list), "MaterialId", "Name");
-            return Page();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin" && userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    var id = HttpContext.Session.GetString("selectedBatchId");
+                    List<BatchDetail> list = _repo.GetBatchDetailsByBatchId(Guid.Parse(id));
+                    //List<BatchDetail> list = _context.BatchDetails.Where(bd => bd.BatchId == id).ToList();
+                    ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(list), "MaterialId", "Name");
+                    return Page();
+                }
+            }
         }
 
         [BindProperty]

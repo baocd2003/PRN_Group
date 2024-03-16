@@ -24,22 +24,37 @@ namespace ICQS_Management.Pages.BatchsManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null || _context.Batches == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin" && userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null || _context.Batches == null)
+                    {
+                        return NotFound();
+                    }
 
-            var batch = await _context.Batches.FirstOrDefaultAsync(m => m.BatchId == id);
+                    var batch = await _context.Batches.FirstOrDefaultAsync(m => m.BatchId == id);
 
-            if (batch == null)
-            {
-                return NotFound();
+                    if (batch == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        Batch = batch;
+                    }
+                    return Page();
+                }
             }
-            else 
-            {
-                Batch = batch;
-            }
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(Guid? id)

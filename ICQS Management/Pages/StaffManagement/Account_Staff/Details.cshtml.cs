@@ -23,21 +23,36 @@ namespace ICQS_Management.Pages.Account_Staff
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null )
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
 
-            var staff = _baseRepository.GetById(id);
-            if (staff == null)
-            {
-                return NotFound();
+                    var staff = _baseRepository.GetById(id);
+                    if (staff == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        Staff = staff;
+                    }
+                    return Page();
+                }
             }
-            else 
-            {
-                Staff = staff;
-            }
-            return Page();
         }
     }
 }

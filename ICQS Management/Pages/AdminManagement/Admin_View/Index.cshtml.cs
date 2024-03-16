@@ -27,11 +27,27 @@ namespace ICQS_Management.Pages.Admin_View
         }
         public IList<User> User { get; set; }
 
-        public async Task OnGetAsync(int? pageNumber)
+        public async Task<IActionResult> OnGetAsync(int? pageNumber)
         {
-            PageNumber = pageNumber ?? 1;
-            TotalRecords = _baseRepository.GetTotalCount();
-            User = _baseRepository.GetAll(PageNumber, PageSize).ToList();
+            if (HttpContext.Session != null)
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (userRole == null || userRole != "admin")
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    PageNumber = pageNumber ?? 1;
+                    TotalRecords = _baseRepository.GetTotalCount();
+                    User = _baseRepository.GetAll(PageNumber, PageSize).ToList();
+                }
+            }
+            else
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            return Page();
         }
     }
 }

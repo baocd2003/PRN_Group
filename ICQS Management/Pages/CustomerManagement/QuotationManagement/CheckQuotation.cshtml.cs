@@ -33,21 +33,36 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
         public List<ProjectMaterialDTO> ProjectMaterials { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-
-            Quotation = await _context.Quotations
-                .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
-
-            if (Quotation == null)
+            else
             {
-                return NotFound();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    Quotation = await _context.Quotations
+                        .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
+
+                    if (Quotation == null)
+                    {
+                        return NotFound();
+                    }
+                    TempData["id"] = id;
+                    ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "Description");
+                    return Page();
+                }
             }
-            TempData["id"] = id;
-           ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "Description");
-            return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.

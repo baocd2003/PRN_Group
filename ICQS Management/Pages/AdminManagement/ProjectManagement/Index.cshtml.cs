@@ -24,11 +24,27 @@ namespace ICQS_Management.Pages.ProjectManagement
 
         public List<Project> Project { get;set; } = default!;
 
-        public async Task OnGetAsync(int? pageNumber)
+        public async Task<IActionResult> OnGetAsync(int? pageNumber)
         {
-            PageNumber = pageNumber ?? 1;
-            TotalRecords = _projectRepository.GetTotalCount();
-            Project = _projectRepository.GetAll(PageNumber, PageSize).ToList();           
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    PageNumber = pageNumber ?? 1;
+                    TotalRecords = _projectRepository.GetTotalCount();
+                    Project = _projectRepository.GetAll(PageNumber, PageSize).ToList();
+                    return Page();
+                }
+            }
         }
     }
 }

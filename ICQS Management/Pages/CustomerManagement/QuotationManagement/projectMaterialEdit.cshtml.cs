@@ -25,22 +25,37 @@ namespace ICQS_Management.Pages.QuotationManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-
-            ProjectMaterial = await _context.ProjectMaterials
-                .Include(p => p.Materials)
-                .Include(p => p.Projects).FirstOrDefaultAsync(m => m.ProjectMaterialId == id);
-
-            if (ProjectMaterial == null)
+            else
             {
-                return NotFound();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    ProjectMaterial = await _context.ProjectMaterials
+                        .Include(p => p.Materials)
+                        .Include(p => p.Projects).FirstOrDefaultAsync(m => m.ProjectMaterialId == id);
+
+                    if (ProjectMaterial == null)
+                    {
+                        return NotFound();
+                    }
+                    ViewData["MaterialId"] = new SelectList(_context.Materials, "MaterialId", "Name");
+                    ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "Description");
+                    return Page();
+                }
             }
-           ViewData["MaterialId"] = new SelectList(_context.Materials, "MaterialId", "Name");
-           ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "Description");
-            return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.

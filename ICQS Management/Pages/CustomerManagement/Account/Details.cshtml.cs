@@ -23,21 +23,36 @@ namespace ICQS_Management.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
 
-            var customer = _baseRepository.GetById(id);
-            if (customer == null)
-            {
-                return NotFound();
+                    var customer = _baseRepository.GetById(id);
+                    if (customer == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        Customer = customer;
+                    }
+                    return Page();
+                }
             }
-            else 
-            {
-                Customer = customer;
-            }
-            return Page();
         }
     }
 }

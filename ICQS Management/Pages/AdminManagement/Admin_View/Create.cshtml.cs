@@ -23,15 +23,25 @@ namespace ICQS_Management.Pages.Admin_View
 
         public IActionResult OnGet(Guid userId)
         {
-            return Page();
+            if (HttpContext.Session != null)
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if(userRole == null || userRole != "admin")
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                return Page();
+            }
+            else
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
         }
 
         [BindProperty]
         public User User { get; set; }
         [BindProperty]
         public string role { get; set; }
-
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
             if (role == "Staff")

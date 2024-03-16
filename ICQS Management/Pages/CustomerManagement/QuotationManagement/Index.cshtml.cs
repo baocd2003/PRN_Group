@@ -21,10 +21,26 @@ namespace ICQS_Management.Pages.QuotationManagement
 
         public IList<Quotation> Quotation { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Quotation = await _context.Quotations.Where(q => q.Status == 1)
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    Quotation = await _context.Quotations.Where(q => q.Status == 1)
                 .Include(q => q.Project).ToListAsync();
+                    return Page();
+                }
+            }
         }
     }
 }

@@ -25,18 +25,33 @@ namespace ICQS_Management.Pages.QuotationManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-
-            Project = await _context.Projects.FirstOrDefaultAsync(m => m.ProjectID == id);
-
-            if (Project == null)
+            else
             {
-                return NotFound();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    Project = await _context.Projects.FirstOrDefaultAsync(m => m.ProjectID == id);
+
+                    if (Project == null)
+                    {
+                        return NotFound();
+                    }
+                    return Page();
+                }
             }
-            return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.

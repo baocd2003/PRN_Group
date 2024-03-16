@@ -22,13 +22,29 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 
         public IList<BatchDetail> BatchDetail { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (_context.BatchDetails != null)
+            if (HttpContext.Session == null)
             {
-                BatchDetail = await _context.BatchDetails
-                .Include(b => b.Batch)
-                .Include(b => b.Materials).ToListAsync();
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin" && userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (_context.BatchDetails != null)
+                    {
+                        BatchDetail = await _context.BatchDetails
+                        .Include(b => b.Batch)
+                        .Include(b => b.Materials).ToListAsync();
+                    }
+                    return Page();
+                }
             }
         }
     }

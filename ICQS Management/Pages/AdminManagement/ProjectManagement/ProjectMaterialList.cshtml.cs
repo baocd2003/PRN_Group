@@ -28,28 +28,44 @@ namespace ICQS_Management.Pages.ProjectManagement
         public String ProjectName { get; set; }
         [BindProperty]
         public int countProjectMaterial { get; set; }
-        public void OnGet(Guid id, byte status)
+        public async Task<IActionResult> OnGet(Guid id, byte status)
         {
-            Status = status;
-            ProjectId = id;
-            ProjectName = _pmRepository.GetProjectById(id).ProjectName;
-            var projectMaterials = _pmRepository.GetProjectMaterialByProjectId(id);
-            var materials = _materialRepository.GetAllMaterials();
-            ProjectMaterialList = (from pm in projectMaterials
-                             join m in materials on pm.MaterialId equals m.MaterialId
-                             where pm.ProjectId == id
-                             select new ProjectMaterialDTO
-                             {
-                                 ProjectMaterialId = pm.ProjectMaterialId,
-                                 ProjectId = pm.ProjectId,
-                                 MaterialId = pm.MaterialId,
-                                 MaterialName = m.Name,
-                                 Quantity = pm.Quantity,
-                                 MediumPrice = m.MediumPrice,
-                                 UnitType = _materialTypeRepository.GetMaterialTypeById(m.MaterialTypeId).UnitType,
-                                 TotalPrice = _pmRepository.GetProjectById(pm.ProjectId).TotalPrice
-                             }).ToList();
-            countProjectMaterial = ProjectMaterialList.Count;
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    Status = status;
+                    ProjectId = id;
+                    ProjectName = _pmRepository.GetProjectById(id).ProjectName;
+                    var projectMaterials = _pmRepository.GetProjectMaterialByProjectId(id);
+                    var materials = _materialRepository.GetAllMaterials();
+                    ProjectMaterialList = (from pm in projectMaterials
+                                           join m in materials on pm.MaterialId equals m.MaterialId
+                                           where pm.ProjectId == id
+                                           select new ProjectMaterialDTO
+                                           {
+                                               ProjectMaterialId = pm.ProjectMaterialId,
+                                               ProjectId = pm.ProjectId,
+                                               MaterialId = pm.MaterialId,
+                                               MaterialName = m.Name,
+                                               Quantity = pm.Quantity,
+                                               MediumPrice = m.MediumPrice,
+                                               UnitType = _materialTypeRepository.GetMaterialTypeById(m.MaterialTypeId).UnitType,
+                                               TotalPrice = _pmRepository.GetProjectById(pm.ProjectId).TotalPrice
+                                           }).ToList();
+                    countProjectMaterial = ProjectMaterialList.Count;
+                    return Page();
+                }
+            }
         }
     }
 }

@@ -26,18 +26,33 @@ namespace ICQS_Management.Pages.ProjectManagement
 
         public IActionResult OnGet(Guid id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
 
-            Project = _pmRepository.GetProjectById(id);
-            materialPrice = _pmRepository.CalculateProjectMaterialPrice(id);
-            if (Project == null)
-            {
-                return NotFound();
+                    Project = _pmRepository.GetProjectById(id);
+                    materialPrice = _pmRepository.CalculateProjectMaterialPrice(id);
+                    if (Project == null)
+                    {
+                        return NotFound();
+                    }
+                    return Page();
+                }
             }
-            return Page();
         }
         public IActionResult OnPost()
         {

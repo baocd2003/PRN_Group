@@ -29,24 +29,39 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 
         public IActionResult OnGet()
         {
-            ImportDate = DateTime.Parse(HttpContext.Session.GetString("ImportDate"));
-            string detailListJson = HttpContext.Session.GetString("detailList");
-            List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin" && userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    ImportDate = DateTime.Parse(HttpContext.Session.GetString("ImportDate"));
+                    string detailListJson = HttpContext.Session.GetString("detailList");
+                    List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
 
-            var materials = _materialRepo.GetAllMaterials();
-            Materials = _materialRepo.GetAllMaterials().ToList();
-            ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
-            
-            BatchDetails = (from bd in batchDetails 
-                            join m in materials on bd.MaterialId equals m.MaterialId
-                            select new BatchDetailDTO
-                            {
-                                BatchDetailId = bd.BatchDetailId,
-                                Quantity = bd.Quantity,
-                                Price = bd.Price,
-                                MaterialName = m.Name,
-                            }).ToList();
-            return Page();
+                    var materials = _materialRepo.GetAllMaterials();
+                    Materials = _materialRepo.GetAllMaterials().ToList();
+                    ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
+
+                    BatchDetails = (from bd in batchDetails
+                                    join m in materials on bd.MaterialId equals m.MaterialId
+                                    select new BatchDetailDTO
+                                    {
+                                        BatchDetailId = bd.BatchDetailId,
+                                        Quantity = bd.Quantity,
+                                        Price = bd.Price,
+                                        MaterialName = m.Name,
+                                    }).ToList();
+                    return Page();
+                }
+            }
         }
 
         [BindProperty]

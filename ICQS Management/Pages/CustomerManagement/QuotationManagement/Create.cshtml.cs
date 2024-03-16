@@ -23,22 +23,37 @@ namespace ICQS_Management.Pages.QuotationManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-
-            Project = await _context.Projects.FirstOrDefaultAsync(m => m.ProjectID == id);
-            if (Project == null)
+            else
             {
-                return NotFound();
-            }
-            ProjectMaterials = await _context.ProjectMaterials.Include(p => p.Materials).Where(p => p.ProjectId == id).ToListAsync();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
 
-            //ViewData["CustomerId"] = new SelectList(_context.Customers, "UserId", "Discriminator");
-            //ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "ProjectName");
-            //ViewData["StaffID"] = new SelectList(_context.Staffs, "UserId", "Discriminator");
-            return Page();
+                    Project = await _context.Projects.FirstOrDefaultAsync(m => m.ProjectID == id);
+                    if (Project == null)
+                    {
+                        return NotFound();
+                    }
+                    ProjectMaterials = await _context.ProjectMaterials.Include(p => p.Materials).Where(p => p.ProjectId == id).ToListAsync();
+
+                    //ViewData["CustomerId"] = new SelectList(_context.Customers, "UserId", "Discriminator");
+                    //ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectID", "ProjectName");
+                    //ViewData["StaffID"] = new SelectList(_context.Staffs, "UserId", "Discriminator");
+                    return Page();
+                }
+            }
         }
 
         // Project properties

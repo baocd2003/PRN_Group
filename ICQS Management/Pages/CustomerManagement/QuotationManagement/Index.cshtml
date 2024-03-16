@@ -8,7 +8,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="./ViewProcessingQuotes">Check applied quotation</a>
 </p>
 <table class="table">
     <thead>
@@ -44,9 +44,8 @@
                 @Html.DisplayFor(modelItem => item.Project.Description)
             </td>
             <td>
-                <a asp-page="./CheckQuotation" asp-route-id="@item.QuotationId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.QuotationId">Delete</a>
+               
+                <a asp-page="./Details" asp-route-id="@item.QuotationId">View Details</a> |
             </td>
         </tr>
 }

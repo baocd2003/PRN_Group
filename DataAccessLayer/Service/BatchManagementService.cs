@@ -342,7 +342,7 @@ namespace DataAccessLayer.Service
 
         public void ClearAffectedBatches(Guid quotationId)
         {
-            Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
+            Quotation _selectedQuotation = _db.Quotations.Include(q => q.Batchs).FirstOrDefault(q => q.QuotationId == quotationId);
             _selectedQuotation.Batchs.Clear();
             _db.SaveChanges();
         }
@@ -350,7 +350,7 @@ namespace DataAccessLayer.Service
         {
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
             ClearAffectedBatches(quotationId);
-            _selectedQuotation.Status = 4;
+            _selectedQuotation.Status = 3;
             _db.SaveChanges();
         }
         public void StaffApplyQuote(Guid staffId, Quotation quote)
@@ -364,6 +364,10 @@ namespace DataAccessLayer.Service
             _db.SaveChanges();
         }
 
-
+        public Quotation GetQuotationWithProject(Guid id)
+        {
+          return  _db.Quotations
+                .Include(q => q.Project).FirstOrDefault(m => m.QuotationId == id);
+        }
     }
 }

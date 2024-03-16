@@ -12,5 +12,8 @@ namespace Repository.Interface
         IEnumerable<Quotation> GetAllQuotations();
         Quotation AddQuotation (Quotation quotation, Project project, List<ProjectMaterial> projectMaterial);
         Quotation GetQuotation(Guid id);
+        List<Quotation> GetProcessingQuotes();
+        List<Quotation> GetAppliedQuotes();
+
     }
 }

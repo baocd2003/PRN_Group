@@ -21,6 +21,16 @@ namespace Repository
             return QuotationManagementService.Instance.GetAllQuotations();
         }
 
+        public List<Quotation> GetAppliedQuotes()
+        {
+            return QuotationManagementService.Instance.GetAppliedQuotes();
+        }
+
+        public List<Quotation> GetProcessingQuotes()
+        {
+            return QuotationManagementService.Instance.GetProcessingQuotes();
+        }
+
         public Quotation GetQuotation(Guid id)
        => QuotationManagementService.Instance.GetQuotation(id);
     }

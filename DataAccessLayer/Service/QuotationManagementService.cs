@@ -1,5 +1,6 @@
 ﻿using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
@@ -47,5 +48,17 @@ namespace DataAccessLayer.Service
         {
             return _db.Quotations.FirstOrDefault(q => q.QuotationId == id);
         }
+
+        public List<Quotation> GetProcessingQuotes()
+        {
+            return _db.Quotations.Include(q => q.Project).Where(q => q.Status == 0).ToList();
+        }
+
+        public List<Quotation> GetAppliedQuotes()
+        {
+            return _db.Quotations.Include(q => q.Project).Where(q => q.Status == 1).ToList();
+        }
+
+
     }
 }

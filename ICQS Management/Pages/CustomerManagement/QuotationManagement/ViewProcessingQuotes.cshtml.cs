@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
-using Repository;
 using Repository.Interface;
+using Repository;
 
-namespace ICQS_Management.Pages.StaffManagement.Account_Staff
+namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
 {
-    public class QuotationRequestModel : PageModel
+    public class ViewProcessingQuotesModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-        private IBatchManagement _batchManagementRepository = new BatchManagementRepository();
-        public QuotationRequestModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        private IQuotationManagementRepository _quoteRepo = new QuotationManagementRepository();
+        public ViewProcessingQuotesModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
             _context = context;
         }
@@ -25,7 +25,7 @@ namespace ICQS_Management.Pages.StaffManagement.Account_Staff
 
         public async Task OnGetAsync()
         {
-            Quotation = _batchManagementRepository.GetRequestQuotation().ToList();
+            Quotation = _quoteRepo.GetAppliedQuotes();
         }
     }
 }

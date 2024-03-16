@@ -162,6 +162,7 @@ namespace DataAccessLayer.Service
         public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId)
         {
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
+            Project _selectedProject = _db.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
             List<ProjectMaterial> quoteMaterials = ProjectManagementService.Instance.GetProjectMaterialByProjectId(_selectedQuotation.ProjectId).ToList();
             Staff staff = _db.Staffs.FirstOrDefault(s => s.StaffId == staffId);
             List<Guid> remainingBatchIds = SortBatchsIdByDate(batchIds);
@@ -212,14 +213,15 @@ namespace DataAccessLayer.Service
                     }
                 }
             }
-            _selectedQuotation.Batchs = affectedBatchs;
+            Staff staff = _db.Staffs.FirstOrDefault(s => s.StaffId == staffId);
             if (staff.Quotations == null)
             {
                 staff.Quotations = new List<Quotation>();
             }
-            _selectedQuotation.CompletePrice = price;
-            _selectedQuotation.Status = 1;
             staff.Quotations.Add(_selectedQuotation);
+            _selectedQuotation.Batchs = affectedBatchs;
+            _selectedQuotation.CompletePrice = price + (_selectedProject.LaborSalaryPerMonth * _selectedProject.MonthDuration * _selectedProject.NumOfLabors);
+            //_selectedQuotation.Status = 1;
             _db.Entry(_selectedQuotation).State = EntityState.Modified;
             _db.SaveChanges();
         }
@@ -272,7 +274,6 @@ namespace DataAccessLayer.Service
                                 batchDetail.Quantity = 0;
                                 _db.SaveChanges();
                             }
-
                         }
                     }
                     if (remainingQuantity == 0)
@@ -281,7 +282,7 @@ namespace DataAccessLayer.Service
                     }
                 }
             }
-            _selectedQuotation.Status = 2;
+            _selectedQuotation.Status = 1;
             _db.SaveChanges();
         }
 
@@ -298,9 +299,15 @@ namespace DataAccessLayer.Service
             _selectedQuotation.Status = 4;
             _db.SaveChanges();
         }
-        public void EditQuotation()
+        public void StaffApplyQuote(Guid staffId, Quotation quote)
         {
-
+            Staff staff = _db.Staffs.FirstOrDefault(s => s.StaffId == staffId);
+            if(staff.Quotations == null)
+            {
+                staff.Quotations = new List<Quotation>();
+            }
+            staff.Quotations.Add(quote);
+            _db.SaveChanges();
         }
 
 

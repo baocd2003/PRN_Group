@@ -68,7 +68,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             {
                 _repo.AddMoreDetailsInBatch(batchDetails);
                 HttpContext.Session.Remove("moreDetailList");
-                return RedirectToPage("/BatchsManagement/Index");
+                return RedirectToPage("/AdminManagement/BatchsManagement/Index");
             }
         }
     }

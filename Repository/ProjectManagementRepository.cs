@@ -61,6 +61,11 @@ public class ProjectManagementRepository : IProjectManagementRepository
         return ProjectManagementService.Instance.GetProjectById(id);
     }
 
+    public Project GetProjectByQuoteId(Guid quoteid)
+    {
+        return ProjectManagementService.Instance.GetProjectByQuoteId(quoteid);
+    }
+
     public IEnumerable<ProjectMaterial> GetProjectMaterialByProjectId(Guid projectID)
     {
         return ProjectManagementService.Instance.GetProjectMaterialByProjectId(projectID);

@@ -140,4 +140,12 @@ public class ProjectManagementService : applicationDbContext
             this.SaveChanges();
         }
     }
+
+    public Project GetProjectByQuoteId(Guid quoteid)
+    {
+        Quotation _selectedQuotation = this.Quotations.FirstOrDefault(q => q.QuotationId == quoteid);
+        Project _selectedProject = this.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
+        return _selectedProject;
+    }
+    
 }

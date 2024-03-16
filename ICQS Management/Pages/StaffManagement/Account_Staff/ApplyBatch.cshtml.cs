@@ -39,7 +39,7 @@ namespace ICQS_Management.Pages.Account_Staff
         public List<Guid> SelectedItems { get; set; }
 
         [BindProperty]
-        public Project Project { get ; set; }
+        public Project Project { get; set; }
 
         public double materialPrice { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -66,10 +66,7 @@ namespace ICQS_Management.Pages.Account_Staff
                                        Quantity = pm.Quantity
                                    }).ToList();
             Batches = _batchRepo.GetBatchesDateAsc();
-            //foreach (var batch in Batches)
-            //{
-            //    batch.BatchDetails = _context.BatchDetails.Where(bd => bd.BatchId == batch.BatchId).Include(bd => bd.Materials).ToList();
-            //}
+            Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
             return Page();
         }
 
@@ -92,6 +89,7 @@ namespace ICQS_Management.Pages.Account_Staff
                                     MaterialName = m.Name,
                                     Quantity = pm.Quantity
                                 }).ToList();
+
             string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
             Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
             Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
@@ -123,9 +121,15 @@ namespace ICQS_Management.Pages.Account_Staff
                                         Quantity = pm.Quantity
                                     }).ToList();
                 Batches = _batchRepo.GetBatchesDateAsc();
+                Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
                 return Page();
             }
-            _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems);
+            //materialPrice = 
+            string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
+           Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
+            Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
+            //_batchRepo.StaffApplyQuote(selectedStaff.StaffId, afterQuote);
+            _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId);
             return RedirectToPage("/AdminManagement/BatchsManagement/Index");
         }
 

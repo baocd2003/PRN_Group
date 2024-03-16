@@ -21,7 +21,7 @@
             <input type="hidden" asp-for="Quotation.QuotationId" />
             <div class="form-group">
                 <label asp-for="Quotation.RequestDate" class="control-label"></label>
-                <input asp-for="Quotation.RequestDate" class="form-control" />
+                <input asp-for="Quotation.RequestDate" class="form-control" readonly/>
                 <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -61,6 +61,7 @@
                 <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" required min="1" />
                 <span asp-validation-for="Project.MonthDuration" class="text-danger"></span>
             </div>
+
             <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" />
             <div class="form-group">
                 <label asp-for="Project.TotalPrice" class="control-label"></label>
@@ -94,7 +95,7 @@
                 </tbody>
             </table>
             <div class="form-group">
-                <input type="submit" name="form1" value="Save" class="btn btn-primary" />
+                <input type="submit" name="form1" value="Preview Price" class="btn btn-primary" />
             </div>
         </form>
 
@@ -165,9 +166,17 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    <script src="~/js/calculateTotalPrice.js"></script>
+    <!-- Load jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-@* <script src="~/lib/@popperjs/core/dist/umd/popper.min.js"></script> *@
+    <!-- Load jQuery Validate plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
+    <!-- Load jQuery Validate Unobtrusive plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 

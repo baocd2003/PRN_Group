@@ -11,14 +11,19 @@ namespace Repository
 {
     public class QuotationManagementRepository : IQuotationManagementRepository
     {
-        public Quotation AddQuotation(Quotation quotation, Project project, List<ProjectMaterial> projectMaterial)
+        public Quotation AddQuotation(Quotation quotation)
         {
-            return QuotationManagementService.Instance.AddQuotation(quotation, project, projectMaterial);
+            return QuotationManagementService.Instance.AddQuotation(quotation);
         }
 
         public IEnumerable<Quotation> GetAllQuotations()
         {
             return QuotationManagementService.Instance.GetAllQuotations();
+        }
+
+        public Customer GetCustomerByEmail(string email)
+        {
+            return QuotationManagementService.Instance.GetCustomerByEmail(email);
         }
 
         public Quotation GetQuotation(Guid id)

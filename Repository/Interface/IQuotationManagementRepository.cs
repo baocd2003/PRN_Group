@@ -10,7 +10,8 @@ namespace Repository.Interface
     public interface IQuotationManagementRepository
     {
         IEnumerable<Quotation> GetAllQuotations();
-        Quotation AddQuotation (Quotation quotation, Project project, List<ProjectMaterial> projectMaterial);
+        Quotation AddQuotation (Quotation quotation);
         Quotation GetQuotation(Guid id);
+        Customer GetCustomerByEmail(string email);
     }
 }

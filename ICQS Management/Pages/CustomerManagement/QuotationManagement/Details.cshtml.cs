@@ -33,7 +33,25 @@ namespace ICQS_Management.Pages.QuotationManagement
         public List<ProjectMaterialDTO> ProjectMaterialList { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            Quotation = _batchRepo.GetQuotationWithProject((Guid)id);
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    Quotation = _batchRepo.GetQuotationWithProject((Guid)id);
             Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
             var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
             var materials = _materialRepo.GetAllMaterials();
@@ -49,11 +67,14 @@ namespace ICQS_Management.Pages.QuotationManagement
                                        Quantity = pm.Quantity
                                    }).ToList();
 
-            if (Quotation == null)
-            {
-                return NotFound();
+
+                    if (Quotation == null)
+                    {
+                        return NotFound();
+                    }
+                    return Page();
+                }
             }
-            return Page();
         }
     }
 }

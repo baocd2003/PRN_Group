@@ -23,15 +23,31 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 
         public List<Material> Material { get; set; } = default!;
 
-        public async Task OnGetAsync(int? pageNumber)
+        public async Task<IActionResult> OnGetAsync(int? pageNumber)
         {
-            if (pageNumber.HasValue)
+            if (HttpContext.Session == null)
             {
-                PageNumber = pageNumber.Value;
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-            PageNumber = pageNumber ?? 1;
-            TotalRecords = _baseRepository.GetTotalCount();
-            Material = await _materialRepository.GetMaterialsPaged(PageNumber, PageSize);
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (pageNumber.HasValue)
+                    {
+                        PageNumber = pageNumber.Value;
+                    }
+                    PageNumber = pageNumber ?? 1;
+                    TotalRecords = _baseRepository.GetTotalCount();
+                    Material = await _materialRepository.GetMaterialsPaged(PageNumber, PageSize);
+                    return Page();
+                }
+            }
         }
     }
 }

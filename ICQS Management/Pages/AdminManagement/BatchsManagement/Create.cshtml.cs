@@ -14,24 +14,31 @@ namespace ICQS_Management.Pages.BatchsManagement
 {
     public class CreateModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
         private BatchManagementRepository _repo = new BatchManagementRepository();
-
-        public CreateModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
 
         public IActionResult OnGet()
         {
-            return Page();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin" && userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    return Page();
+                }
+            }
         }
 
         [BindProperty]
         public Batch Batch { get; set; } = default!;
-        
-
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+       
         public async Task<IActionResult> OnPostAsync()
         {
           if (Batch == null)

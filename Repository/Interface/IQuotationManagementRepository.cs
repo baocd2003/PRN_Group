@@ -1,3 +1,4 @@
+
 ﻿using BussinessObject.Entity;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,6 @@ namespace Repository.Interface
         Quotation GetQuotation(Guid id);
         List<Quotation> GetProcessingQuotes();
         List<Quotation> GetAppliedQuotes();
-
+        Customer GetCustomerByEmail(string email);
     }
 }

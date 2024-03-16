@@ -22,9 +22,24 @@ namespace ICQS_Management.Pages.ProjectManagement
         public byte status { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            Project = await Task.Run(() => _pmRepository.GetProjectById(id));
-            status = Project.Status;
-            return Page();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    Project = await Task.Run(() => _pmRepository.GetProjectById(id));
+                    status = Project.Status;
+                    return Page();
+                }
+            }
         }
 
         public IActionResult OnPostAsync(Guid id)

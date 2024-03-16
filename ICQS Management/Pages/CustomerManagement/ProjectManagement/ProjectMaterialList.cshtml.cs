@@ -25,24 +25,40 @@ namespace ICQS_Management.Pages.CustomerManagement.ProjectManagement
         public Guid ProjectId { get; set; }
         [BindProperty]
         public String ProjectName { get; set; }
-        public void OnGet(Guid id, byte status)
+        public async Task<IActionResult> OnGet(Guid id, byte status)
         {
-            Status = status;
-            ProjectId = id;
-            ProjectName = _pmRepository.GetProjectById(id).ProjectName;
-            var projectMaterials = _pmRepository.GetProjectMaterialByProjectId(id);
-            var materials = _materialRepository.GetAllMaterials();
-            ProjectMaterialList = (from pm in projectMaterials
-                                   join m in materials on pm.MaterialId equals m.MaterialId
-                                   where pm.ProjectId == id
-                                   select new ProjectMaterialDTO
-                                   {
-                                       ProjectMaterialId = pm.ProjectMaterialId,
-                                       ProjectId = pm.ProjectId,
-                                       MaterialId = pm.MaterialId,
-                                       MaterialName = m.Name,
-                                       Quantity = pm.Quantity
-                                   }).ToList();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    Status = status;
+                    ProjectId = id;
+                    ProjectName = _pmRepository.GetProjectById(id).ProjectName;
+                    var projectMaterials = _pmRepository.GetProjectMaterialByProjectId(id);
+                    var materials = _materialRepository.GetAllMaterials();
+                    ProjectMaterialList = (from pm in projectMaterials
+                                           join m in materials on pm.MaterialId equals m.MaterialId
+                                           where pm.ProjectId == id
+                                           select new ProjectMaterialDTO
+                                           {
+                                               ProjectMaterialId = pm.ProjectMaterialId,
+                                               ProjectId = pm.ProjectId,
+                                               MaterialId = pm.MaterialId,
+                                               MaterialName = m.Name,
+                                               Quantity = pm.Quantity
+                                           }).ToList();
+                    return Page();
+                }
+            }
         }
     }
 }

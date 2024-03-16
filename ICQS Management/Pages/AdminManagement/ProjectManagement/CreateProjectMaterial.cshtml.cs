@@ -36,32 +36,47 @@ namespace ICQS_Management.Pages.ProjectManagement
         public int countProjectMaterial { get; set; }
         public IActionResult OnGet(Guid ProjectId)
         {
-            projectName = _projectManagementRepository.GetProjectById(ProjectId).ProjectName;
-            projectId = ProjectId;
-            projectStatus = _projectManagementRepository.GetProjectById(ProjectId).Status;
-            var projectMaterials = _projectManagementRepository.GetProjectMaterialByProjectId(ProjectId);
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    projectName = _projectManagementRepository.GetProjectById(ProjectId).ProjectName;
+                    projectId = ProjectId;
+                    projectStatus = _projectManagementRepository.GetProjectById(ProjectId).Status;
+                    var projectMaterials = _projectManagementRepository.GetProjectMaterialByProjectId(ProjectId);
 
-            var materials = _mMRepository.GetAllMaterials();
-            ProjectMaterialList = (from pm in projectMaterials
-                                   join m in materials on pm.MaterialId equals m.MaterialId
-                                   where pm.ProjectId == ProjectId
-                                   select new ProjectMaterialDTO
-                                   {
-                                       ProjectMaterialId = pm.ProjectMaterialId,
-                                       ProjectId = pm.ProjectId,
-                                       MaterialId = pm.MaterialId,
-                                       MaterialName = m.Name,
-                                       Quantity = pm.Quantity,
-                                       MediumPrice = m.MediumPrice,
-                                       UnitType = _materialTypeRepository.GetMaterialTypeById(m.MaterialTypeId).UnitType,
-                                       TotalPrice = _projectManagementRepository.GetProjectById(pm.ProjectId).TotalPrice
-                                   }).ToList();
-            totalprice = _projectManagementRepository.GetProjectById(ProjectId).TotalPrice;
-            countProjectMaterial = ProjectMaterialList.Count;
-            var availableMaterials = _mMRepository.GetAllMaterials()
-                .Where(material => !projectMaterials.Any(pm => pm.MaterialId == material.MaterialId));
-            ViewData["MaterialId"] = new SelectList(availableMaterials, "MaterialId", "Name");
-            return Page();
+                    var materials = _mMRepository.GetAllMaterials();
+                    ProjectMaterialList = (from pm in projectMaterials
+                                           join m in materials on pm.MaterialId equals m.MaterialId
+                                           where pm.ProjectId == ProjectId
+                                           select new ProjectMaterialDTO
+                                           {
+                                               ProjectMaterialId = pm.ProjectMaterialId,
+                                               ProjectId = pm.ProjectId,
+                                               MaterialId = pm.MaterialId,
+                                               MaterialName = m.Name,
+                                               Quantity = pm.Quantity,
+                                               MediumPrice = m.MediumPrice,
+                                               UnitType = _materialTypeRepository.GetMaterialTypeById(m.MaterialTypeId).UnitType,
+                                               TotalPrice = _projectManagementRepository.GetProjectById(pm.ProjectId).TotalPrice
+                                           }).ToList();
+                    totalprice = _projectManagementRepository.GetProjectById(ProjectId).TotalPrice;
+                    countProjectMaterial = ProjectMaterialList.Count;
+                    var availableMaterials = _mMRepository.GetAllMaterials()
+                        .Where(material => !projectMaterials.Any(pm => pm.MaterialId == material.MaterialId));
+                    ViewData["MaterialId"] = new SelectList(availableMaterials, "MaterialId", "Name");
+                    return Page();
+                }
+            }
         }
         public IActionResult OnPostAsync()
         {

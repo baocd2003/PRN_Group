@@ -45,31 +45,46 @@ namespace ICQS_Management.Pages.Account_Staff
         public double materialPrice { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-            SelectedItems = new List<Guid>();
-            Quotation = await _context.Quotations
-                .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
-            var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
-            TempData["QuotationId"] = id;
-            var materials = _materialRepo.GetAllMaterials();
-            ProjectMaterials = (from pm in projectMaterials
-                                   join m in materials on pm.MaterialId equals m.MaterialId
-                                   where pm.ProjectId == Quotation.ProjectId
-                                   select new ProjectMaterialDTO
-                                   {
-                                       ProjectMaterialId = pm.ProjectMaterialId,
-                                       ProjectId = pm.ProjectId,
-                                       MaterialId = pm.MaterialId,
-                                       MaterialName = m.Name,
-                                       Quantity = pm.Quantity
-                                   }).ToList();
-            Batches = _batchRepo.GetBatchesDateAsc();
-            materialPrice = Quotation.CompletePrice;
-            Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
-            return Page();
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+                    SelectedItems = new List<Guid>();
+                    Quotation = await _context.Quotations
+                        .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
+                    var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
+                    TempData["QuotationId"] = id;
+                    var materials = _materialRepo.GetAllMaterials();
+                    ProjectMaterials = (from pm in projectMaterials
+                                        join m in materials on pm.MaterialId equals m.MaterialId
+                                        where pm.ProjectId == Quotation.ProjectId
+                                        select new ProjectMaterialDTO
+                                        {
+                                            ProjectMaterialId = pm.ProjectMaterialId,
+                                            ProjectId = pm.ProjectId,
+                                            MaterialId = pm.MaterialId,
+                                            MaterialName = m.Name,
+                                            Quantity = pm.Quantity
+                                        }).ToList();
+                    Batches = _batchRepo.GetBatchesDateAsc();
+                    materialPrice = Quotation.CompletePrice;
+                    Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
+                    return Page();
+                }
+            }
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.

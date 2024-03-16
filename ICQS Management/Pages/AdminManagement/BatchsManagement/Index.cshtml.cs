@@ -13,20 +13,29 @@ namespace ICQS_Management.Pages.BatchsManagement
 {
     public class IndexModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
         private BatchManagementRepository _repo = new BatchManagementRepository();
-
-        public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
 
         public IList<Batch> Batch { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-
-           Batch  = _repo.GetBatchesDateAsc().ToList();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin" && userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    Batch = _repo.GetBatchesDateAsc().ToList();
+                    return Page();
+                }
+            }
         }
     }
 }

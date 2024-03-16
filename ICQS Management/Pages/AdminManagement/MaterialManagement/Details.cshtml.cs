@@ -23,18 +23,33 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-
-            Material = await _context.Materials.FirstOrDefaultAsync(m => m.MaterialId == id);
-
-            if (Material == null)
+            else
             {
-                return NotFound();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    Material = await _context.Materials.FirstOrDefaultAsync(m => m.MaterialId == id);
+
+                    if (Material == null)
+                    {
+                        return NotFound();
+                    }
+                    return Page();
+                }
             }
-            return Page();
         }
     }
 }

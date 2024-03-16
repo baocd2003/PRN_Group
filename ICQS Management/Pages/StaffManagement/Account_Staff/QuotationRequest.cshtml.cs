@@ -23,9 +23,25 @@ namespace ICQS_Management.Pages.StaffManagement.Account_Staff
 
         public IList<Quotation> Quotation { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Quotation = _batchManagementRepository.GetRequestQuotation().ToList();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    Quotation = _batchManagementRepository.GetRequestQuotation().ToList();
+                    return Page();
+                }
+            }
         }
     }
 }

@@ -21,7 +21,22 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
         public string message { get; set; } = string.Empty;
         public IActionResult OnGet()
         {
-            return Page();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    return Page();
+                }
+            }
         }
 
         public IActionResult OnPostAsync()

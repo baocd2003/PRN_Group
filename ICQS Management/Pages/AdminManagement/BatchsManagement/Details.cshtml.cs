@@ -14,13 +14,7 @@ namespace ICQS_Management.Pages.BatchsManagement
 {
     public class DetailsModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
         private BatchManagementRepository _repo = new BatchManagementRepository();
-
-        public DetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
-        {
-            _context = context;
-        }
 
         public Batch Batch { get; set; } = default!;
         public IList<BatchDetail> BatchDetails { get; set; } = default!;
@@ -29,12 +23,27 @@ namespace ICQS_Management.Pages.BatchsManagement
         public Guid BId { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-            BatchDetails = _repo.GetBatchDetailsByBatchId((Guid)id).ToList();
-            return Page();
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin" && userRole != "Staff"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+                    BatchDetails = _repo.GetBatchDetailsByBatchId((Guid)id).ToList();
+                    return Page();
+                }
+            }
         }
         public async Task<IActionResult> OnPostAsync()
         {

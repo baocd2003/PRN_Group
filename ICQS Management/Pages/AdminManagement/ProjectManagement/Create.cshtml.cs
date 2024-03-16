@@ -21,6 +21,25 @@ namespace ICQS_Management.Pages.ProjectManagement
         [BindProperty]
         public string message { get; set; } = string.Empty;
 
+        public async Task<IActionResult> OnGetAsync()
+        {
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    return Page();
+                }
+            }
+        }
         public IActionResult OnPost()
         {
             if (Project != null)

@@ -18,9 +18,25 @@ namespace ICQS_Management.Pages.CustomerManagement.ProjectManagement
 
         public List<Project> Project { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Project = await Task.Run(() => _pmRepository.GetAllProjects().Where(p => p.Status == 1).ToList());
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    Project = await Task.Run(() => _pmRepository.GetAllProjects().Where(p => p.Status == 1).ToList());
+                    return Page();
+                }
+            }
         }
     }
 }

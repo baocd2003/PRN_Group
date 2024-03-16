@@ -27,29 +27,45 @@ namespace ICQS_Management.Pages.ProjectManagement
         public Guid ProjectId { get; set; }
         [BindProperty]
         public byte status { get; set; }
-        public void OnGetAsync(Guid id)
+        public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            ProjectMaterialId = id;
-            var projectMaterial = _projectManagementRepository.GetProjectMaterialByProjectMaterialId(id);
-            var materials = _materialRepository.GetAllMaterials();
-            ProjectId = projectMaterial.ProjectId;
-            status = _projectManagementRepository.GetProjectById(ProjectId).Status;
-            if (projectMaterial != null)
+            if (HttpContext.Session == null)
             {
-                ProjectMaterial = new ProjectMaterialDTO
-                {
-                    ProjectMaterialId = projectMaterial.ProjectMaterialId,
-                    ProjectId = projectMaterial.ProjectId,
-                    MaterialId = projectMaterial.MaterialId,
-                    MaterialName = materials.FirstOrDefault(m => m.MaterialId == projectMaterial.MaterialId)?.Name,
-                    Quantity = projectMaterial.Quantity,
-                    MediumPrice = _materialRepository.GetMaterialById(projectMaterial.MaterialId).MediumPrice,
-                    UnitType = _materialTypeRepository.GetMaterialTypeById(_materialRepository.GetMaterialById(projectMaterial.MaterialId).MaterialTypeId).UnitType
-                };
+                return RedirectToPage("/Authentication/ErrorSession");
             }
             else
             {
-                NotFound();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    ProjectMaterialId = id;
+                    var projectMaterial = _projectManagementRepository.GetProjectMaterialByProjectMaterialId(id);
+                    var materials = _materialRepository.GetAllMaterials();
+                    ProjectId = projectMaterial.ProjectId;
+                    status = _projectManagementRepository.GetProjectById(ProjectId).Status;
+                    if (projectMaterial != null)
+                    {
+                        ProjectMaterial = new ProjectMaterialDTO
+                        {
+                            ProjectMaterialId = projectMaterial.ProjectMaterialId,
+                            ProjectId = projectMaterial.ProjectId,
+                            MaterialId = projectMaterial.MaterialId,
+                            MaterialName = materials.FirstOrDefault(m => m.MaterialId == projectMaterial.MaterialId)?.Name,
+                            Quantity = projectMaterial.Quantity,
+                            MediumPrice = _materialRepository.GetMaterialById(projectMaterial.MaterialId).MediumPrice,
+                            UnitType = _materialTypeRepository.GetMaterialTypeById(_materialRepository.GetMaterialById(projectMaterial.MaterialId).MaterialTypeId).UnitType
+                        };
+                    }
+                    else
+                    {
+                        NotFound();
+                    }
+                    return Page();
+                }
             }
         }
 

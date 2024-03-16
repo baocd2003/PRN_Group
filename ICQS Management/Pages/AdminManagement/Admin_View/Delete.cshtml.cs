@@ -25,16 +25,31 @@ namespace ICQS_Management.Pages.Admin_View
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session != null)
             {
-                return NotFound();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (userRole == null || userRole != "admin")
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    User = _baseRepository.GetById(id);
+
+                    if (User == null)
+                    {
+                        return NotFound();
+                    }
+                }
             }
-
-            User = _baseRepository.GetById(id);
-
-            if (User == null)
+            else
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
             return Page();
         }

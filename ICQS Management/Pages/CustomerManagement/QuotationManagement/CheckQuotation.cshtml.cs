@@ -36,10 +36,23 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
         public List<ProjectMaterialDTO> ProjectMaterialList { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
 
             Quotation = _batchRepo .GetQuotationWithProject((Guid)id);
             Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);

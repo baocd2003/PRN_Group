@@ -24,6 +24,14 @@ namespace ICQS_Management
             builder.Services.AddHttpContextAccessor();
             //Scope
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+            builder.Services.AddScoped<IBatchManagement, BatchManagementRepository>();
+            builder.Services.AddScoped<IMaterialManagementRepository, MaterialManagementRepository>();
+            builder.Services.AddScoped<IMaterialTypeManagementRepository, MaterialTypeManagementRepository>();
+            builder.Services.AddScoped<IQuotationManagementRepository, QuotationManagementRepository>();
+            builder.Services.AddScoped<IProjectManagementRepository, ProjectManagementRepository>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

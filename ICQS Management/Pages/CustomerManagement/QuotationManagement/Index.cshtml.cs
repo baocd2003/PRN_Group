@@ -23,9 +23,26 @@ namespace ICQS_Management.Pages.QuotationManagement
 
         public IList<Quotation> Quotation { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Quotation =_quoteRepo.GetProcessingQuotes();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                      Quotation =_quoteRepo.GetProcessingQuotes();
+                    return Page();
+                }
+            }
+
         }
     }
 }

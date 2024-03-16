@@ -39,9 +39,9 @@ namespace Repository
         public Quotation GetQuotation(Guid id)
        => QuotationManagementService.Instance.GetQuotation(id);
 
-        public Quotation AddQuotation(Quotation quotation, Project project, List<ProjectMaterial> projectMaterial)
+        public Quotation AddQuotation(Quotation quotation)
         {
-          return  QuotationManagementService.Instance.AddQuotation(quotation, project, projectMaterial);
+          return  QuotationManagementService.Instance.AddQuotation(quotation);
         }
     }
 }

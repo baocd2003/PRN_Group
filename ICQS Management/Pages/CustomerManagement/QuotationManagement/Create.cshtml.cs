@@ -139,7 +139,7 @@ namespace ICQS_Management.Pages.QuotationManagement
             }
             cus.Quotations.Add(CreatedQuotation);
 
-            _quotationRepo.AddQuotation(CreatedQuotation);
+            //_quotationRepo.AddQuotation(CreatedQuotation);
 
             return RedirectToPage("./Index");
         }

@@ -11,10 +11,10 @@ namespace Repository
 {
     public class QuotationManagementRepository : IQuotationManagementRepository
     {
-        public Quotation AddQuotation(Quotation quotation)
-        {
-            return QuotationManagementService.Instance.AddQuotation(quotation);
-        }
+        //public Quotation AddQuotation(Quotation quotation)
+        //{
+        //    return QuotationManagementService.Instance.AddQuotation(quotation);
+        //}
 
         public IEnumerable<Quotation> GetAllQuotations()
         {
@@ -29,12 +29,19 @@ namespace Repository
         public List<Quotation> GetProcessingQuotes()
         {
             return QuotationManagementService.Instance.GetProcessingQuotes();
+        }
         public Customer GetCustomerByEmail(string email)
         {
-            return QuotationManagementService.Instance.GetCustomerByEmail(email);
+            //return QuotationManagementService.Instance.GetCustomerByEmail(email);
+            return null;
         }
 
         public Quotation GetQuotation(Guid id)
        => QuotationManagementService.Instance.GetQuotation(id);
+
+        public Quotation AddQuotation(Quotation quotation, Project project, List<ProjectMaterial> projectMaterial)
+        {
+          return  QuotationManagementService.Instance.AddQuotation(quotation, project, projectMaterial);
+        }
     }
 }

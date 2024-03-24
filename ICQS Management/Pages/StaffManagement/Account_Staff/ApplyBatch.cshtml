@@ -63,13 +63,7 @@
                 <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" required min="1" />
                 <span asp-validation-for="Project.MonthDuration" class="text-danger"></span>
             </div>
-
             <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" />
-            <div class="form-group">
-                <label asp-for="Project.TotalPrice" class="control-label"></label>
-                <input id="Project_TotalPrice" asp-for="Project.TotalPrice" class="form-control" readonly />
-                <span asp-validation-for="Project.TotalPrice" class="text-danger"></span>
-            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -96,9 +90,6 @@
                     }
                 </tbody>
             </table>
-            <div class="form-group">
-                <input type="submit" name="form1" value="Preview Price" class="btn btn-primary" />
-            </div>
         </div>
         <div class="col-md-4">
             <table class="table">

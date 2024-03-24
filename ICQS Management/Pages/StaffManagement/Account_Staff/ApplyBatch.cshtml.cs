@@ -80,7 +80,6 @@ namespace ICQS_Management.Pages.Account_Staff
                                             Quantity = pm.Quantity
                                         }).ToList();
                     Batches = _batchRepo.GetBatchesDateAsc();
-                    materialPrice = Quotation.CompletePrice;
                     Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
                     return Page();
                 }

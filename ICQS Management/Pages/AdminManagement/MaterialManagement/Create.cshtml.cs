@@ -46,19 +46,19 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
         {
             if (MaterialDTO != null)
             {
-                Material updatedMaterial = new Material
+                Material createdMaterial = new Material
                 {
                     Name = MaterialDTO.Name,
                     MediumPrice = MaterialDTO.MediumPrice,
                     MaterialTypeId = MaterialDTO.MaterialTypeId,
                 };
                 ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes(), "MaterialTypeId", "MaterialTypeName");
-                if (_materialRepository.checkMaterialExist(updatedMaterial))
+                if (_materialRepository.checkMaterialExist(createdMaterial))
                 {
                     ModelState.AddModelError("MaterialDTO.Name", "Material Name already exists!");
                     return Page();
                 }
-                _materialRepository.AddMaterial(updatedMaterial);
+                _materialRepository.AddMaterial(createdMaterial);
                 message = "Add successfully.";
                 return Page();
             }

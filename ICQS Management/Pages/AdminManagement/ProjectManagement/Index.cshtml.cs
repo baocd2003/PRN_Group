@@ -41,7 +41,7 @@ namespace ICQS_Management.Pages.ProjectManagement
                 {
                     PageNumber = pageNumber ?? 1;
                     TotalRecords = _projectRepository.GetTotalCount();
-                    Project = _projectRepository.GetAll(PageNumber, PageSize).ToList();
+                    Project = await _pmRepository.GetAllPaging(PageNumber, PageSize);
                     return Page();
                 }
             }

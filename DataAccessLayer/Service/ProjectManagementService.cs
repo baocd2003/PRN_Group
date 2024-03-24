@@ -31,6 +31,14 @@ public class ProjectManagementService : applicationDbContext
             }
         }
     }
+    public async Task<List<Project>> GetAllPaging(int pageNumber, int pageSize)
+    {
+        using (applicationDbContext _db = new applicationDbContext())
+        {
+            var listQuerry = await _db.Projects.Include(x => x.ProjectMaterials).ToListAsync();
+            return listQuerry.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        }
+    }
     public IEnumerable<Project> GetAllProjects()
     {
         return this.Projects.ToList();
@@ -92,10 +100,12 @@ public class ProjectManagementService : applicationDbContext
     }
     public void ChangeProjectStatus(Project project)
     {
-        if(project.Status == 1)
+        if (project.Status == 1)
         {
             project.Status = 0;
-        }else if(project.Status == 0) {
+        }
+        else if (project.Status == 0)
+        {
             project.Status = 1;
         }
         this.SaveChanges();
@@ -103,7 +113,7 @@ public class ProjectManagementService : applicationDbContext
     public void UpdateProjectMaterial(ProjectMaterial projectMaterial)
     {
         var updatedProjectMaterial = GetProjectMaterialByProjectMaterialId(projectMaterial.ProjectMaterialId);
-        if(updatedProjectMaterial != null)
+        if (updatedProjectMaterial != null)
         {
             updatedProjectMaterial.MaterialId = projectMaterial.MaterialId;
             updatedProjectMaterial.Quantity = projectMaterial.Quantity;
@@ -113,7 +123,7 @@ public class ProjectManagementService : applicationDbContext
     public void DeleteProjectMaterial(Guid projectMaterialID)
     {
         var deletedProjectMaterial = GetProjectMaterialByProjectMaterialId(projectMaterialID);
-        if(deletedProjectMaterial != null)
+        if (deletedProjectMaterial != null)
         {
             this.ProjectMaterials.Remove(deletedProjectMaterial);
             this.SaveChanges();
@@ -123,7 +133,7 @@ public class ProjectManagementService : applicationDbContext
     {
         List<ProjectMaterial> projectMaterials = GetProjectMaterialByProjectId(projectID).ToList();
         float sum = 0;
-        foreach(ProjectMaterial projectMaterial in projectMaterials)
+        foreach (ProjectMaterial projectMaterial in projectMaterials)
         {
             int quantity = projectMaterial.Quantity;
             Material material = MaterialManagementService.Instance.GetMaterialById(projectMaterial.MaterialId);
@@ -148,5 +158,5 @@ public class ProjectManagementService : applicationDbContext
         Project _selectedProject = this.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
         return _selectedProject;
     }
-    
+
 }

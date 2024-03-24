@@ -9,6 +9,7 @@ namespace Repository.Interface;
 
 public interface IProjectManagementRepository
 {
+    public Task<List<Project>> GetAllPaging(int pageNumber, int pageSize);
     IEnumerable<Project> GetAllProjects();
     Project GetProjectById(Guid id);
     Project AddProject(Project project);

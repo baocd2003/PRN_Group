@@ -11,6 +11,8 @@ namespace Repository;
 
 public class ProjectManagementRepository : IProjectManagementRepository
 {
+    public async Task<List<Project>> GetAllPaging(int pageNumber, int pageSize)
+    => await ProjectManagementService.Instance.GetAllPaging(pageNumber, pageSize); 
     public Project AddProject(Project project)
     {
         return ProjectManagementService.Instance.AddProject(project);

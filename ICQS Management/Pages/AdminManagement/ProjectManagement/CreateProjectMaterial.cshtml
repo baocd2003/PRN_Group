@@ -10,6 +10,12 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <form id="materialForm" asp-page-handler="ChooseMaterial" asp-route-id="@Model.projectId" method="post">
+            <div class="form-group">
+                <label class="control-label">Material Type</label>
+                <select id="materialTypeSelect" name="MaterialTypeId" class="form-control" asp-items="ViewBag.MaterialTypeId" onchange="submitForm(this)"></select>
+            </div>
+        </form>
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group" hidden>
@@ -22,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProjectMaterial.Quantity" class="control-label"></label>
-                <input asp-for="ProjectMaterial.Quantity" class="form-control" min="1" required/>
+                <input asp-for="ProjectMaterial.Quantity" class="form-control" value="1" min="1" required/>
                 <span asp-validation-for="ProjectMaterial.Quantity" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -68,7 +74,7 @@
                         </td>
                         <td>
                             <form asp-page-handler="Edit" asp-route-id="@item.ProjectMaterialId" method="post" style="display: inline;">
-                                <input type="number" name="editedQuantity" value="@item.Quantity" class="form-control" style="width: 80px;">
+                                <input type="number" name="editedQuantity" value="@item.Quantity" class="form-control" style="width: 80px" min="1">
                                 <input asp-for="@Model.projectId" class="form-control" hidden />
                                 <button type="submit" class="btn btn-primary" style="width: 40%; text-align: center">Save</button>
                             </form>
@@ -93,7 +99,13 @@
         </table>
     </div>
 </div>
-
+<script>
+    function submitForm(selectElement) {
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        var materialTypeId = selectedOption.value;
+        document.getElementById('materialForm').submit();
+    }
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

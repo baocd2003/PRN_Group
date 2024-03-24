@@ -66,9 +66,21 @@ public class MaterialManagementService : applicationDbContext
     }
     public Material AddMaterial(Material material)
     {
-        this.Materials.Add(material);
-        this.SaveChanges();
-        return material;
+        try
+        {
+            using (applicationDbContext _db = new applicationDbContext())
+            {
+                _db.Materials.Add(material);
+                _db.SaveChanges();
+                return material;
+            }
+                
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        
     }
     public bool checkMaterialExist(Material material)
     {

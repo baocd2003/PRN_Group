@@ -16,7 +16,7 @@ namespace ICQS_Management
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddMvc().AddRazorPagesOptions(option => option.Conventions.AddPageRoute("/HomePage", ""));
-            builder.Services.AddSession(o => o.IdleTimeout = TimeSpan.FromMinutes(5));
+            builder.Services.AddSession(o => o.IdleTimeout = TimeSpan.FromMinutes(30));
             builder.Services.AddDbContext<applicationDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

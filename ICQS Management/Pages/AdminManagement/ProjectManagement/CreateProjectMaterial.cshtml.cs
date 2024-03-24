@@ -12,6 +12,7 @@ using Repository;
 using Microsoft.CodeAnalysis;
 using Microsoft.Build.Evaluation;
 using BusinessObject.DTO;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ICQS_Management.Pages.ProjectManagement
 {
@@ -34,7 +35,8 @@ namespace ICQS_Management.Pages.ProjectManagement
         public List<ProjectMaterialDTO> ProjectMaterialList { get; set; }
         [BindProperty]
         public int countProjectMaterial { get; set; }
-        public IActionResult OnGet(Guid ProjectId)
+        public Boolean isDisabled { get; set; }
+        public IActionResult OnGet(Guid ProjectId, Guid? materialTypeId)
         {
             if (HttpContext.Session == null)
             {
@@ -73,7 +75,16 @@ namespace ICQS_Management.Pages.ProjectManagement
                     countProjectMaterial = ProjectMaterialList.Count;
                     var availableMaterials = _mMRepository.GetAllMaterials()
                         .Where(material => !projectMaterials.Any(pm => pm.MaterialId == material.MaterialId));
-                    ViewData["MaterialId"] = new SelectList(availableMaterials, "MaterialId", "Name");
+                    if (materialTypeId != null)
+                    {
+                        ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes(), "MaterialTypeId", "MaterialTypeName", materialTypeId);
+                        ViewData["MaterialId"] = new SelectList(availableMaterials.Where(am => am.MaterialTypeId == materialTypeId), "MaterialId", "Name");
+                    }
+                    else
+                    {
+                        ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes(), "MaterialTypeId", "MaterialTypeName", _materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId);
+                        ViewData["MaterialId"] = new SelectList(availableMaterials.Where(am => am.MaterialTypeId == _materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId), "MaterialId", "Name");
+                    }
                     return Page();
                 }
             }
@@ -100,6 +111,10 @@ namespace ICQS_Management.Pages.ProjectManagement
             _projectManagementRepository.DeleteProjectMaterial(id);
             _projectManagementRepository.UpdateProjectTotalPrice(projectId);
             return RedirectToPage("./CreateProjectMaterial", new { ProjectId = projectId });
+        }
+        public IActionResult OnPostChooseMaterialAsync(Guid id, Guid MaterialTypeId)
+        {
+            return RedirectToPage("./CreateProjectMaterial", new { ProjectId = id,  materialTypeId = MaterialTypeId });
         }
     }
 }

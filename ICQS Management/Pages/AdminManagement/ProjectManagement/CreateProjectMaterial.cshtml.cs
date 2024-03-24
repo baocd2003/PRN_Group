@@ -35,7 +35,10 @@ namespace ICQS_Management.Pages.ProjectManagement
         public List<ProjectMaterialDTO> ProjectMaterialList { get; set; }
         [BindProperty]
         public int countProjectMaterial { get; set; }
-        public Boolean isDisabled { get; set; }
+        [BindProperty]
+        public Boolean isDisabled { get; set; } = false;
+        [BindProperty]
+        public string UnitType { get; set; }
         public IActionResult OnGet(Guid ProjectId, Guid? materialTypeId)
         {
             if (HttpContext.Session == null)
@@ -78,12 +81,22 @@ namespace ICQS_Management.Pages.ProjectManagement
                     if (materialTypeId != null)
                     {
                         ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes(), "MaterialTypeId", "MaterialTypeName", materialTypeId);
+                        UnitType = _materialTypeRepository.GetMaterialTypeById(materialTypeId.Value).UnitType;
                         ViewData["MaterialId"] = new SelectList(availableMaterials.Where(am => am.MaterialTypeId == materialTypeId), "MaterialId", "Name");
+                        if (ViewData["MaterialId"] == null || ((SelectList)ViewData["MaterialId"]).Count() <= 0)
+                        {
+                            isDisabled = true;
+                        }
                     }
                     else
                     {
                         ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes(), "MaterialTypeId", "MaterialTypeName", _materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId);
+                        UnitType = _materialTypeRepository.GetMaterialTypeById(_materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId).UnitType;
                         ViewData["MaterialId"] = new SelectList(availableMaterials.Where(am => am.MaterialTypeId == _materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId), "MaterialId", "Name");
+                        if (ViewData["MaterialId"] == null || ((SelectList)ViewData["MaterialId"]).Count() <= 0)
+                        {
+                            isDisabled = true;
+                        }
                     }
                     return Page();
                 }

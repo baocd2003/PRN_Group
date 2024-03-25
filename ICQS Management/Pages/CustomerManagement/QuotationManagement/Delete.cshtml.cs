@@ -63,7 +63,9 @@ namespace ICQS_Management.Pages.QuotationManagement
                 return NotFound();
             }
 
+            var NotePase = Quotation.Note;
             Quotation = _quotationManagement.FindQuotationById(id.Value);
+            Quotation.Note = NotePase;
 
             if (Quotation != null)
             {

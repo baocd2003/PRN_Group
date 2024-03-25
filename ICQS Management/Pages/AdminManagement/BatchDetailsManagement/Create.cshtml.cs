@@ -19,12 +19,14 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
     public class CreateModel : PageModel
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-        private BatchManagementRepository _repo = new BatchManagementRepository();
-        private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
-        private IMaterialTypeManagementRepository _typeRepo = new MaterialTypeManagementRepository();
-        public CreateModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        private IBatchManagement _repo;
+        private IMaterialManagementRepository _materialRepo;
+        private IMaterialTypeManagementRepository _typeRepo;
+        public CreateModel(IBatchManagement repo, IMaterialManagementRepository materialRepo, IMaterialTypeManagementRepository typeRepo)
         {
-            _context = context;
+            _repo = repo;
+            _materialRepo = materialRepo;
+            _typeRepo = typeRepo;
         }
 
         public IList<BatchDetailDTO> BatchDetails { get; set; } = default!;
@@ -60,6 +62,13 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                         Material mat = _materialRepo.GetMaterialById((Guid)materialId);
                         MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
                         TempData["MatId"] = (Guid)materialId;
+                    }
+                    else {
+                        ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name", materialId);
+                        List<Material> matList = _materialRepo.GetOthersMaterial(batchDetails).ToList();
+                        Material mat = matList.FirstOrDefault();
+                        MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
+                        TempData["MatId"] = mat.MaterialId;
                     }
 
                     BatchDetails = (from bd in batchDetails

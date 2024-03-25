@@ -11,6 +11,7 @@ using DataAccessLayer.ApplicationDbContext;
 using Newtonsoft.Json;
 using Repository.Interface;
 using Repository;
+using BusinessObject.Entity;
 
 namespace ICQS_Management.Pages.BatchDetailsManagement
 {
@@ -18,6 +19,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
     {
         private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
         private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
+        private IMaterialTypeManagementRepository _typeRepo = new MaterialTypeManagementRepository();
 
         public EditCheckoutModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
         {
@@ -29,6 +31,9 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 
         [BindProperty]
         private int DetailIndex { get; set; }
+
+        [BindProperty]
+        public MaterialType MaterialType { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int index)
         {
             if (HttpContext.Session == null)
@@ -58,6 +63,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                         return NotFound();
                     }
                     ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name", batchDetails[index].MaterialId);
+                    MaterialType = _typeRepo.GetMaterialTypeById(batchDetails[index].MaterialId);
                     return Page();
                 }
             }
@@ -78,6 +84,12 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             string detailList = JsonConvert.SerializeObject(batchDetails);
             HttpContext.Session.SetString("detailList", detailList);
             return RedirectToPage("./CheckOutBatch");
+        }
+
+        public IActionResult OnPostChooseMaterialAsync(Guid MaterialId)
+        {
+            BatchDetail.MaterialId = MaterialId;
+            return RedirectToPage("./Create", new { materialId = MaterialId });
         }
     }
 }

@@ -38,9 +38,20 @@ namespace DataAccessLayer.Service
             return quotation;
         }
 
-        public IEnumerable<Quotation> GetAllQuotations()
+        public IList<Quotation> GetAllQuotations()
         {
-            return _db.Quotations.ToList();
+            return _db.Quotations.Include(q => q.Project)
+                .ThenInclude(p => p.ProjectMaterials)
+                .ThenInclude(pm => pm.Materials)
+                .ThenInclude(m => m.MaterialTypes).ToList();
+        }
+
+        public static Staff GetResponder(Guid quotId)
+        {
+            using (var _dbb = new applicationDbContext())
+            {
+                return _dbb.Staffs.FirstOrDefault(s => s.Quotations.Any(q => q.QuotationId == quotId));
+            }
         }
 
         public Quotation GetQuotation(Guid id)

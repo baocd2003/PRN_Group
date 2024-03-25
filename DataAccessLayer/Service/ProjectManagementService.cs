@@ -41,7 +41,9 @@ public class ProjectManagementService : applicationDbContext
     }
     public IEnumerable<Project> GetAllProjects()
     {
-        return this.Projects.ToList();
+        return this.Projects.Include(p => p.ProjectMaterials)
+            .ThenInclude(m => m.Materials)
+            .ThenInclude(m => m.MaterialTypes).ToList();
     }
 
     public Project GetProjectById(Guid id)

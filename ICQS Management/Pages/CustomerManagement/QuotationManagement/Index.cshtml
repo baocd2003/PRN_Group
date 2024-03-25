@@ -1,53 +1,156 @@
 ﻿@page
 @model ICQS_Management.Pages.QuotationManagement.IndexModel
-
+@using DataAccessLayer.Service
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="text-center mb-4">My Quotations</h1>
 
-<p>
+@* <p>
     <a asp-page="./ViewProcessingQuotes">Check applied quotation</a>
-</p>
-<table class="table">
-    <thead>
+</p> *@
+<table class="quotations_table w-100">
+    <tr>
+        <th>Request Date</th>
+        <th>Estimated Price</th>
+        <th>Status</th>
+        @* <th>Responded by</th> *@
+        <th>Actual Price</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.Quotation)
+    {
+        var quotStatus = "";
+        var statusStyle = "";
+        switch (item.Status)
+        {
+            case 0:
+                quotStatus = "Processing";
+                statusStyle = "badge rounded-pill bg-secondary";
+                break;
+            case 1:
+                quotStatus = "Responded";
+                statusStyle = "badge rounded-pill bg-success";
+                break;
+            case 2:
+                quotStatus = "Confirmed";
+                statusStyle = "badge rounded-pill bg-success";
+                break;
+            case 3:
+                quotStatus = "Denied";
+                statusStyle = "badge rounded-pill bg-secondary";
+                break;
+        }
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Quotation[0].RequestDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quotation[0].EstimatePrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quotation[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quotation[0].Project)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Quotation) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RequestDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatePrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Description)
-            </td>
-            <td>              
-                <a asp-page="./Details" asp-route-id="@item.QuotationId">View Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.QuotationId">Deny</a>
+            <td style="border-radius: .5rem 0 0 .5rem;">@item.RequestDate</td>
+            <td>@string.Format("{0:N0}", item.EstimatePrice)</td>
+            <td style="color: white;"><span class="@statusStyle">@quotStatus</span></td>
+            @* <td>@QuotationManagementService.GetResponder(item.QuotationId)?.Email</td> *@
+            <td>@string.Format("{0:N0}", item.CompletePrice)</td>
+            <td style="border-radius: 0 .5rem .5rem 0;" class="quotation_buttons">
+                <a type="button" data-toggle="modal" data-target="#exampleModal">Details</a>
+                @if (item.Status == 0)
+                {
+                    <a asp-page="./CheckQuotation" asp-route-id="@item.QuotationId">Review response</a>
+                }
             </td>
         </tr>
-}
-    </tbody>
+    }
 </table>
+@foreach (var item in Model.Quotation)
+{
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" class="position-relative" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="quotation_header">
+                        <h2>Quotation Project Detail</h2>
+                        <img src="/images/iqcs_logo.png" />
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="project_card_wrapper">
+                        <div class="project_card">
+                            <dl class="row">
+                                <dt class="col-sm-3">
+                                    Company
+                                </dt>
+                                <dd class="col-sm-9">
+                                    : ICQS System
+                                </dd>
+                                <dt class="col-sm-3">
+                                    Project Name
+                                </dt>
+                                <dd class="col-sm-9">
+                                    : @item.Project.ProjectName
+                                </dd>
+                                <dt class="col-sm-3">
+                                    Description
+                                </dt>
+                                <dd class="col-sm-9">
+                                    : @item.Project.Description
+                                </dd>
+                                <dt class="col-sm-3">
+                                    Area per floor
+                                </dt>
+                                <dd class="col-sm-9">
+                                    : @item.Project.AreaPerFloor (m²)
+                                </dd>
+                                <dt class="col-sm-3">
+                                    Floor(s)
+                                </dt>
+                                <dd class="col-sm-9">
+                                    : @item.Project.NumOfFloors
+                                </dd>
+                            </dl>
+                            <table class="labor_cost w-100">
+                                <caption style="caption-side: top; text-align: right;">Labor cost</caption>
+                                <tr>
+                                    <th class="w-25">Amount</th>
+                                    <th class="w-25">Salary/ps</th>
+                                    <th class="w-25">Duration</th>
+                                    <th class="w-25">Price</th>
+
+                                </tr>
+                                <tr>
+                                    <td>@item.Project.NumOfLabors (people)</td>
+                                    <td>@string.Format("{0:N0}", item.Project.LaborSalaryPerMonth)/month</td>
+                                    <td>@item.Project.MonthDuration (months)</td>
+                                    <td>@string.Format("{0:N0}", (item.Project.NumOfLabors * item.Project.LaborSalaryPerMonth * item.Project.MonthDuration))</td>
+                                </tr>
+                            </table>
+                            <table class="project_materials w-100">
+                                <caption style="caption-side: top; text-align: right;">Materials</caption>
+                                <tr>
+                                    <th class="w-25" style="background: white;"></th>
+                                    <th class="w-25">Name</th>
+                                    <th class="w-25">Quantity</th>
+                                    <th class="w-25">Medium price</th>
+                                </tr>
+                                @foreach (var mat in item.Project.ProjectMaterials)
+                                {
+                                    <tr>
+                                        <td style="border: none; background-color: white;"></td>
+                                        <td>@mat.Materials.Name</td>
+                                        <td>@mat.Quantity (@mat.Materials.MaterialTypes.UnitType)</td>
+                                        <td>@string.Format("{0:N0}", mat.Materials.MediumPrice)</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td style="border: none; background-color: white;"></td>
+                                    <td style="border: none; background-color: white; font-size: 1.2rem; padding: 1rem 0;" class="font-weight-bold text-center" colspan="2">Estimated</td>
+                                    <td style="border: none; background-color: white; font-size: 1.2rem;" class="font-weight-bold">@string.Format("{0:N0}", item.Project.TotalPrice)</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

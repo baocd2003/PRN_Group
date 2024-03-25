@@ -50,18 +50,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="Project.NumOfLabors" class="control-label"></label>
-                <input id="Project_NumOfLabors" asp-for="Project.NumOfLabors" class="form-control" />
+                <input id="Project_NumOfLabors" asp-for="Project.NumOfLabors" class="form-control" readonly/>
                 <span asp-validation-for="Project.NumOfLabors" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Project.LaborSalaryPerMonth" class="control-label"></label>
-                <input id="Project_LaborSalaryPerMonth" asp-for="Project.LaborSalaryPerMonth" class="form-control" required min="1" />
+                <input id="Project_LaborSalaryPerMonth" asp-for="Project.LaborSalaryPerMonth" class="form-control" readonly/>
                 <span asp-validation-for="Project.LaborSalaryPerMonth" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Project.MonthDuration" class="control-label"></label>
-                <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" required min="1" />
-                <span asp-validation-for="Project.MonthDuration" class="text-danger"></span>
+                <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" readonly/>
+                <span asp-validation-for="Project.MonthDuration" class="text-danger" ></span>
             </div>
             <div class="form-group">
                 <label>Preview Price</label>

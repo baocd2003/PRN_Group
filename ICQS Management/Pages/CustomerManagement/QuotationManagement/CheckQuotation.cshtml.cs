@@ -81,7 +81,6 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
 
             public async Task<IActionResult> OnPostAsync()
                 {
-
                     Guid quoteId = (Guid)TempData["id"];
                     if (Request.Form.ContainsKey("confirmBut"))
                     {

@@ -17,13 +17,13 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class EditCheckoutModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
         private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
         private IMaterialTypeManagementRepository _typeRepo = new MaterialTypeManagementRepository();
 
-        public EditCheckoutModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public EditCheckoutModel(IMaterialManagementRepository materialRepo, IMaterialTypeManagementRepository typeRepo)
         {
-            _context = context;
+            _materialRepo = materialRepo;
+            _typeRepo = typeRepo;
         }
 
         [BindProperty]
@@ -57,6 +57,9 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                     List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
                     BatchDetail = batchDetails[index];
                     DetailIndex = index;
+                    IEnumerable<Material> list = _materialRepo.GetOthersMaterial(batchDetails);
+                    MaterialType = _typeRepo.GetMaterialTypeById(list.FirstOrDefault().MaterialTypeId);
+
                     TempData["IndexValue"] = index;
                     if (BatchDetail == null)
                     {

@@ -57,8 +57,9 @@ namespace DataAccessLayer.Service
             _db.SaveChanges();
         }
 
-        public List<BatchDetail> GetBatchDetailsByBatchId(Guid batchId) {
-            List<BatchDetail> batchDetails = _db.BatchDetails.Where(bd => bd.BatchId == batchId).Include(bd => bd.Materials).ToList(); 
+        public List<BatchDetail> GetBatchDetailsByBatchId(Guid batchId)
+        {
+            List<BatchDetail> batchDetails = _db.BatchDetails.Where(bd => bd.BatchId == batchId).Include(bd => bd.Materials).ToList();
             return batchDetails;
         }
 
@@ -70,7 +71,7 @@ namespace DataAccessLayer.Service
 
         public void AddMoreDetailsInBatch(List<BatchDetail> batchDetails)
         {
-            foreach(BatchDetail batchDetail in batchDetails)
+            foreach (BatchDetail batchDetail in batchDetails)
             {
                 _db.BatchDetails.Add(batchDetail);
                 _db.SaveChanges();
@@ -96,7 +97,7 @@ namespace DataAccessLayer.Service
 
         public bool CheckOverlapBatch(Batch batch)
         {
-            if(_db.Batches.FirstOrDefault(b => b.ImportDate.Date == batch.ImportDate.Date) != null)
+            if (_db.Batches.FirstOrDefault(b => b.ImportDate.Date == batch.ImportDate.Date) != null)
             {
                 return true;
             }
@@ -110,13 +111,35 @@ namespace DataAccessLayer.Service
         {
             return _db.Quotations.Where(q => q.Status == 0).Include(q => q.Project).OrderByDescending(q => q.RequestDate).ToList();
         }
-
+        public List<Batch> CheckAvailableQuantityBatch()
+        {
+            List<Batch> batchList = GetBatchesDateAsc();
+            List<Batch> availableList = new List<Batch>();
+            foreach (Batch b in batchList)
+            {
+                List<BatchDetail> batchDetails = GetBatchDetailsByBatchId(b.BatchId);
+                bool flag = true;
+                foreach (BatchDetail bd in batchDetails)
+                {
+                    if (bd.Quantity != 0)
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    availableList.Add(b);
+                }
+            }
+            return availableList;
+        }
         public List<Batch> GetBatchesDateAsc()
         {
             return _db.Batches
           .OrderBy(b => b.ImportDate)
-          .Include(b => b.BatchDetails)  
-              .ThenInclude(bd => bd.Materials) 
+          .Include(b => b.BatchDetails)
+              .ThenInclude(bd => bd.Materials)
           .ToList();
         }
         public bool CheckAvailableBatchForQuote(Guid quotationId, List<Guid> batchIds)
@@ -152,14 +175,14 @@ namespace DataAccessLayer.Service
 
         public List<Guid> SortBatchsIdByDate(List<Guid> batchIds)
         {
-            
+
             List<Batch> batches = _db.Batches.Where(b => batchIds.Contains(b.BatchId)).ToList();
             batches = batches.OrderBy(b => b.ImportDate).ToList();
             List<Guid> sortedBatchIds = batches.Select(b => b.BatchId).ToList();
             return sortedBatchIds;
         }
-        
-        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId)
+
+        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId, Project prj)
         {
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
             Project _selectedProject = _db.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
@@ -190,7 +213,7 @@ namespace DataAccessLayer.Service
                         }
                         else
                         {
-                            if(quantityToUpdate > 0)
+                            if (quantityToUpdate > 0)
                             {
                                 remainingQuantity -= quantityToUpdate;
                                 price += quantityToUpdate * batchDetail.Price;
@@ -219,13 +242,13 @@ namespace DataAccessLayer.Service
             }
             staff.Quotations.Add(_selectedQuotation);
             _selectedQuotation.Batchs = affectedBatchs;
-            _selectedQuotation.CompletePrice = price + (_selectedProject.LaborSalaryPerMonth * _selectedProject.MonthDuration * _selectedProject.NumOfLabors);
+            _selectedQuotation.CompletePrice = price + (prj.LaborSalaryPerMonth * prj.MonthDuration * prj.NumOfLabors);
             _selectedQuotation.Status = 1;
             _db.Entry(_selectedQuotation).State = EntityState.Modified;
             _db.SaveChanges();
         }
 
-        public double PreviewPrice(Guid quotationId, List<Guid> batchIds)
+        public double PreviewPrice(Guid quotationId, List<Guid> batchIds, Project prj)
         {
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
             Project _selectedProject = _db.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
@@ -278,7 +301,7 @@ namespace DataAccessLayer.Service
                     }
                 }
             }
-            return price + (_selectedProject.LaborSalaryPerMonth * _selectedProject.MonthDuration * _selectedProject.NumOfLabors);
+            return price + (prj.LaborSalaryPerMonth * prj.MonthDuration * prj.NumOfLabors);
         }
 
         public void MinusQuantityInBatch(Guid quotationId)
@@ -356,7 +379,7 @@ namespace DataAccessLayer.Service
         public void StaffApplyQuote(Guid staffId, Quotation quote)
         {
             Staff staff = _db.Staffs.FirstOrDefault(s => s.StaffId == staffId);
-            if(staff.Quotations == null)
+            if (staff.Quotations == null)
             {
                 staff.Quotations = new List<Quotation>();
             }
@@ -366,8 +389,13 @@ namespace DataAccessLayer.Service
 
         public Quotation GetQuotationWithProject(Guid id)
         {
-          return  _db.Quotations
-                .Include(q => q.Project).FirstOrDefault(m => m.QuotationId == id);
+            return _db.Quotations
+                  .Include(q => q.Project).FirstOrDefault(m => m.QuotationId == id);
         }
+
+        public BatchDetail GetDetailById(Guid id)
+            => _db.BatchDetails.FirstOrDefault(bd => bd.BatchDetailId == id);
+
     }
 }
+

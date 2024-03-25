@@ -28,6 +28,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Quotation[0].Project)
             </th>
+            <th>
+                Month Duration
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -46,9 +49,13 @@
             <td>
                  @Html.DisplayFor(modelItem => item.Status)
             </td>
+              
             <td>
                 @Html.DisplayFor(modelItem => item.Project.Description)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Project.MonthDuration)
+                </td>
             <td>
                  <a asp-page="./CheckQuotation" asp-route-id="@item.QuotationId">Check your quotaion</a> |
                 <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a> |

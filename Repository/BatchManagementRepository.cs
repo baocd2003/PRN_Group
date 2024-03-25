@@ -47,8 +47,8 @@ namespace Repository
         public void UpdateBatchDetail(BatchDetail batchDetail)
         =>BatchManagementService.Instance.UpdateBatchDetail(batchDetail);
 
-        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId)
-       => BatchManagementService.Instance.UpdateQuantityInBatch(quotationId, batchIds,staffId);
+        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId, Project prj)
+       => BatchManagementService.Instance.UpdateQuantityInBatch(quotationId, batchIds,staffId , prj);
 
         public bool CheckOverlapBatch(Batch batch)
         => BatchManagementService.Instance.CheckOverlapBatch(batch);
@@ -59,8 +59,8 @@ namespace Repository
         public void StaffApplyQuote(Guid staffId, Quotation quote)
         => BatchManagementService.Instance.StaffApplyQuote(staffId, quote);
 
-        public double PreviewPrice(Guid quotationId, List<Guid> batchIds)
-        => BatchManagementService.Instance.PreviewPrice(quotationId, batchIds);
+        public double PreviewPrice(Guid quotationId, List<Guid> batchIds, Project prj)
+        => BatchManagementService.Instance.PreviewPrice(quotationId, batchIds,prj);
 
         public Quotation GetQuotationWithProject(Guid id)
        => BatchManagementService.Instance.GetQuotationWithProject(id);

@@ -62,6 +62,11 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             string detailListJson = HttpContext.Session.GetString("detailList");
             List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
             ImportDate = DateTime.Parse(HttpContext.Session.GetString("ImportDate"));
+            if (!batchDetails.Any())
+            {
+                ModelState.AddModelError("", "Add at least 1 detail in batch");
+                return Page();
+            }
             _repo.CreateBatch(ImportDate, batchDetails);
             return RedirectToPage("/AdminManagement/BatchsManagement/Index");
 

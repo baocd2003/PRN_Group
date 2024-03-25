@@ -21,7 +21,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Batch.ImportDate" class="control-label"></label>
-                <input asp-for="Batch.ImportDate" class="form-control" />
+                <input asp-for="Batch.ImportDate" class="form-control" required/>
                 <span asp-validation-for="Batch.ImportDate" class="text-danger"></span>
             </div>
             <div class="form-group">

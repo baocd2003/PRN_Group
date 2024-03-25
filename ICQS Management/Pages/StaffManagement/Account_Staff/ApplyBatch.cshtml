@@ -63,7 +63,10 @@
                 <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" required min="1" />
                 <span asp-validation-for="Project.MonthDuration" class="text-danger"></span>
             </div>
-            <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" />
+            <div class="form-group">
+                <label>Preview Price</label>
+                <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" />
+            </div>
             <table class="table">
                 <thead>
                     <tr>

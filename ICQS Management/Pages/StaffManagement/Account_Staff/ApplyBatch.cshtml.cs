@@ -79,7 +79,7 @@ namespace ICQS_Management.Pages.Account_Staff
                                             MaterialName = m.Name,
                                             Quantity = pm.Quantity
                                         }).ToList();
-                    Batches = _batchRepo.GetBatchesDateAsc();
+                    Batches = _batchRepo.CheckAvailableQuantityBatch();
                     Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
                     return Page();
                 }
@@ -112,7 +112,7 @@ namespace ICQS_Management.Pages.Account_Staff
                                             MaterialName = m.Name,
                                             Quantity = pm.Quantity
                                         }).ToList();
-                    Batches = _batchRepo.GetBatchesDateAsc();
+                    Batches = _batchRepo.CheckAvailableQuantityBatch();
                     Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
                     return Page();
                 }
@@ -121,6 +121,7 @@ namespace ICQS_Management.Pages.Account_Staff
                 Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
                 Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
                 //_batchRepo.StaffApplyQuote(selectedStaff.StaffId, afterQuote);
+                _projectRepo.UpdateProject(Project);
                 _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId);
                 return RedirectToPage("/AdminManagement/BatchsManagement/Index");
             }

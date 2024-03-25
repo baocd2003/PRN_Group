@@ -28,5 +28,7 @@ namespace Repository.Interface
 
         public double PreviewPrice(Guid quotationId, List<Guid> batchIds);
         public Quotation GetQuotationWithProject(Guid id);
+        public List<Batch> CheckAvailableQuantityBatch();
+        public BatchDetail GetDetailById(Guid id);
     }
 }

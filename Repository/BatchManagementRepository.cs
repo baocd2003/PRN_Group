@@ -64,5 +64,11 @@ namespace Repository
 
         public Quotation GetQuotationWithProject(Guid id)
        => BatchManagementService.Instance.GetQuotationWithProject(id);
+
+        public List<Batch> CheckAvailableQuantityBatch()
+        => BatchManagementService.Instance.CheckAvailableQuantityBatch();
+
+        public BatchDetail GetDetailById(Guid id)
+        => BatchManagementService.Instance.GetDetailById(id);
     }
 }

@@ -130,6 +130,7 @@ namespace ICQS_Management.Pages.QuotationManagement
             CreatedQuotation.RequestDate = RequestDate;
             CreatedQuotation.EstimatePrice = EstimatePrice;
             CreatedQuotation.Status = 0;
+            CreatedQuotation.Note = "";
 
             string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
             Customer cus = _quotationRepo.GetCustomerByEmail(loggedEmail);

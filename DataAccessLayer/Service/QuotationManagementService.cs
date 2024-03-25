@@ -31,7 +31,8 @@ namespace DataAccessLayer.Service
             }
         }
 
-        public Quotation AddQuotation (Quotation quotation) {
+        public Quotation AddQuotation(Quotation quotation)
+        {
             _db.Quotations.Add(quotation);
             _db.SaveChanges();
             return quotation;
@@ -61,7 +62,44 @@ namespace DataAccessLayer.Service
         {
             return _db.Quotations.Include(q => q.Project).Where(q => q.Status == 1).ToList();
         }
+        public Quotation FindQuotationById(Guid id)
+        {
+            using (applicationDbContext _dbnew = new applicationDbContext())
+            {
+                return _dbnew.Quotations.Include(x => x.Project)
+                    .FirstOrDefault(x => x.QuotationId.Equals(id));
+            }
+        }
+        public void UpdateNote(Quotation quotation)
+        {
+            using (applicationDbContext _dbnew = new applicationDbContext())
+            {
+                _dbnew.Attach(quotation).State = EntityState.Modified;
+                try
+                {
+                    _dbnew.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EyeglassExists(quotation.QuotationId))
+                    {
 
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }        
+        private bool EyeglassExists(Guid id)
+        {
+            using (applicationDbContext _dbNew = new applicationDbContext())
+            {
+                return (_dbNew.Quotations?.Any(e => e.QuotationId == id)).GetValueOrDefault();
+            }
+
+        }
 
     }
 }

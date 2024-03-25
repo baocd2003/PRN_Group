@@ -37,10 +37,14 @@
             @Html.DisplayFor(model => model.Quotation.Project.Description)
         </dd>
     </dl>
+
     
     <form method="post">
+        <label>Why do you want to deny</label>
+        <input type="text" asp-for="Quotation.Note"  />
+        <br />
         <input type="hidden" asp-for="Quotation.QuotationId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input type="submit" value="Deny" class="btn btn-danger" /> |
         <a asp-page="./Index">Back to List</a>
     </form>
 </div>

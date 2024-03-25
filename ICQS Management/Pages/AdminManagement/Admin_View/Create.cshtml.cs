@@ -15,10 +15,12 @@ namespace ICQS_Management.Pages.Admin_View
     public class CreateModel : PageModel
     {
         private readonly IBaseRepository<User> _baseRepository;
+        private readonly IQuotationManagementRepository _quotationManagement;
 
-        public CreateModel(IBaseRepository<User> baseRepository)
+        public CreateModel(IBaseRepository<User> baseRepository, IQuotationManagementRepository quotationManagement)
         {
             _baseRepository = baseRepository;
+            _quotationManagement = quotationManagement;
         }
 
         public IActionResult OnGet(Guid userId)
@@ -26,7 +28,7 @@ namespace ICQS_Management.Pages.Admin_View
             if (HttpContext.Session != null)
             {
                 string userRole = HttpContext.Session.GetString("userRole");
-                if(userRole == null || userRole != "admin")
+                if (userRole == null || userRole != "admin")
                 {
                     return RedirectToPage("/Authentication/ErrorSession");
                 }
@@ -44,6 +46,17 @@ namespace ICQS_Management.Pages.Admin_View
         public string role { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
+            var exitedUser = _quotationManagement.GetCustomerByEmail(User.Email);
+            if (User.Email is null || User.Name is null || User.PhoneNumber is null || User.Password is null)
+            {
+                TempData["createError"] = "Field can not be null";
+                return RedirectToPage();
+            }
+            else if (exitedUser is null)
+            {
+                TempData["createError"] = "Email can not be duplicated";
+                return RedirectToPage();
+            }
             if (role == "Staff")
             {
                 User.UserId = Guid.NewGuid();
@@ -54,6 +67,7 @@ namespace ICQS_Management.Pages.Admin_View
                     Name = User.Name,
                     StaffId = User.UserId,
                     Password = User.Password,
+                    status = "1",
                     PhoneNumber = User.PhoneNumber,
                 };
 
@@ -70,6 +84,7 @@ namespace ICQS_Management.Pages.Admin_View
                     Name = User.Name,
                     CustomerId = User.UserId,
                     Password = User.Password,
+                    status = "1",
                     PhoneNumber = User.PhoneNumber,
                 };
                 _baseRepository.Insert(customerDTO);
@@ -79,9 +94,6 @@ namespace ICQS_Management.Pages.Admin_View
             {
                 return Page();
             }
-
-
-
             return RedirectToPage("./Index");
         }
     }

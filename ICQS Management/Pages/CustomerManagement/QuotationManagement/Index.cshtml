@@ -43,9 +43,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Project.Description)
             </td>
-            <td>
-               
+            <td>              
                 <a asp-page="./Details" asp-route-id="@item.QuotationId">View Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.QuotationId">Deny</a>
             </td>
         </tr>
 }

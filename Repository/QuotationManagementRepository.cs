@@ -38,5 +38,10 @@ namespace Repository
         public Quotation GetQuotation(Guid id)
        => QuotationManagementService.Instance.GetQuotation(id);
 
+        public Quotation FindQuotationById(Guid id)
+        => QuotationManagementService.Instance.FindQuotationById(id);
+
+        public void UpdateNote(Quotation quotation)
+        => QuotationManagementService.Instance.UpdateNote(quotation);
     }
 }

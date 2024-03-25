@@ -16,5 +16,7 @@ namespace Repository.Interface
         List<Quotation> GetProcessingQuotes();
         List<Quotation> GetAppliedQuotes();
         Customer GetCustomerByEmail(string email);
+        Quotation FindQuotationById(Guid id);
+        void UpdateNote(Quotation quotation);
     }
 }

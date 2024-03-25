@@ -13,11 +13,12 @@ namespace ICQS_Management.Pages.Admin_View
 {
     public class DeleteModel : PageModel
     {
-        private readonly IBaseRepository<User> _baseRepository;
+      
+        private readonly IAuthRepository authRepository;
 
-        public DeleteModel(IBaseRepository<User> baseRepository)
+        public DeleteModel(IAuthRepository authRepository)
         {
-            _baseRepository = baseRepository;
+            this.authRepository = authRepository;
         }
 
         [BindProperty]
@@ -39,7 +40,7 @@ namespace ICQS_Management.Pages.Admin_View
                         return NotFound();
                     }
 
-                    User = _baseRepository.GetById(id);
+                    User = await authRepository.GetById(id.Value);
 
                     if (User == null)
                     {
@@ -60,15 +61,7 @@ namespace ICQS_Management.Pages.Admin_View
             {
                 return NotFound();
             }
-
-            User = _baseRepository.GetById(id);
-
-            if (User != null)
-            {
-                _baseRepository.Delete(User.UserId);
-                _baseRepository.Save();
-            }
-
+            authRepository.Block(User);          
             return RedirectToPage("./Index");
         }
     }

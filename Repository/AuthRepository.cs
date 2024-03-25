@@ -16,6 +16,12 @@ namespace Repository
         => await AuthenticationService.Instance.Login(loginDTO);
         public async Task<Customer> CustomerRegister(Customer customer)
        => await AuthenticationService.Instance.CustomerRegister(customer);
+        public User Block(User user)
+        => AuthenticationService.Instance.Block(user);
+        public Task<List<User>> GetAllPaging(int pageNumber, int pageSize)
+        => AuthenticationService.Instance.GetAllPaging(pageNumber, pageSize);
 
+        public Task<User> GetById(Guid id)
+        => AuthenticationService.Instance.GetById(id);  
     }
 }

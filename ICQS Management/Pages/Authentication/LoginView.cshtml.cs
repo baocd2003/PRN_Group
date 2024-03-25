@@ -34,7 +34,7 @@ namespace ICQS_Management.Pages.Authentication
             {
                 TempData["ErrorMessage"] = "Invalid username or password.";
                 return RedirectToPage();
-            }
+            }            
             else
             {
                 HttpContext.Session.SetString("LoggedEmail", loginDTO.email);

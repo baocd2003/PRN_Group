@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.ApplicationDbContext;
+﻿using BussinessObject.Entity;
+using DataAccessLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -43,13 +44,14 @@ namespace DataAccessLayer.Service
         }
         public IEnumerable<T> GetAll(int pageNumber, int pageSize)
         {
-            IQueryable<T> query = _db.Set<T>();          
+            IQueryable<T> query = _db.Set<T>();
             return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
         public T GetById(object id)
         {
             return table.Find(id);
         }
+       
         public void Insert(T obj)
         {
             //It will mark the Entity state as Added State
@@ -100,11 +102,11 @@ namespace DataAccessLayer.Service
         //It will receive the primary key value as an argument whose information needs to be removed from the table
         public void Delete(object id)
         {
-            
-            T existing = table.Find(id);          
+
+            T existing = table.Find(id);
             table.Remove(existing);
         }
-       
+
         public void Save()
         {
             _db.SaveChanges();

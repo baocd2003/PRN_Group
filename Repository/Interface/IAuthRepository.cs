@@ -12,5 +12,10 @@ namespace Repository.Interface
     {
         public Task<User> Login(LoginDTO loginDTO);
         public Task<Customer> CustomerRegister(Customer customer);
+        public User Block(User user);
+        public Task<List<User>> GetAllPaging(int pageNumber, int pageSize);
+        public Task<User> GetById(Guid id);
+
+
     }
 }

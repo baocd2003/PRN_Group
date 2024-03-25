@@ -4,7 +4,9 @@ using DataAccessLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,23 +37,28 @@ namespace DataAccessLayer.Service
         }
         public async Task<User> Login(LoginDTO loginDTO)
         {
-            try
+            using (applicationDbContext _dbnew = new applicationDbContext())
             {
-                var customer = await _db.Users.FirstOrDefaultAsync(x => x.Email.Equals(loginDTO.email));
-                if (customer != null)
+                try
                 {
-                    if (customer.Password.Equals(loginDTO.password))
+                    var customer = await _dbnew.Users.FirstOrDefaultAsync(x => x.Email.Equals(loginDTO.email));
+                    if (customer != null && customer.status.Equals("1"))
                     {
-                        return customer;
+                        if (customer.Password.Equals(loginDTO.password))
+                        {
+                            return customer;
+                        }
                     }
+                    return null;
                 }
-                return null;
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+                
         }
+        
         public async Task<Customer> CustomerRegister(Customer customer)
         {
             try
@@ -64,7 +71,8 @@ namespace DataAccessLayer.Service
                     Name = customer.Name,
                     Password = customer.Password,
                     PhoneNumber = customer.PhoneNumber,
-                    UserId = customer.CustomerId
+                    UserId = customer.CustomerId,
+                    status = "1"
                 };
                 await _db.Users.AddAsync(customerParse);
                 await _db.SaveChangesAsync();
@@ -75,5 +83,43 @@ namespace DataAccessLayer.Service
                 throw new Exception(ex.Message);
             }
         }
+        public User Block(User user)
+        {
+            using(applicationDbContext _dbnew = new applicationDbContext())
+            {
+                var acc = _dbnew.Users.FirstOrDefault(x=>x.UserId == user.UserId);
+                if (user != null)
+                {
+                    if (acc.status.Equals("1"))
+                    {
+                        acc.status = "0";
+                    }
+                    else
+                    {
+                        acc.status = "1";
+                    }
+
+                }
+                _dbnew.SaveChanges();
+                return acc;
+
+            }
+           
+        }
+        public async Task<List<User>> GetAllPaging(int pageNumber, int pageSize)
+        {
+            using (applicationDbContext _db = new applicationDbContext())
+            {              
+                return _db.Users.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            }
+        }
+        public async Task<User> GetById(Guid id)
+        {
+            using (applicationDbContext _db = new applicationDbContext())
+            {
+                return await _db.Users.FirstOrDefaultAsync(x => x.UserId.Equals(id));
+            }
+        }
+
     }
 }

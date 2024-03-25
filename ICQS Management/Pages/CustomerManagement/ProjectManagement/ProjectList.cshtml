@@ -5,12 +5,99 @@
     ViewData["Title"] = "ProjectList";
 }
 
-<h1 style="margin-bottom: 2vh; text-align: center">Project List</h1>
+<h1 style="margin-bottom: 2rem; text-align: center">Project Prototype List</h1>
+<div class="project_list">
+    <div class="row d-flex justify-content-between">
+        @foreach (var item in Model.Project)
+        {
+            <div class="project_card_wrapper col-md-6 mb-5">
+                <div class="project_card">
+                    <h3 class="font-weight-bold">@Html.DisplayFor(modelItem => item.ProjectName)</h3>
+                    <dl class="row">
+                        <dt class="col-sm-3">
+                            Company
+                        </dt>
+                        <dd class="col-sm-9">
+                            : ICQS System
+                        </dd>
+                        <dt class="col-sm-3">
+                            Project Name
+                        </dt>
+                        <dd class="col-sm-9">
+                            : @Html.DisplayFor(modelItem => item.ProjectName)
+                        </dd>
+                        <dt class="col-sm-3">
+                            Description
+                        </dt>
+                        <dd class="col-sm-9">
+                            : @Html.DisplayFor(modelItem => item.Description)
+                        </dd>
+                        <dt class="col-sm-3">
+                            Area per floor
+                        </dt>
+                        <dd class="col-sm-9">
+                            : @Html.DisplayFor(modelItem => item.AreaPerFloor) (m²)
+                        </dd>
+                        <dt class="col-sm-3">
+                            Floor(s)
+                        </dt>
+                        <dd class="col-sm-9">
+                            : @Html.DisplayFor(modelItem => item.NumOfFloors)
+                        </dd>
+                    </dl>
+                    <table class="labor_cost w-100">
+                        <caption style="caption-side: top; text-align: right;">Labor cost</caption>
+                        <tr>
+                            <th class="w-25">Amount</th>
+                            <th class="w-25">Salary/ps</th>
+                            <th class="w-25">Duration</th>
+                            <th class="w-25">Price</th>
 
-<p>
-    <a asp-page="Create" class="btn btn-primary">Create New</a>
-</p>
-<table class="table">
+                        </tr>
+                        <tr>
+                            <td>@item.NumOfLabors (people)</td>
+                            <td>@string.Format("{0:N0}", item.LaborSalaryPerMonth)/month</td>
+                            <td>@item.MonthDuration (months)</td>
+                            <td>@string.Format("{0:N0}", (item.NumOfLabors * item.LaborSalaryPerMonth * item.MonthDuration))</td>
+                        </tr>
+                    </table>
+                    <table class="project_materials w-100">
+                        <caption style="caption-side: top; text-align: right;">Materials</caption>
+                        <tr>
+                            <th class="w-25" style="background: white;"></th>
+                            <th class="w-25">Name</th>
+                            <th class="w-25">Quantity</th>
+                            <th class="w-25">Medium price</th>
+                        </tr>
+                        @foreach (var mat in item.ProjectMaterials)
+                        {
+                            <tr>
+                                <td style="border: none; background-color: white;"></td>
+                                <td>@mat.Materials.Name</td>
+                                <td>@mat.Quantity (@mat.Materials.MaterialTypes.UnitType)</td>
+                                <td>@string.Format("{0:N0}", mat.Materials.MediumPrice)</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td style="border: none; background-color: white;"></td>
+                            <td style="border: none; background-color: white; font-size: 1.2rem; padding: 1rem 0;" class="font-weight-bold text-center" colspan="2">Estimated Total</td>
+                            <td style="border: none; background-color: white; font-size: 1.2rem;" class="font-weight-bold">@string.Format("{0:N0}", item.TotalPrice)</td>
+                        </tr>
+                    </table>
+                    <div class="d-flex justify-content-center mt-4">
+                        <a asp-page="../QuotationManagement/Create" asp-route-id="@item.ProjectID" class="btn btn-primary">Get Quotation</a>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        }
+    </div>
+
+</div>
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -32,31 +119,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Project) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AreaPerFloor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumOfFloors)
-            </td>
-            <td>
-                @{
-                    var formattedTotalPrice = string.Format("{0:N0}", item.TotalPrice); // Format with commas
-                }
-                @formattedTotalPrice
-            </td>
-            <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 400px">
-                <a asp-page="./ProjectMaterialList" asp-route-id="@item.ProjectID" asp-route-status="@item.Status" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Details</a>
-                <a asp-page="../QuotationManagement/Create" asp-route-id="@item.ProjectID" class="btn btn-danger" style="display: flex; justify-content: center; align-items: center">Make Quotation</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Project)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AreaPerFloor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumOfFloors)
+                </td>
+                <td>
+                    @{
+                        var formattedTotalPrice = string.Format("{0:N0}", item.TotalPrice); // Format with commas
+                    }
+                    @formattedTotalPrice
+                </td>
+                <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 400px">
+                    <a asp-page="./ProjectMaterialList" asp-route-id="@item.ProjectID" asp-route-status="@item.Status" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Details</a>
+                    <a asp-page="../QuotationManagement/Create" asp-route-id="@item.ProjectID" class="btn btn-danger" style="display: flex; justify-content: center; align-items: center">Make Quotation</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+ *@

@@ -14,15 +14,33 @@
     <link href="~/css/style.css" rel="stylesheet" />
     <link href="~/css/responsive.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/ICQS Management.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ICQS_Management.styles.css" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="~/css/admin_layout.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet"
+          data-purpose="Layout StyleSheet"
+          title="Web Awesome"
+          href="/css/app-wa-8106c2e05ae3cd7bfbb686f33d73a923.css?vsn=d">
 
+    <link rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
+
+    <link rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-thin.css">
+
+    <link rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-solid.css">
+
+    <link rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-regular.css">
+
+    <link rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-light.css">
 </head>
 
 <body>
     <div class="">
         <div class="row">
-            <div class="col-md-2 p-0 side_bar">
+            <div class="col-md-3 p-0 side_bar">
                 <div class="text-center logo_section">
                     <div class="logo_wrapper">
                         <img src="/images/iqcs_logo.png" />
@@ -33,49 +51,49 @@
                 <div class="sidebar_nav_wrapper">
                     <a class="nav_tab" asp-page="/AdminManagement/Admin_View/Index">
                         <div class="nav_icon">
-                            <img src="https://i.ibb.co/WtPZ3LC/user.png" width="40" height="40" />
+                            <i class="fa-regular fa-user" style="color: white; font-size: 24px"></i>
                         </div>
                         <span>Users</span>
                     </a>
                     <a class="nav_tab" asp-page="/AdminManagement/ProjectManagement/Index">
                         <div class="nav_icon">
-                            <img src="https://i.ibb.co/Rb5xFM4/blueprint.png" width="40" height="40" />
+                            <i class="fa-regular fa-rectangle-list" style="color: white; font-size: 24px"></i>
                         </div>
                         <span>Projects</span>
                     </a>
                     <a class="nav_tab" asp-page="/AdminManagement/BatchsManagement/Index">
                         <div class="nav_icon">
-                            <img src="https://i.ibb.co/4mpvQVV/batch-picking.png" width="40" height="40" />
+                            <i class="fa-regular fa-boxes" style="color: white; font-size: 24px"></i>
                         </div>
                         <span>Batches</span>
                     </a>
                     <a class="nav_tab" asp-page="/AdminManagement/MaterialManagement/Index">
                         <div class="nav_icon">
-                            <img src="https://i.ibb.co/7Qk6Hbw/brick.png" width="40" height="40" />
+                            <i class="fa-regular fa-trowel-bricks" style="color: white; font-size: 24px"></i>
                         </div>
                         <span>Materials</span>
                     </a>
                     <a class="nav_tab" asp-page="/AdminManagement/MaterialTypeManagement/Index">
                         <div class="nav_icon">
-                            <img src="https://i.ibb.co/JyLLH6m/logs.png" width="40" height="40" />
+                            <i class="fa-regular fa-block-brick" style="color: white; font-size: 24px"></i>
                         </div>
                         <span>Material Types</span>
                     </a>
-                    <a class="nav_tab" asp-page="/StaffManagement/AccountStaff/QuotationRequest">
+                    <a class="nav_tab" asp-page="/AdminManagement/QuotationManagement/Index">
                         <div class="nav_icon">
-                            <img src="https://i.ibb.co/dj4n5XM/file.png" width="40" height="40" />
+                            <i class="fa-regular fa-clipboard" style="color: white; font-size: 24px"></i>
                         </div>
                         <span>Quotations</span>
                     </a>
                     <a class="nav_tab" asp-page="/Authentication/Logout">
                         <div class="nav_icon">
-                            <img src="https://i.ibb.co/4S9XYpb/exit.png" width="40" height="40" />
+                            <i class="fa-solid fa-arrow-right-from-bracket" style="color: white; font-size: 24px"></i>
                         </div>
                         <span>Logout</span>
                     </a>
                 </div>
             </div>
-            <div class="col-md-10 p-0">
+            <div class="col-md-9 p-0">
                 <div class="dashboard_header">
                     <h3>Admin Management</h3>
                 </div>
@@ -88,23 +106,30 @@
             </div>
         </div>
     </div>
-   
-
-
-    @*  <section class="container-fluid footer_section ">
-    <div class="container">
-    <p>
-    &copy; <span id="displayYear"></span> All Rights Reserved By
-    <a href="https://html.design/">Free Html Templates</a>
-    </p>
-    </div>
-    </section> *@
-
 
     <script type="text/javascript" src="~/js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="~/js/bootstrap.js"></script>
     <script type="text/javascript" src="~/js/custom.js"></script>
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var currentPath = window.location.pathname;
+            $(".nav_tab").each(function () {
+                var href = $(this).attr('href');
+                if (currentPath.indexOf(href) !== -1) {
+                    $(this).css({
+                        'background-color': 'white',
+                        'color': '#3554D1',
+                        'border-radius': '10px',
+                        'box-shadow': '1px 3px rgba(0,0,0,0.4)',
+                        'font-weight': 'bold'
+                    });
+                    $(this).find('.nav_icon i').css({
+                        'color': '#3554D1',
+                    });
+                }
+            });
+        });
+    </script>
 
 </body>
 

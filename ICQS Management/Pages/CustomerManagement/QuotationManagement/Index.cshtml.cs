@@ -22,7 +22,6 @@ namespace ICQS_Management.Pages.QuotationManagement
         }
 
         public IList<Quotation> Quotation { get;set; }
-
         public async Task<IActionResult> OnGetAsync()
         {
             if (HttpContext.Session == null)
@@ -38,7 +37,7 @@ namespace ICQS_Management.Pages.QuotationManagement
                 }
                 else
                 {
-                      Quotation =_quoteRepo.GetProcessingQuotes();
+                      Quotation =_quoteRepo.GetAllQuotations();
                     return Page();
                 }
             }

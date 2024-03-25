@@ -122,7 +122,7 @@ namespace ICQS_Management.Pages.Account_Staff
                 Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
                 //_batchRepo.StaffApplyQuote(selectedStaff.StaffId, afterQuote);
                 _projectRepo.UpdateProject(Project);
-                _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId);
+                _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId,Project);
                 return RedirectToPage("/AdminManagement/BatchsManagement/Index");
             }
             else
@@ -146,7 +146,7 @@ namespace ICQS_Management.Pages.Account_Staff
 
                 string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
                 Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
-                materialPrice = _batchRepo.PreviewPrice(QuotationId, SelectedItems);
+                materialPrice = _batchRepo.PreviewPrice(QuotationId, SelectedItems,Project);
                 Batches = _batchRepo.GetBatchesDateAsc();
                 TempData["QuotationId"] = QuotationId;
                 return Page();

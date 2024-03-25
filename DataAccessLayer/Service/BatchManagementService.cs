@@ -182,7 +182,7 @@ namespace DataAccessLayer.Service
             return sortedBatchIds;
         }
 
-        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId)
+        public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId, Project prj)
         {
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
             Project _selectedProject = _db.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
@@ -242,13 +242,13 @@ namespace DataAccessLayer.Service
             }
             staff.Quotations.Add(_selectedQuotation);
             _selectedQuotation.Batchs = affectedBatchs;
-            _selectedQuotation.CompletePrice = price + (_selectedProject.LaborSalaryPerMonth * _selectedProject.MonthDuration * _selectedProject.NumOfLabors);
+            _selectedQuotation.CompletePrice = price + (prj.LaborSalaryPerMonth * prj.MonthDuration * prj.NumOfLabors);
             _selectedQuotation.Status = 1;
             _db.Entry(_selectedQuotation).State = EntityState.Modified;
             _db.SaveChanges();
         }
 
-        public double PreviewPrice(Guid quotationId, List<Guid> batchIds)
+        public double PreviewPrice(Guid quotationId, List<Guid> batchIds, Project prj)
         {
             Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
             Project _selectedProject = _db.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
@@ -301,7 +301,7 @@ namespace DataAccessLayer.Service
                     }
                 }
             }
-            return price + (_selectedProject.LaborSalaryPerMonth * _selectedProject.MonthDuration * _selectedProject.NumOfLabors);
+            return price + (prj.LaborSalaryPerMonth * prj.MonthDuration * prj.NumOfLabors);
         }
 
         public void MinusQuantityInBatch(Guid quotationId)

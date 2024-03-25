@@ -116,18 +116,17 @@ namespace ICQS_Management.Pages.Account_Staff
                     Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
                     return Page();
                 }
-                //materialPrice = 
                 string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
                 Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
                 Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
                 //_batchRepo.StaffApplyQuote(selectedStaff.StaffId, afterQuote);
-                _projectRepo.UpdateProject(Project);
+                //_projectRepo.UpdateProject(Project);
                 _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId,Project);
                 return RedirectToPage("/AdminManagement/BatchsManagement/Index");
             }
             else
             {
-                _projectRepo.UpdateProject(Project);
+                //_projectRepo.UpdateProject(Project);
                 Guid QuotationId = (Guid)TempData["QuotationId"];
                 Quotation = _quoteRepo.GetQuotation(QuotationId);
                 var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);

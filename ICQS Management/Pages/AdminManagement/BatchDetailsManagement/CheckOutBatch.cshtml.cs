@@ -17,9 +17,13 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class CheckOutBatchModel : PageModel
     {
-        private BatchManagementRepository _repo = new BatchManagementRepository();
-        private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
+        private IBatchManagement _repo;
+        private IMaterialManagementRepository _materialRepo;
 
+        public CheckOutBatchModel(IBatchManagement repo, IMaterialManagementRepository materialRepo) {
+            _repo = repo;
+            _materialRepo = materialRepo;
+        }
         public IList<BatchDetailDTO> BatchDetail { get;set; }
 
         public DateTime ImportDate { get; set; }

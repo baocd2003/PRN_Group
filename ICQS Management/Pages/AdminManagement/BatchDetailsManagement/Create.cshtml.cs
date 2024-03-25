@@ -32,6 +32,9 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
         public IList<BatchDetailDTO> BatchDetails { get; set; } = default!;
         [BindProperty]
         public MaterialType MaterialType { get; set; } = default!;
+
+        [BindProperty]
+        public float MediumPrice { get; set; } = 0;
         public IActionResult OnGet(Guid? materialId)
         {
             if (HttpContext.Session == null)
@@ -62,6 +65,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                         Material mat = _materialRepo.GetMaterialById((Guid)materialId);
                         MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
                         TempData["MatId"] = (Guid)materialId;
+                        MediumPrice = mat.MediumPrice;
                     }
                     else {
                         ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name", materialId);
@@ -69,6 +73,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                         Material mat = matList.FirstOrDefault();
                         MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
                         TempData["MatId"] = mat.MaterialId;
+                        MediumPrice = mat.MediumPrice;
                     }
 
                     BatchDetails = (from bd in batchDetails
@@ -112,11 +117,11 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                 if (!_materialRepo.GetOthersMaterial(batchDetails).Any())
                 {
                     HttpContext.Session.SetString("detailList", detailList);
-                    //HttpContext.Session.Remove("ImportDate");
                     return RedirectToPage("./CheckOutBatch");
                 }
                 IEnumerable<Material> list = _materialRepo.GetOthersMaterial(batchDetails);
                 MaterialType = _typeRepo.GetMaterialTypeById(list.FirstOrDefault().MaterialTypeId);
+                MediumPrice = list.FirstOrDefault().MediumPrice;
                 var materials = _materialRepo.GetAllMaterials();
                 BatchDetails = (from bd in batchDetails
                                 join m in materials on bd.MaterialId equals m.MaterialId
@@ -130,7 +135,6 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                 return Page();
             } else
             {
-                //_repo.CreateBatch(ImportDate, batchDetails);
                 if (!batchDetails.Any())
                 {
                     ModelState.AddModelError("", "Add at least 1 detail in batch");

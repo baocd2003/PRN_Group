@@ -11,6 +11,16 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <form method="post" id="materialForm" asp-page-handler="ChooseMaterial" method="post">
+            <div class="form-group">
+                <label class="control-label">Material</label>
+                <select name="MaterialId" class="form-control" asp-items="ViewBag.MaterialId" onchange="submitForm(this)"></select>
+            </div>
+        </form>
+        <div class="form-group">
+            <label>Unit</label>
+            <input asp-for="MaterialType.UnitType" readonly />
+        </div>
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="BatchDetail.BatchDetailId" />
@@ -30,11 +40,6 @@
                 <span asp-validation-for="BatchDetail.BatchId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BatchDetail.MaterialId" class="control-label"></label>
-                <select asp-for="BatchDetail.MaterialId" class="form-control" asp-items="ViewBag.MaterialId"></select>
-                <span asp-validation-for="BatchDetail.MaterialId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -48,3 +53,11 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    function submitForm(selectElement) {
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        var materialTypeId = selectedOption.value;
+        document.getElementById('materialForm').submit();
+    }
+</script>

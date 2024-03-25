@@ -1,0 +1,44 @@
+﻿body {
+}
+
+
+/* Project card*/
+
+/*********/
+
+.quotations_table{
+    th{
+          background: rgba(0, 0, 0, 0.8);
+          color: white;
+          text-align: center;
+          padding: .3rem 0;
+      }
+    th:first-child{
+        border-radius: .5rem 0 0 .5rem;
+    }
+    th:last-child{
+        border-radius: 0 .5rem .5rem 0;
+    }
+    td{
+        padding-left: 3rem;
+        padding: 1rem 0 1rem 3rem;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+}
+
+.quotation_buttons {
+    padding-left: 0 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .3rem;
+    a{
+         text-decoration: none;
+         color: white;
+         background: #0069d9;
+         padding: .1rem .5rem;
+         border-radius: .2rem;
+     }
+}

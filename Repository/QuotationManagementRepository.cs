@@ -16,7 +16,7 @@ namespace Repository
             return QuotationManagementService.Instance.AddQuotation(quotation);
         }
 
-        public IEnumerable<Quotation> GetAllQuotations()
+        public IList<Quotation> GetAllQuotations()
         {
             return QuotationManagementService.Instance.GetAllQuotations();
         }

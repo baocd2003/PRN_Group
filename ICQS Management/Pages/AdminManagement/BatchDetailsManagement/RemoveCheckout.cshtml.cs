@@ -72,7 +72,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             batchDetails.RemoveAt(index);
             string detailList = JsonConvert.SerializeObject(batchDetails);
             HttpContext.Session.SetString("detailList", detailList);
-            return RedirectToPage("./CheckOutBatch");
+            return RedirectToPage("./Create");
         }
     }
 }

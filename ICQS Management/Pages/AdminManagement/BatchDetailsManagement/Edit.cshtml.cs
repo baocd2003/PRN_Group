@@ -9,17 +9,17 @@ using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-        private BatchManagementRepository _repo = new BatchManagementRepository();
+        private IBatchManagement _repo;
 
-        public EditModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public EditModel(IBatchManagement context)
         {
-            _context = context;
+            _repo = context;
         }
 
         [BindProperty]
@@ -40,7 +40,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                 }
                 else
                 {
-                    var batchdetail = await _context.BatchDetails.FirstOrDefaultAsync(m => m.BatchDetailId == id);
+                    var batchdetail = _repo.GetDetailById((Guid)id);
                     if (batchdetail == null)
                     {
                         return NotFound();
@@ -56,7 +56,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
         public async Task<IActionResult> OnPostAsync()
         {
             _repo.UpdateBatchDetail(BatchDetail);
-            return RedirectToPage("/BatchsManagement/Index");
+            return RedirectToPage("/AdminManagement/BatchsManagement/Details?id=" + BatchDetail.BatchId);
         }
     }
 }

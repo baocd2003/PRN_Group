@@ -60,7 +60,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                     MaterialType = _typeRepo.GetMaterialTypeById(list.FirstOrDefault().MaterialTypeId);
                     if (materialId != null)
                     {
-                        ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
+                        ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name",materialId);
                         Material mat = _materialRepo.GetMaterialById((Guid)materialId);
                         MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
                         TempData["MatId"] = (Guid)materialId;

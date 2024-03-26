@@ -14,11 +14,11 @@ namespace ICQS_Management.Pages.StaffManagement.Account_Staff
 {
     public class QuotationRequestModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        
         private IBatchManagement _batchManagementRepository = new BatchManagementRepository();
-        public QuotationRequestModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public QuotationRequestModel(IBatchManagement batchManagementRepository)
         {
-            _context = context;
+            _batchManagementRepository = batchManagementRepository;
         }
 
         public IList<Quotation> Quotation { get;set; }

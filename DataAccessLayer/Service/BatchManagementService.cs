@@ -63,12 +63,6 @@ namespace DataAccessLayer.Service
             return batchDetails;
         }
 
-        //public List<BatchDetail> GetBatchDetailsByBatchIdWithMaterial(Guid batchId)
-        //{
-        //    List<BatchDetail> batchDetails = _db.BatchDetails.Where(bd => bd.BatchId == batchId).Include(bd => bd.MaterialId).ToList();
-        //    return batchDetails;
-        //}
-
         public void AddMoreDetailsInBatch(List<BatchDetail> batchDetails)
         {
             foreach (BatchDetail batchDetail in batchDetails)
@@ -390,6 +384,11 @@ namespace DataAccessLayer.Service
 
         public BatchDetail GetDetailById(Guid id)
             => _db.BatchDetails.FirstOrDefault(bd => bd.BatchDetailId == id);
+
+        public List<Batch> GetBatchesByQuote(Guid quoteId)
+        {
+            return _db.Batches.Where(b => b.Quotations.Any(q => q.QuotationId == quoteId)).Include(b => b.BatchDetails).ToList();
+        }
 
     }
 }

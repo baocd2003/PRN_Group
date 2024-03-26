@@ -97,7 +97,7 @@ namespace ICQS_Management.Pages.Admin_View
                 _baseRepository.InsertUser(customerDTO);
                 
             }
-           
+            TempData["UpdateNotify"] = "Create success";
             return RedirectToPage("./Index");
         }
     }

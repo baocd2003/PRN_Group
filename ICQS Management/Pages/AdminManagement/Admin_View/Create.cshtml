@@ -2,6 +2,14 @@
 @model ICQS_Management.Pages.Admin_View.CreateModel
 
 <h1 class="title">User Management</h1>
+@if (@TempData["createError"] is not null)
+{
+    <span class="text-danger">@TempData["createError"]</span>
+}
+@if (@TempData["UpdateNotify"] is not null)
+{
+    <span class="text-success">@TempData["UpdateNotify"]</span>
+}
 <div style="width: 90%; margin: 0 auto">
     <h2 class="text-center" style="margin-bottom: 3vh">Add User</h2>
     <form method="post">
@@ -44,10 +52,7 @@
             <a asp-page="Index" class="btn btn-primary">Back to List</a>
         </div>
     </form>
- @if (@TempData["createError"] is not null)
-{
-    <span class="text-danger">@TempData["createError"]</span>
-}
+
 </div>
 
 @section Scripts {

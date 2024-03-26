@@ -77,6 +77,7 @@ namespace ICQS_Management.Pages.Admin_View
                 
                 _baseRepository.Update(User);              
                 var user = _baseRepository.GetById(User.UserId);
+                
                 return RedirectToPage("./Index");
             }
             catch (Exception ex)

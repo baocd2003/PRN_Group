@@ -18,18 +18,22 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class CreateModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-        private BatchManagementRepository _repo = new BatchManagementRepository();
-        private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
-        private IMaterialTypeManagementRepository _typeRepo = new MaterialTypeManagementRepository();
-        public CreateModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        private IBatchManagement _repo;
+        private IMaterialManagementRepository _materialRepo;
+        private IMaterialTypeManagementRepository _typeRepo;
+        public CreateModel(IBatchManagement repo, IMaterialManagementRepository materialRepo, IMaterialTypeManagementRepository typeRepo)
         {
-            _context = context;
+            _repo = repo;
+            _materialRepo = materialRepo;
+            _typeRepo = typeRepo;
         }
 
         public IList<BatchDetailDTO> BatchDetails { get; set; } = default!;
         [BindProperty]
         public MaterialType MaterialType { get; set; } = default!;
+
+        [BindProperty]
+        public float MediumPrice { get; set; } = 0;
         public IActionResult OnGet(Guid? materialId)
         {
             if (HttpContext.Session == null)
@@ -56,10 +60,19 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                     MaterialType = _typeRepo.GetMaterialTypeById(list.FirstOrDefault().MaterialTypeId);
                     if (materialId != null)
                     {
-                        ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name", materialId);
+                        ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
                         Material mat = _materialRepo.GetMaterialById((Guid)materialId);
                         MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
                         TempData["MatId"] = (Guid)materialId;
+                        MediumPrice = mat.MediumPrice;
+                    }
+                    else {
+                        ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
+                        List<Material> matList = _materialRepo.GetOthersMaterial(batchDetails).ToList();
+                        Material mat = matList.FirstOrDefault();
+                        MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
+                        TempData["MatId"] = mat.MaterialId;
+                        MediumPrice = mat.MediumPrice;
                     }
 
                     BatchDetails = (from bd in batchDetails
@@ -103,11 +116,11 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                 if (!_materialRepo.GetOthersMaterial(batchDetails).Any())
                 {
                     HttpContext.Session.SetString("detailList", detailList);
-                    //HttpContext.Session.Remove("ImportDate");
                     return RedirectToPage("./CheckOutBatch");
                 }
                 IEnumerable<Material> list = _materialRepo.GetOthersMaterial(batchDetails);
                 MaterialType = _typeRepo.GetMaterialTypeById(list.FirstOrDefault().MaterialTypeId);
+                MediumPrice = list.FirstOrDefault().MediumPrice;
                 var materials = _materialRepo.GetAllMaterials();
                 BatchDetails = (from bd in batchDetails
                                 join m in materials on bd.MaterialId equals m.MaterialId
@@ -121,7 +134,6 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                 return Page();
             } else
             {
-                //_repo.CreateBatch(ImportDate, batchDetails);
                 if (!batchDetails.Any())
                 {
                     ModelState.AddModelError("", "Add at least 1 detail in batch");

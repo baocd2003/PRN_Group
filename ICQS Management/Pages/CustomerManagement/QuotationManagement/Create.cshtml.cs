@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Repository.Interface;
 using ICQS_Management.Pages.Authentication;
+using DataAccessLayer.Service;
 
 namespace ICQS_Management.Pages.QuotationManagement
 {
@@ -35,30 +36,45 @@ namespace ICQS_Management.Pages.QuotationManagement
             {
                 return RedirectToPage("/Authentication/ErrorSession");
             }
+            ProjectId = id.Value;
+            PopulateData();
+            
+            return Page();
+        }
 
-            Project = _projectRepo.GetProjectById(id.Value);
+        public void PopulateData()
+        {
+            Project = _projectRepo.GetProjectById(ProjectId);
             if (Project == null)
             {
-                return NotFound();
+                throw new Exception("Project not found!");
             }
-            ProjectMaterials = _projectRepo.GetProjectMaterialByProjectId(id.Value);
+            ProjectMaterials = _projectRepo.GetProjectMaterialByProjectId(ProjectId);
             Materials = _materialRepo.GetAllMaterials();
-            return Page();
         }
 
         // Project properties
         [BindProperty]
         [Required]
-        public string ProjectName { get; set; } = default!;
+        public string ProjectName { get; set; }
         [BindProperty]
         [Required]
-        public string Description { get; set; } = default!;
+        public string Description { get; set; }
         [BindProperty]
         [Required(ErrorMessage = "Area per floor field is required!")]
         public int AreaPerFloor { get; set; } = default!;
         [BindProperty]
         [Required(ErrorMessage = "Number of floors field is required!")]
         public int NumOfFloors { get; set; } = default!;
+        [BindProperty]
+        [Required]
+        public int NumOfLabors { get; set; }
+        [BindProperty]
+        [Required]
+        public float LaborSalaryPerMonth { get; set; }
+        [BindProperty]
+        [Required]
+        public int MonthDuration { get; set; }
         [BindProperty]
         public IEnumerable<Material> Materials { get; set; }
         private Project NewProject { get; set; } = new Project();
@@ -84,25 +100,30 @@ namespace ICQS_Management.Pages.QuotationManagement
         [BindProperty]
         public float EstimatePrice { get; set; } = default!;
         private Quotation CreatedQuotation { get; set; } = new Quotation();
-
-        [BindProperty]
         public Project Project { get; set; } = default!;
         [BindProperty]
         public IEnumerable<ProjectMaterial> ProjectMaterials { get; set; } = default!;
+        [BindProperty]
+        public Guid ProjectId { get; set; } = default!;
 
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
+            if (!ModelState.IsValid)
+            {
+                PopulateData();
+                return Page();
+            }
 
             NewProject.ProjectName = ProjectName;
             NewProject.Description = Description;
             NewProject.AreaPerFloor = AreaPerFloor;
             NewProject.NumOfFloors = NumOfFloors;
+            NewProject.NumOfLabors = NumOfLabors;
+            NewProject.LaborSalaryPerMonth = LaborSalaryPerMonth;
+            NewProject.MonthDuration = MonthDuration;
+            NewProject.TotalPrice = EstimatePrice;
             NewProject.Status = 2;
 
             var projectResult = _projectRepo.AddProject(NewProject);
@@ -130,6 +151,7 @@ namespace ICQS_Management.Pages.QuotationManagement
             CreatedQuotation.RequestDate = RequestDate;
             CreatedQuotation.EstimatePrice = EstimatePrice;
             CreatedQuotation.Status = 0;
+            CreatedQuotation.Note = "";
 
             string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
             Customer cus = _quotationRepo.GetCustomerByEmail(loggedEmail);

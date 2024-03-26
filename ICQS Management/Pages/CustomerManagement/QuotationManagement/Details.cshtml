@@ -4,42 +4,92 @@
 @{
     ViewData["Title"] = "Details";
 }
-
-<h1>Details</h1>
-
-<div>
-    <hr />
-    <dl class="row">
-        <div>Project Name</div>
-        <dd>@Html.DisplayFor(model => model.Project.ProjectName)</dd>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ProjectMaterialList[0].MaterialName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ProjectMaterialList[0].Quantity)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.ProjectMaterialList)
-                {
+<div class="detail_wrapper">
+    <div class="w-75">
+        <div class="quotation-header mb-3">
+            <div class="quotation_header">
+                <h2>Quotation Project Detail</h2>
+                <img src="/images/iqcs_logo.png" />
+            </div>
+        </div>
+        <div class="project_card_wrapper">
+            <div class="project_card">
+                <dl class="row">
+                    <dt class="col-sm-3">
+                        Company
+                    </dt>
+                    <dd class="col-sm-9">
+                        : ICQS System
+                    </dd>
+                    <dt class="col-sm-3">
+                        Project Name
+                    </dt>
+                    <dd class="col-sm-9">
+                        : @Model.Quotation.Project.ProjectName
+                    </dd>
+                    <dt class="col-sm-3">
+                        Description
+                    </dt>
+                    <dd class="col-sm-9">
+                        : @Model.Quotation.Project.Description
+                    </dd>
+                    <dt class="col-sm-3">
+                        Area per floor
+                    </dt>
+                    <dd class="col-sm-9">
+                        : @Model.Quotation.Project.AreaPerFloor (m²)
+                    </dd>
+                    <dt class="col-sm-3">
+                        Floor(s)
+                    </dt>
+                    <dd class="col-sm-9">
+                        : @Model.Quotation.Project.NumOfFloors
+                    </dd>
+                </dl>
+                <table class="labor_cost w-100">
+                    <caption style="caption-side: top; text-align: right;">Labor cost</caption>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MaterialName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Quantity)
-                        </td>
+                        <th class="w-25">Amount</th>
+                        <th class="w-25">Salary/ps</th>
+                        <th class="w-25">Duration</th>
+                        <th class="w-25">Price</th>
+
                     </tr>
-                }
-            </tbody>
-        </table>
-    </dl>
+                    <tr>
+                        <td>@Model.Quotation.Project.NumOfLabors (people)</td>
+                        <td>@string.Format("{0:N0}", Model.Quotation.Project.LaborSalaryPerMonth)/month</td>
+                        <td>@Model.Quotation.Project.MonthDuration (months)</td>
+                        <td>@string.Format("{0:N0}", (Model.Quotation.Project.NumOfLabors * Model.Quotation.Project.LaborSalaryPerMonth * Model.Quotation.Project.MonthDuration))</td>
+                    </tr>
+                </table>
+                <table class="project_materials w-100">
+                    <caption style="caption-side: top; text-align: right;">Materials</caption>
+                    <tr>
+                        <th class="w-25" style="background: white;"></th>
+                        <th class="w-25">Name</th>
+                        <th class="w-25">Quantity</th>
+                        <th class="w-25">Medium price</th>
+                    </tr>
+                    @foreach (var mat in Model.Quotation.Project.ProjectMaterials)
+                    {
+                        <tr>
+                            <td style="border: none; background-color: white;"></td>
+                            <td>@mat.Materials.Name</td>
+                            <td>@mat.Quantity (@mat.Materials.MaterialTypes.UnitType)</td>
+                            <td>@string.Format("{0:N0}", mat.Materials.MediumPrice)</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td style="border: none; background-color: white;"></td>
+                        <td style="border: none; background-color: white; font-size: 1.2rem; padding: 1rem 0;" class="font-weight-bold text-center" colspan="2">Estimated</td>
+                        <td style="border: none; background-color: white; font-size: 1.2rem;" class="font-weight-bold">@string.Format("{0:N0}", Model.Quotation.Project.TotalPrice)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Quotation.QuotationId">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
+
+
+<a asp-page="./Index">Back to List</a>

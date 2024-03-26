@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ICQS_Management.Pages.Admin_View.EditModel
 
 <h1 class="title">User Management</h1>
@@ -37,6 +37,10 @@
             <a asp-page="Index" class="btn btn-primary">Back to List</a>
         </div>
     </form>
+@if (@TempData["createError"] is not null)
+{
+    <span class="text-danger">@TempData["createError"]</span>
+}
 </div>
 
 @section Scripts {

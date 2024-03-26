@@ -15,13 +15,18 @@ namespace ICQS_Management.Pages.QuotationManagement
 {
     public class DetailsModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+
         private IBatchManagement _batchRepo = new BatchManagementRepository();
         private IProjectManagementRepository _projectRepo = new ProjectManagementRepository();
         private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
-        public DetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+
+        private IQuotationManagementRepository _quoteRepo = new QuotationManagementRepository();
+
+        public DetailsModel(IBatchManagement batchRepo, IProjectManagementRepository projectRepo, IMaterialManagementRepository materialRepo)
         {
-            _context = context;
+            _batchRepo = batchRepo;
+            _projectRepo = projectRepo;
+            _materialRepo = materialRepo;
         }
 
         [BindProperty]
@@ -51,22 +56,23 @@ namespace ICQS_Management.Pages.QuotationManagement
                         return NotFound();
                     }
 
-                    Quotation = _batchRepo.GetQuotationWithProject((Guid)id);
-            Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
-            var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
-            var materials = _materialRepo.GetAllMaterials();
-            ProjectMaterialList = (from pm in projectMaterials
-                                   join m in materials on pm.MaterialId equals m.MaterialId
-                                   where pm.ProjectId == Quotation.ProjectId
-                                   select new ProjectMaterialDTO
-                                   {
-                                       ProjectMaterialId = pm.ProjectMaterialId,
-                                       ProjectId = pm.ProjectId,
-                                       MaterialId = pm.MaterialId,
-                                       MaterialName = m.Name,
-                                       Quantity = pm.Quantity
-                                   }).ToList();
+                    //        Quotation = _batchRepo.GetQuotationWithProject((Guid)id);
+                    //Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
+                    //var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
+                    //var materials = _materialRepo.GetAllMaterials();
+                    //ProjectMaterialList = (from pm in projectMaterials
+                    //                       join m in materials on pm.MaterialId equals m.MaterialId
+                    //                       where pm.ProjectId == Quotation.ProjectId
+                    //                       select new ProjectMaterialDTO
+                    //                       {
+                    //                           ProjectMaterialId = pm.ProjectMaterialId,
+                    //                           ProjectId = pm.ProjectId,
+                    //                           MaterialId = pm.MaterialId,
+                    //                           MaterialName = m.Name,
+                    //                           Quantity = pm.Quantity
+                    //                       }).ToList();
 
+                    Quotation = _quoteRepo.GetQuotation(id.Value);
 
                     if (Quotation == null)
                     {

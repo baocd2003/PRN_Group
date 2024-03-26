@@ -10,23 +10,28 @@ using DataAccessLayer.ApplicationDbContext;
 using Newtonsoft.Json;
 using Repository;
 using Repository.Interface;
+using BusinessObject.Entity;
 
 namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class UpdateMoreDetailsModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-        private BatchManagementRepository _repo = new BatchManagementRepository();
+        private IBatchManagement _repo = new BatchManagementRepository();
         private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
 
-        public UpdateMoreDetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public UpdateMoreDetailsModel(IBatchManagement repo , IMaterialManagementRepository materialRepo)
         {
-            _context = context;
+            _repo = repo;
+            _materialRepo = materialRepo;
         }
 
         [BindProperty]
         public Guid BatchId { get; set; }
+        [BindProperty]
+        public MaterialType MaterialType { get; set; } = default!;
 
+        [BindProperty]
+        public float MediumPrice { get; set; } = 0;
 
         public IActionResult OnGet()
         {
@@ -83,7 +88,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             {
                 _repo.AddMoreDetailsInBatch(batchDetails);
                 HttpContext.Session.Remove("moreDetailList");
-                return RedirectToPage("/AdminManagement/BatchsManagement/Index");
+                return RedirectToPage("/AdminManagement/BatchsManagement/Details?id=" + selectedBatchId);
             }
         }
     }

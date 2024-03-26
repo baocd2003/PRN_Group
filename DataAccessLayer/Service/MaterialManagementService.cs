@@ -1,4 +1,5 @@
 ﻿using BusinessObject.DTO;
+using BusinessObject.Entity;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
@@ -74,13 +75,13 @@ public class MaterialManagementService : applicationDbContext
                 _db.SaveChanges();
                 return material;
             }
-                
+
         }
         catch (Exception ex)
         {
             throw new Exception(ex.Message);
         }
-        
+
     }
     public bool checkMaterialExist(Material material)
     {
@@ -100,6 +101,14 @@ public class MaterialManagementService : applicationDbContext
             updatedMaterial.MediumPrice = material.MediumPrice;
             updatedMaterial.MaterialTypeId = material.MaterialTypeId;
             this.SaveChanges(true);
+        }
+    }
+
+    public static float GetMediumPriceById(Guid id)
+    {
+        using (applicationDbContext _db = new applicationDbContext())
+        {
+            return _db.Materials.FirstOrDefault(m => m.MaterialId == id).MediumPrice;
         }
     }
 }

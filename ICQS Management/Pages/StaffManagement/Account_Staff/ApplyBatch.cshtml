@@ -5,7 +5,7 @@
     ViewData["Title"] = "ApplyBatch";
 }
 
-<h1>ApplyBatch</h1>
+<h1 class="text-center">Apply Quotation Materials</h1>
 
 @if (TempData["ErrorMessage"] != null)
 {
@@ -14,60 +14,62 @@
     </div>
 }
 <hr />
+<form method="post" class="w-100">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Quotation.QuotationId" />
+    <input type="hidden" asp-for="Project.ProjectID" />
 
-</div>
-    <div class="col-md-4">
-        <form method="post">
-        <div class="row">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Quotation.QuotationId" />
-            <div class="form-group">
-                <label asp-for="Quotation.RequestDate" class="control-label"></label>
-                <input asp-for="Quotation.RequestDate" class="form-control" readonly />
-                <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
-            </div>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Project.ProjectID" />
-            <div class="form-group">
-                <label asp-for="Project.ProjectName" class="control-label"></label>
-                <input asp-for="Project.ProjectName" class="form-control" readonly />
-                <span asp-validation-for="Project.ProjectName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Project.Description" class="control-label"></label>
-                <input asp-for="Project.Description" class="form-control" readonly />
-                <span asp-validation-for="Project.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Project.AreaPerFloor" class="control-label"></label>
-                <input asp-for="Project.AreaPerFloor" class="form-control" readonly />
-                <span asp-validation-for="Project.AreaPerFloor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Project.NumOfFloors" class="control-label"></label>
-                <input asp-for="Project.NumOfFloors" class="form-control" readonly />
-                <span asp-validation-for="Project.NumOfFloors" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Project.NumOfLabors" class="control-label"></label>
-                <input id="Project_NumOfLabors" asp-for="Project.NumOfLabors" class="form-control" />
-                <span asp-validation-for="Project.NumOfLabors" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Project.LaborSalaryPerMonth" class="control-label"></label>
-                <input id="Project_LaborSalaryPerMonth" asp-for="Project.LaborSalaryPerMonth" class="form-control" required min="1" />
-                <span asp-validation-for="Project.LaborSalaryPerMonth" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Project.MonthDuration" class="control-label"></label>
-                <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" required min="1" />
-                <span asp-validation-for="Project.MonthDuration" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label>Preview Price</label>
-                <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" />
-            </div>
-            <table class="table">
+    <div class="row">
+        <div class="col-md-8">
+            <h5 class="text-center">Quotation Information</h5>
+            <dl class="row" style="padding: 1.5rem 0.5rem; border: 0.1rem solid rgba(0, 0, 0, 0.3); border-radius: 0.5rem;">
+                <dt class="col-md-4">Request Date</dt>
+                <dd class="col-md-8">
+                    <input asp-for="Quotation.RequestDate" class="form-control" readonly />
+                    <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
+                </dd>
+                <dt class="col-md-4">Project Name</dt>
+                <dd class="col-md-8">
+                    <input asp-for="Project.ProjectName" class="form-control" readonly />
+                    <span asp-validation-for="Project.ProjectName" class="text-danger"></span>
+                </dd>
+                <dt class="col-md-4">Description</dt>
+                <dd class="col-md-8">
+                    <input asp-for="Project.Description" class="form-control" readonly />
+                    <span asp-validation-for="Project.Description" class="text-danger"></span>
+                </dd>
+                <dt class="col-md-4">Area/Floor</dt>
+                <dd class="col-md-8">
+                    <input asp-for="Project.AreaPerFloor" class="form-control" readonly />
+                    <span asp-validation-for="Project.AreaPerFloor" class="text-danger"></span>
+                </dd>
+                <dt class="col-md-4">Floors</dt>
+                <dd class="col-md-8">
+                    <input asp-for="Project.NumOfFloors" class="form-control" readonly />
+                    <span asp-validation-for="Project.NumOfFloors" class="text-danger"></span>
+                </dd>
+                <dt class="col-md-4">Workers</dt>
+                <dd class="col-md-8">
+                    <input id="Project_NumOfLabors" asp-for="Project.NumOfLabors" class="form-control" readonly />
+                    <span asp-validation-for="Project.NumOfLabors" class="text-danger"></span>
+                </dd>
+                <dt class="col-md-4">Worker salary/month</dt>
+                <dd class="col-md-8">
+                    <input id="Project_LaborSalaryPerMonth" asp-for="Project.LaborSalaryPerMonth" class="form-control" readonly />
+                    <span asp-validation-for="Project.LaborSalaryPerMonth" class="text-danger"></span>
+                </dd>
+                <dt class="col-md-4">Duration (month)</dt>
+                <dd class="col-md-8">
+                    <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" readonly />
+                    <span asp-validation-for="Project.MonthDuration" class="text-danger"></span>
+                </dd>
+                <dt class="col-md-4">Preview total price</dt>
+                <dd class="col-md-8">
+                    <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" />
+                </dd>
+            </dl>
+            <table class="table" style="padding: 1.5rem 0.5rem; border: 0.1rem solid rgba(0, 0, 0, 0.3); border-radius: 0.5rem;">
+                <caption style="caption-side: top; font-weight: bold;">Quotation Materials</caption>
                 <thead>
                     <tr>
                         <th>
@@ -93,6 +95,7 @@
                     }
                 </tbody>
             </table>
+
         </div>
         <div class="col-md-4">
             <table class="table">
@@ -146,19 +149,22 @@
                     }
                 </tbody>
             </table>
-                <input type="submit" name="saveBtn" value="Save" class="btn btn-primary" />
-                <input type="submit" name="previewBtn" value="Preview" class="btn btn-primary" />
 
-        </form>
-    </div>      
-</div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <input type="submit" name="saveBtn" value="Save" class="btn btn-primary mr-5" />
+        <input type="submit" name="previewBtn" value="Preview" class="btn btn-primary" />
+    </div>
+</form>
 
 <div>
     <a asp-page="./Index">Back to List</a>
 </div>
 
 @section Scripts {
-   <!-- Load jQuery library -->
+    <!-- Load jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Load jQuery Validate plugin -->

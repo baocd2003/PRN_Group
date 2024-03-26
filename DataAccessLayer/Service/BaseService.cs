@@ -36,7 +36,11 @@ namespace DataAccessLayer.Service
         }
         public int GetTotalCount()
         {
-            return _db.Set<T>().Count();
+            using (applicationDbContext _dbNew = new applicationDbContext())
+            {
+                return _dbNew.Set<T>().Count();
+            }
+
         }
         public IEnumerable<T> GetAll()
         {
@@ -44,14 +48,18 @@ namespace DataAccessLayer.Service
         }
         public IEnumerable<T> GetAll(int pageNumber, int pageSize)
         {
-            IQueryable<T> query = _db.Set<T>();
-            return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            using (applicationDbContext _dbNew = new applicationDbContext())
+            {
+                IQueryable<T> query = _dbNew.Set<T>();
+                return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            }
+
         }
         public T GetById(object id)
         {
             return table.Find(id);
         }
-       
+
         public void Insert(T obj)
         {
             //It will mark the Entity state as Added State
@@ -61,40 +69,61 @@ namespace DataAccessLayer.Service
         public void Update(T obj, object id)
         {
             // Find the entity's primary key properties
-            var entityType = _db.Model.FindEntityType(typeof(T));
-            var primaryKeyProperties = entityType.FindPrimaryKey().Properties;
-
-            // Create a dictionary to hold the primary key values
-            var keyValues = new Dictionary<string, object>();
-            foreach (var property in primaryKeyProperties)
+            using (applicationDbContext _dbNew = new applicationDbContext())
             {
-                keyValues[property.Name] = id; // Assuming 'id' is the primary key value
-            }
+                var entityType = _dbNew.Model.FindEntityType(typeof(T));
+                var primaryKeyProperties = entityType.FindPrimaryKey().Properties;
 
-            // Look for any previously tracked entity with the same primary key values
-            var entry = _db.ChangeTracker.Entries<T>().FirstOrDefault(e =>
-            {
-                foreach (var keyValue in keyValues)
+                // Create a dictionary to hold the primary key values
+                var keyValues = new Dictionary<string, object>();
+                foreach (var property in primaryKeyProperties)
                 {
-                    if (!e.Property(keyValue.Key).CurrentValue.Equals(keyValue.Value))
-                    {
-                        return false;
-                    }
+                    keyValues[property.Name] = id; // Assuming 'id' is the primary key value
                 }
-                return true;
-            });
 
-            // If found, detach it
-            if (entry != null)
-            {
-                entry.State = EntityState.Detached;
+                // Look for any previously tracked entity with the same primary key values
+                var entry = _dbNew.ChangeTracker.Entries<T>().FirstOrDefault(e =>
+                {
+                    foreach (var keyValue in keyValues)
+                    {
+                        if (!e.Property(keyValue.Key).CurrentValue.Equals(keyValue.Value))
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+
+                // If found, detach it
+                if (entry != null)
+                {
+                    entry.State = EntityState.Detached;
+                }
+
+                // Attach the updated entity
+                _dbNew.Attach(obj);
+
+                // Set the state of the Entity as Modified
+                
             }
 
-            // Attach the updated entity
-            _db.Attach(obj);
+        }
+        public void Update(User user)
+        {
+            // Find the entity's primary key properties
+            using (applicationDbContext _dbNew = new applicationDbContext())
+            {
+                _dbNew.Entry(user).State = EntityState.Modified;
+                try
+                {
+                    _dbNew.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
 
-            // Set the state of the Entity as Modified
-            _db.Entry(obj).State = EntityState.Modified;
         }
 
 
@@ -109,7 +138,11 @@ namespace DataAccessLayer.Service
 
         public void Save()
         {
-            _db.SaveChanges();
+            using (applicationDbContext _dbNew = new applicationDbContext())
+            {
+                _dbNew.SaveChanges();
+            }
+
         }
 
     }

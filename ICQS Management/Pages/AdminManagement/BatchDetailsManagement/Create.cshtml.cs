@@ -18,7 +18,6 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class CreateModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
         private IBatchManagement _repo;
         private IMaterialManagementRepository _materialRepo;
         private IMaterialTypeManagementRepository _typeRepo;

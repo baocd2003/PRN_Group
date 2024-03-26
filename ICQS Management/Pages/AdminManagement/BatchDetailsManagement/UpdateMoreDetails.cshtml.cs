@@ -16,13 +16,13 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class UpdateMoreDetailsModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-        private BatchManagementRepository _repo = new BatchManagementRepository();
+        private IBatchManagement _repo = new BatchManagementRepository();
         private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
 
-        public UpdateMoreDetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public UpdateMoreDetailsModel(IBatchManagement repo , IMaterialManagementRepository materialRepo)
         {
-            _context = context;
+            _repo = repo;
+            _materialRepo = materialRepo;
         }
 
         [BindProperty]

@@ -56,8 +56,8 @@ namespace Repository
         public bool CheckAvailableBatchForQuote(Guid quotationId, List<Guid> batchIds)
         => BatchManagementService.Instance.CheckAvailableBatchForQuote(quotationId, batchIds);
 
-        public void StaffApplyQuote(Guid staffId, Quotation quote)
-        => BatchManagementService.Instance.StaffApplyQuote(staffId, quote);
+        public Staff StaffApplyQuote(String loggedEmail)
+         => BatchManagementService.Instance.StaffApplyQuote(loggedEmail);
 
         public double PreviewPrice(Guid quotationId, List<Guid> batchIds, Project prj)
         => BatchManagementService.Instance.PreviewPrice(quotationId, batchIds,prj);

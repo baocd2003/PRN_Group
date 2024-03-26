@@ -24,7 +24,7 @@ namespace Repository.Interface
         public void DeleteQuotation(Guid quotationId);
         public bool CheckOverlapBatch(Batch batch);
         public bool CheckAvailableBatchForQuote(Guid quotationId, List<Guid> batchIds);
-        public void StaffApplyQuote(Guid staffId, Quotation quote);
+        public Staff StaffApplyQuote(String loggedEmail);
 
         public double PreviewPrice(Guid quotationId, List<Guid> batchIds, Project prj);
         public Quotation GetQuotationWithProject(Guid id);

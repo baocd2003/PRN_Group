@@ -17,14 +17,17 @@ namespace ICQS_Management.Pages.Account_Staff
 {
     public class ApplyBatchModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+     
         private IBatchManagement _batchRepo = new BatchManagementRepository();
         private IProjectManagementRepository _projectRepo = new ProjectManagementRepository();
         private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
         private IQuotationManagementRepository _quoteRepo = new QuotationManagementRepository();
-        public ApplyBatchModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public ApplyBatchModel(IBatchManagement batchRepo, IProjectManagementRepository projectRepo, IMaterialManagementRepository materialRepo, IQuotationManagementRepository quoteRepo)
         {
-            _context = context;
+            _batchRepo = batchRepo; 
+            _projectRepo = projectRepo;
+            _materialRepo = materialRepo;
+            _quoteRepo = quoteRepo;
         }
 
         [BindProperty]
@@ -63,8 +66,7 @@ namespace ICQS_Management.Pages.Account_Staff
                         return NotFound();
                     }
                     SelectedItems = new List<Guid>();
-                    Quotation = await _context.Quotations
-                        .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
+                    Quotation = _quoteRepo.GetQuotation((Guid)id);
                     var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
                     TempData["QuotationId"] = id;
                     var materials = _materialRepo.GetAllMaterials();
@@ -117,7 +119,7 @@ namespace ICQS_Management.Pages.Account_Staff
                     return Page();
                 }
                 string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
-                Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
+                Staff selectedStaff = _batchRepo.StaffApplyQuote(loggedEmail);
                 Quotation afterQuote = _quoteRepo.GetQuotation(QuotationId);
                 //_batchRepo.StaffApplyQuote(selectedStaff.StaffId, afterQuote);
                 //_projectRepo.UpdateProject(Project);
@@ -163,7 +165,7 @@ namespace ICQS_Management.Pages.Account_Staff
                     return Page();
                 }
                 string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
-                Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
+                Staff selectedStaff = _batchRepo.StaffApplyQuote(loggedEmail);
                 materialPrice = _batchRepo.PreviewPrice(QuotationId, SelectedItems,Project);
                 Batches = _batchRepo.CheckAvailableQuantityBatch();
                 Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);

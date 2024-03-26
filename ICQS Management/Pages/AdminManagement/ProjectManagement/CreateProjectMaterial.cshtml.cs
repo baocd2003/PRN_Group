@@ -21,6 +21,12 @@ namespace ICQS_Management.Pages.ProjectManagement
         private IMaterialManagementRepository _mMRepository = new MaterialManagementRepository();
         private IProjectManagementRepository _projectManagementRepository = new ProjectManagementRepository();
         private IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
+        public CreateProjectMaterialModel(IProjectManagementRepository pmRepository, IMaterialManagementRepository materialRepository, IMaterialTypeManagementRepository materialTypeRepository)
+        {
+            _projectManagementRepository = pmRepository;
+            _mMRepository = materialRepository;
+            _materialTypeRepository = materialTypeRepository;
+        }
         [BindProperty]
         public ProjectMaterial ProjectMaterial { get; set; } = default!;
         [BindProperty]

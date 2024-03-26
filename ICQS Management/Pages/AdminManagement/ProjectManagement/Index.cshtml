@@ -5,84 +5,92 @@
     ViewData["Title"] = "Index";
 }
 
-<h1 style="margin-bottom: 2vh; text-align: center">Project Management</h1>
+<h1 class="title">Project Management</h1>
 
-<p>
-    <a asp-page="Create" class="btn btn-primary">Create New</a>
+<p class="create_button">
+        <a asp-page="Create" class="btn btn-primary" style="height: 50px; display: flex; align-items: center; justify-content: center; width: 150px; background-color: rgb(53, 84, 209)">Add Project</a>
 </p>
+@{
+    if (Model.message != string.Empty)
+    {
+        <div id="notification" class="notification"></div>
+        <script>
+            var notification = document.getElementById("notification");
+            notification.innerText = "@Model.message";
+            notification.classList.add("show");
+
+            setTimeout(function () {
+                notification.classList.remove("show");
+            }, 2000);
+        </script>
+    }
+}
 <table class="table">
-    <thead>
+    <thead class="table_header">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Project[0].ProjectName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project[0].AreaPerFloor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project[0].NumOfFloors)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Project[0].TotalPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project[0].Status)
+                Project Type
             </th>
-            <th></th>
+            <th style="padding-left: 30px">Action</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table_body">
 @foreach (var item in Model.Project) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ProjectName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @{
+                    var formattedTotalPrice = string.Format("{0:N0}", item.TotalPrice);
+                }
+                @formattedTotalPrice $
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AreaPerFloor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumOfFloors)
-            </td>
-                <td>
-                    @{
-                        var formattedTotalPrice = string.Format("{0:N0}", item.TotalPrice);
-                    }
-                    @formattedTotalPrice
-                </td>
             <td>
                     @if (item.Status == 1)
                     {
-                        <span>Sample Project</span>
+                        <span class="status-tag">Sample Project</span>
                     }
                     else if (item.Status == 2)
                     {
-                        <span>Customer Project</span>
+                        <span class="status-tag status-active">Customer Project</span>
                     }
                     else
                     {
-                        <span>Disabled</span>
+                        <span class="status-tag status-inactive">Disabled</span>
                     }
             </td>
-            <td style="display: flex; justify-content: space-evenly; border-bottom: 0; width: 320px">
-                @if (item.Status == 1)
-                {
-                    <a asp-page="./EditProject" asp-route-id="@item.ProjectID" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Edit</a>
-                }
-                <a asp-page="./ProjectMaterialList" asp-route-id="@item.ProjectID" asp-route-status="@item.Status" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center">Details</a>
-                @if (item.Status == 1)
-                {
-                    <a asp-page="./ChangeStatus" asp-route-id="@item.ProjectID" class="btn btn-danger" style="display: flex; justify-content: center; align-items: center">Disable</a>
-                }
-                @if (item.Status == 0)
-                {
-                    <a asp-page="./ChangeStatus" asp-route-id="@item.ProjectID" class="btn btn-success" style="display: flex; justify-content: center; align-items: center">Enable</a>
-                }
+            <td style="display: flex; justify-content: space-between; border-top: 0; align-items: center">
+                <div class="action_button">
+                    @if (item.Status == 1)
+                    {
+                                <a asp-page="./EditProject" asp-route-id="@item.ProjectID" style="display: flex; justify-content: center; align-items: center; color: #44494D">
+                            <i class="fas fa-edit" style="font-size: 20px"></i>
+                        </a>
+                    }
+                </div>
+
+                <div class="action_button">
+                        <a asp-page="./ProjectMaterialList" asp-route-id="@item.ProjectID" asp-route-status="@item.Status" style="display: flex; justify-content: center; align-items: center; color: #44494D">
+                        <i class="fas fa-info-circle" style="font-size: 20px"></i>
+                    </a>
+                </div>
+                <div class="action_button" style="width: 40%">
+                    @if (item.Status == 0)
+                    {
+                        <a asp-page="./ChangeStatus" asp-route-id="@item.ProjectID" class="btn btn-success" style="display: flex; justify-content: center; align-items: center">Enable</a>
+                    }
+                    @if (item.Status == 1)
+                    {
+                        <a asp-page="./ChangeStatus" asp-route-id="@item.ProjectID" class="btn btn-danger" style="display: flex; justify-content: center; align-items: center">Disable</a>
+                    }
+                </div>
             </td>
         </tr>
 }
@@ -95,7 +103,9 @@
 
             @for (int i = 1; i <= Model.PageCount; i++)
             {
-                <li class="page-item @(Model.PageNumber == i ? "active" : "")"><a class="page-link" asp-page="./Index" asp-route-pageNumber="@i">@i</a></li>
+                <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                        <a class="page-link rounded-circle" style="line-height: 1.35 !important" asp-page="./Index" asp-route-pageNumber="@i">@i</a>
+                </li>
             }
 
         </ul>

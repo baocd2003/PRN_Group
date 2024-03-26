@@ -5,49 +5,78 @@
     ViewData["Title"] = "ChangeStatus";
 }
 
-<h1>Change Status</h1>
+<h1 class="title">Project Management</h1>
+<div style="width: 90%; margin: 0 auto">
+    <h2 class="text-center" style="margin-bottom: 7vh">Are you sure you want to change status?</h2>
+    <div>
+        <dl>
+            <div class="add_box">
+                <div>
+                    <dt>
+                        Project Name
+                    </dt>
+                    <dd style="margin-bottom: 20px">
+                        @Html.DisplayFor(model => model.Project.ProjectName)
+                    </dd>
+                    <dt>
+                        Area Per Floor
+                    </dt>
+                    <dd style="margin-bottom: 20px">
+                        @Html.DisplayFor(model => model.Project.AreaPerFloor)
+                    </dd>
+                    <dt>
+                        Number Of Floors
+                    </dt>
+                    <dd style="margin-bottom: 20px">
+                        @Html.DisplayFor(model => model.Project.NumOfFloors)
+                    </dd>
+                    <dt>
+                        Number Of Labors
+                    </dt>
+                    <dd style="margin-bottom: 20px">
+                        @Html.DisplayFor(model => model.Project.NumOfLabors)
+                    </dd>
+                </div>
+                <div>
+                    <dt>
+                        Labor Salary Per Month
+                    </dt>
+                    <dd style="margin-bottom: 20px">
+                        @Html.DisplayFor(model => model.Project.LaborSalaryPerMonth)
+                    </dd>
+                    <dt>
+                        Month Duration
+                    </dt>
+                    <dd style="margin-bottom: 20px">
+                        @Html.DisplayFor(model => model.Project.MonthDuration)
+                    </dd>
+                    <dt>
+                        Total Price
+                    </dt>
+                    <dd style="margin-bottom: 20px">
+                        @Html.DisplayFor(model => model.Project.TotalPrice)
+                    </dd>
+                </div>
+            </div>
+            <dt style="margin: 0 22%">
+                Description
+            </dt>
+            <dd style="margin: 0 22% 2rem 22%">
+                @Html.DisplayFor(model => model.Project.Description)
+            </dd>
+        </dl>
 
-<h3>Are you sure you want to change status?</h3>
-<div>
-    <h4>Project</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Project.ProjectName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Project.ProjectName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Project.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Project.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Project.AreaPerFloor)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Project.AreaPerFloor)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Project.NumOfFloors)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Project.NumOfFloors)
-        </dd>
-    </dl>
-    
-    <form method="post">
-        <input type="hidden" asp-for="Project.ProjectID" />
-        @if(Model.status == 0)
-        {
-            <input type="submit" value="Enable" class="btn btn-success"/>
-        }
-        else if (Model.status == 1)
-        {
-            <input type="submit" value="Disable" class="btn btn-danger" />
-        }
-        <a asp-page="./Index" class="btn btn-primary">Back to List</a>
-    </form>
+        <form method="post" style="display: flex; justify-content: center">
+            <input type="hidden" asp-for="Project.ProjectID" />
+            @if (Model.status == 0)
+            {
+                <input type="submit" value="Enable" class="btn btn-success mr-3" />
+            }
+            else if (Model.status == 1)
+            {
+                <input type="submit" value="Disable" class="btn btn-danger mr-3" />
+            }
+            <a asp-page="./Index" class="btn btn-primary">Back to List</a>
+        </form>
+    </div>
 </div>

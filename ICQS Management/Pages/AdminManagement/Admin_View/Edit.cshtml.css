@@ -1,0 +1,24 @@
+﻿.title {
+    margin-bottom: 4vh;
+    margin-top: 6vh;
+    padding: 0 0 0 3rem;
+    font-weight: bold;
+}
+
+.add_box {
+    display: flex;
+    justify-content: center;
+}
+
+.Edit_Info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.control-label {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}

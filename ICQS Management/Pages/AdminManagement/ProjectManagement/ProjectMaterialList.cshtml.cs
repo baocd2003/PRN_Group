@@ -15,9 +15,15 @@ namespace ICQS_Management.Pages.ProjectManagement
 {
     public class ProjectMaterialListModel : PageModel
     {
-        private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
-        private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
-        private IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
+        private IProjectManagementRepository _pmRepository;
+        private IMaterialManagementRepository _materialRepository;
+        private IMaterialTypeManagementRepository _materialTypeRepository;
+        public ProjectMaterialListModel(IProjectManagementRepository pmRepository, IMaterialManagementRepository materialRepository, IMaterialTypeManagementRepository materialTypeRepository)
+        {
+            _pmRepository = pmRepository;
+            _materialRepository = materialRepository;
+            _materialTypeRepository = materialTypeRepository;
+        }
         [BindProperty]
         public List<ProjectMaterialDTO> ProjectMaterialList { get;set; }
         [BindProperty]

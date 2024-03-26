@@ -1,54 +1,60 @@
 ﻿@page
 @model ICQS_Management.Pages.Admin_View.DeleteModel
 
-<h3>Are you sure you want to Block this?</h3>
-<div>
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.Name)
-        </dd>
-        <dt class="col-sm-2">
-            Role
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.GetType().Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.Password)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.Password)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.PhoneNumber)
-        </dd>
-        
-    </dl>
+<h1 class="title">User Management</h1>
+<div style="width: 90%; margin: 0 auto">
+    <h2 class="text-center" style="margin-bottom: 7vh">Are you sure you want to change this user status?</h2>
+    <div>
+        <dl>
+            <div class="add_box">
+                <div>
+                    <div class="info">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.User.Name)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.User.Name)
+                        </dd>
+                    </div>
+                    <div class="info">
+                        <dt>
+                            Role
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.User.GetType().Name)
+                        </dd>
+                    </div>
+                    <div class="info">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.User.Email)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.User.Email)
+                        </dd>
+                    </div>
+                    <div class="info">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.User.PhoneNumber)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.User.PhoneNumber)
+                        </dd>
+                    </div>
+                </div>
+            </div>
+        </dl>
 
-    <form method="post">
-        <input type="hidden" asp-for="User.UserId" />
-        @if (Model.User.status.Equals("0"))
-        {
-            <input type="submit" value="Enable" class="btn btn-success" />
-        }
-        else if (Model.User.status.Equals("1"))
-        {
-            <input type="submit" value="Disable" class="btn btn-danger" />
-        }
-        <a asp-page="./Index">Back to List</a>
-    </form>
+        <form method="post" style="display: flex; justify-content: center">
+            <input type="hidden" asp-for="User.UserId" />
+            @if (Model.User.status.Equals("0"))
+            {
+                <input type="submit" value="Unblock" class="btn btn-success mr-3" />
+            }
+            else if (Model.User.status.Equals("1"))
+            {
+                <input type="submit" value="Block" class="btn btn-danger mr-3" />
+            }
+            <a asp-page="./Index" class="btn btn-primary">Back to List</a>
+        </form>
+    </div>
 </div>

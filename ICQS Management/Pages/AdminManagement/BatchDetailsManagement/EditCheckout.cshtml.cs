@@ -32,8 +32,14 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
         [BindProperty]
         private int DetailIndex { get; set; }
 
+        
+
         [BindProperty]
         public MaterialType MaterialType { get; set; } = default!;
+        [BindProperty]
+        public float MediumPrice { get; set; } = 0;
+        public Material Material { get; set; } = default!;
+
         public async Task<IActionResult> OnGetAsync(int index)
         {
             if (HttpContext.Session == null)
@@ -56,17 +62,12 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                     string detailListJson = HttpContext.Session.GetString("detailList");
                     List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
                     BatchDetail = batchDetails[index];
+                    BatchDetail.MaterialId = batchDetails[index].MaterialId;
                     DetailIndex = index;
-                    IEnumerable<Material> list = _materialRepo.GetOthersMaterial(batchDetails);
-                    MaterialType = _typeRepo.GetMaterialTypeById(list.FirstOrDefault().MaterialTypeId);
-
                     TempData["IndexValue"] = index;
-                    if (BatchDetail == null)
-                    {
-                        return NotFound();
-                    }
-                    ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name", batchDetails[index].MaterialId);
-                    MaterialType = _typeRepo.GetMaterialTypeById(batchDetails[index].MaterialId);
+                    Material = _materialRepo.GetMaterialById(batchDetails[index].MaterialId);
+                    MaterialType = _typeRepo.GetMaterialTypeById(Material.MaterialTypeId);
+                    MediumPrice = Material.MediumPrice;
                     return Page();
                 }
             }
@@ -83,16 +84,11 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             {
                index = (int)TempData["IndexValue"];
             }
-            batchDetails[index] = BatchDetail;
+            batchDetails[index].Quantity = BatchDetail.Quantity;
+            batchDetails[index].Price = BatchDetail.Price;
             string detailList = JsonConvert.SerializeObject(batchDetails);
             HttpContext.Session.SetString("detailList", detailList);
-            return RedirectToPage("./CheckOutBatch");
-        }
-
-        public IActionResult OnPostChooseMaterialAsync(Guid MaterialId)
-        {
-            BatchDetail.MaterialId = MaterialId;
-            return RedirectToPage("./Create", new { materialId = MaterialId });
+            return RedirectToPage("./Create");
         }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Service
 {
-    public class BatchManagementService
+    public class BatchManagementService : applicationDbContext
     {
         private static BatchManagementService instance;
         public static readonly object instanceLock = new object();

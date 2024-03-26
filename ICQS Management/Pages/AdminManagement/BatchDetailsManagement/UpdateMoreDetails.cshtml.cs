@@ -10,6 +10,7 @@ using DataAccessLayer.ApplicationDbContext;
 using Newtonsoft.Json;
 using Repository;
 using Repository.Interface;
+using BusinessObject.Entity;
 
 namespace ICQS_Management.Pages.BatchDetailsManagement
 {
@@ -26,7 +27,11 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 
         [BindProperty]
         public Guid BatchId { get; set; }
+        [BindProperty]
+        public MaterialType MaterialType { get; set; } = default!;
 
+        [BindProperty]
+        public float MediumPrice { get; set; } = 0;
 
         public IActionResult OnGet()
         {
@@ -83,7 +88,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             {
                 _repo.AddMoreDetailsInBatch(batchDetails);
                 HttpContext.Session.Remove("moreDetailList");
-                return RedirectToPage("/AdminManagement/BatchsManagement/Index");
+                return RedirectToPage("/AdminManagement/BatchsManagement/Details?id=" + selectedBatchId);
             }
         }
     }

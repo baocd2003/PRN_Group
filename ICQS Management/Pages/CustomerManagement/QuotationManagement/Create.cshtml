@@ -55,7 +55,7 @@
                             <img src="https://i.ibb.co/Snqfnc1/worker.png" width="40" height="40" />
                             <h5 class="font-weight-bold">Labor cost</h5>
                         </div>
-                        <span>Estimated: <span class="font-weight-bold" id="labor_cost">@(Model.Project.NumOfLabors * Model.Project.LaborSalaryPerMonth * Model.Project.MonthDuration)</span></span>
+                        <span>Estimated labor cost: <span class="font-weight-bold" id="labor_cost">@(Model.Project.NumOfLabors * Model.Project.LaborSalaryPerMonth * Model.Project.MonthDuration)</span></span>
                     </div>
                     <hr />
                     <table class="mb-3">
@@ -107,7 +107,7 @@
                 {
                     estimatedMat += item.Materials.MediumPrice * item.Quantity;
                 }
-                <span>Estimated: <span class="font-weight-bold" id="estimated_material_cost">@estimatedMat</span></span>
+                <span>Estimated material cost: <span class="font-weight-bold" id="estimated_material_cost">@estimatedMat</span></span>
             </div>
             <hr />
             <div class="row">

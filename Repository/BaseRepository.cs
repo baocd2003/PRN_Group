@@ -37,5 +37,8 @@ namespace Repository
 
         public void Update(User user)
         => BaseService<T>.Instance.Update(user);
+
+        public void InsertUser(User user)
+        => BaseService<T>.Instance.InsertUser(user);
     }
 }

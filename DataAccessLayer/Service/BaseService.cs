@@ -144,6 +144,14 @@ namespace DataAccessLayer.Service
             }
 
         }
+        public void InsertUser(User user)
+        {
+            using (applicationDbContext _dbNew = new applicationDbContext())
+            {
+                _dbNew.Add(user);
+                _dbNew.SaveChanges();
+            }
+        }
 
     }
 }

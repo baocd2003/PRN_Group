@@ -9,6 +9,8 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using NuGet.Common;
 using Repository.Interface;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using System.Text.RegularExpressions;
 
 namespace ICQS_Management.Pages.Admin_View
 {
@@ -52,7 +54,12 @@ namespace ICQS_Management.Pages.Admin_View
                 TempData["createError"] = "Field can not be null";
                 return RedirectToPage();
             }
-            else if (exitedUser is null)
+            if (!Regex.IsMatch(User.Email, @"^\S+@gmail\.com$"))
+            {
+                TempData["createError"] = "Email is invalid";
+                return RedirectToPage();
+            }
+            else if (exitedUser is not null)
             {
                 TempData["createError"] = "Email can not be duplicated";
                 return RedirectToPage();
@@ -71,8 +78,8 @@ namespace ICQS_Management.Pages.Admin_View
                     PhoneNumber = User.PhoneNumber,
                 };
 
-                _baseRepository.Insert(staffDTO);
-                _baseRepository.Save();
+                _baseRepository.InsertUser(staffDTO);
+               
             }
             else if (role == "Customer")
             {
@@ -87,13 +94,10 @@ namespace ICQS_Management.Pages.Admin_View
                     status = "1",
                     PhoneNumber = User.PhoneNumber,
                 };
-                _baseRepository.Insert(customerDTO);
-                _baseRepository.Save();
+                _baseRepository.InsertUser(customerDTO);
+                
             }
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+           
             return RedirectToPage("./Index");
         }
     }

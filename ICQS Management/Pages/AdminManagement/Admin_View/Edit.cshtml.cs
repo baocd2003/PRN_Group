@@ -26,6 +26,7 @@ namespace ICQS_Management.Pages.Admin_View
 
         [BindProperty]
         public User User { get; set; }
+       
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -73,6 +74,7 @@ namespace ICQS_Management.Pages.Admin_View
             {
                 User.status = iduser.status;
                 User.Password = iduser.Password;
+                
                 _baseRepository.Update(User);              
                 var user = _baseRepository.GetById(User.UserId);
                 return RedirectToPage("./Index");

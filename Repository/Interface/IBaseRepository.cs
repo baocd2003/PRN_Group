@@ -15,6 +15,7 @@ namespace Repository.Interface
         IEnumerable<T> GetAll(int pageNumber, int pageSize);
         T GetById(object id);
         void Insert(T obj);
+        void InsertUser(User user);
         void Update(T obj, object id);
         void Update(User user);
         void Delete(object id);

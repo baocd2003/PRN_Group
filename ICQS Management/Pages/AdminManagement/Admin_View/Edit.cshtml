@@ -14,13 +14,7 @@
                     <input asp-for="User.Name" class="form-control" required />
                     <span asp-validation-for="User.Name" class="text-danger"></span>
                 </div>
-                <div class="Edit_Info">
-                    <label class="control-label" style="width: 300px !important"><span style="color: rgb(53, 84, 209); font-weight: bold">* </span>Role</label>
-                    <select class="form-control">
-                        <option value="Staff">Staff</option>
-                        <option value="Customer">Customer</option>
-                    </select>
-                </div>
+               
                 <div class="Edit_Info">
                     <label asp-for="User.Email" class="control-label" style="width: 300px !important"><span style="color: rgb(53, 84, 209); font-weight: bold">* </span>Email Address</label>
                     <input asp-for="User.Email" class="form-control" required />

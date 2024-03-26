@@ -6,41 +6,47 @@
     Layout = "~/Pages/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>MaterialType</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<h1 class="title">Material Type Management</h1>
+<div style="width: 90%; margin: 0 auto">
+    <h2 class="text-center" style="margin-bottom: 3vh">Add Material Type</h2>
+    <div>
         @{
             if (Model.message != string.Empty)
             {
-                <div class="alert alert-primary" role="alert">
-                    @Model.message
-                </div>
+                <div id="notification" class="notification"></div>
+                <script>
+                    var notification = document.getElementById("notification");
+                    notification.innerText = "@Model.message";
+                    notification.classList.add("show");
+
+                    setTimeout(function () {
+                        notification.classList.remove("show");
+                    }, 2000);
+                </script>
             }
         }
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="MaterialType.MaterialTypeName" class="control-label"></label>
-                <input asp-for="MaterialType.MaterialTypeName" class="form-control" required />
-                <span asp-validation-for="MaterialType.MaterialTypeName" class="text-danger"></span>
+            <div class="add_box">
+                <div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="Edit_Info">
+                        <label asp-for="MaterialType.MaterialTypeName" class="control-label" style="width: 300px !important"><span style="color: rgb(53, 84, 209); font-weight: bold">* </span>Material Type Name</label>
+                        <input asp-for="MaterialType.MaterialTypeName" class="form-control" required />
+                        <span asp-validation-for="MaterialType.MaterialTypeName" class="text-danger"></span>
+                    </div>
+                    <div class="Edit_Info">
+                        <label asp-for="MaterialType.UnitType" class="control-label" style="width: 300px !important"><span style="color: rgb(53, 84, 209); font-weight: bold">* </span>Unit Type</label>
+                        <input asp-for="MaterialType.UnitType" class="form-control" required />
+                        <span asp-validation-for="MaterialType.UnitType" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MaterialType.UnitType" class="control-label"></label>
-                <input asp-for="MaterialType.UnitType" class="form-control" required/>
-                <span asp-validation-for="MaterialType.UnitType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group text-center mt-3">
+                <input type="submit" value="Add" class="btn btn-primary mr-3" style="background-color: rgb(53, 84, 209) !important;" />
+                <a asp-page="Index" class="btn btn-primary">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-page="Index">Back to List</a>
 </div>
 
 @section Scripts {

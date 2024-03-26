@@ -16,8 +16,11 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialTypeManagement
 {
     public class CreateModel : PageModel
     {
-        private IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
-
+        private IMaterialTypeManagementRepository _materialTypeRepository;
+        public CreateModel(IMaterialTypeManagementRepository materialTypeRepository)
+        {
+            _materialTypeRepository = materialTypeRepository;
+        }
         [BindProperty]
         public string message { get; set; } = string.Empty;
         [BindProperty]

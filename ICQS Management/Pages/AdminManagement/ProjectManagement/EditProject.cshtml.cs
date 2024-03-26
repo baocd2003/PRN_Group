@@ -15,9 +15,13 @@ namespace ICQS_Management.Pages.ProjectManagement
 {
     public class EditProjectModel : PageModel
     {
-        private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
-        private readonly IBaseRepository<Project> _projectRepository = new BaseRepository<Project>();
-
+        private IProjectManagementRepository _pmRepository;
+        private readonly IBaseRepository<Project> _projectRepository;
+        public EditProjectModel(IProjectManagementRepository pmRepository, IBaseRepository<Project> projectRepository)
+        {
+            _pmRepository = pmRepository;
+            _projectRepository = projectRepository;
+        }
         [BindProperty]
         public Project Project { get; set; }
         [BindProperty]

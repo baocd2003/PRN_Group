@@ -14,8 +14,11 @@ namespace ICQS_Management.Pages.ProjectManagement
 {
     public class ChangeStatusModel : PageModel
     {
-        private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
-
+        private IProjectManagementRepository _pmRepository;
+        public ChangeStatusModel(IProjectManagementRepository pmRepository)
+        {
+            _pmRepository = pmRepository;
+        }
         [BindProperty]
         public Project Project { get; set; } = default!;
         [BindProperty]
@@ -44,8 +47,16 @@ namespace ICQS_Management.Pages.ProjectManagement
 
         public IActionResult OnPostAsync(Guid id)
         {
-            _pmRepository.ChangeProjectStatus(_pmRepository.GetProjectById(id));
-            return RedirectToPage("./Index");
+            if(_pmRepository.GetProjectById(id).Status == 1)
+            {
+                _pmRepository.ChangeProjectStatus(_pmRepository.GetProjectById(id));
+                return RedirectToPage("./Index", new { Message = "Disable Successfully" });
+            }
+            else
+            {
+                _pmRepository.ChangeProjectStatus(_pmRepository.GetProjectById(id));
+                return RedirectToPage("./Index", new { Message = "Enable Successfully" });
+            }
         }
     }
 }

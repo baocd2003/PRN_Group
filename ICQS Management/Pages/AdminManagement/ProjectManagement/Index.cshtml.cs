@@ -14,18 +14,26 @@ namespace ICQS_Management.Pages.ProjectManagement
 {
     public class IndexModel : PageModel
     {
-        private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
-        private readonly IBaseRepository<Project> _projectRepository = new BaseRepository<Project>();
-        //Paging
-        private const int PageSize = 6;
+        private IProjectManagementRepository _pmRepository;
+        private readonly IBaseRepository<Project> _projectRepository;
+        public IndexModel(IProjectManagementRepository pmRepository, IBaseRepository<Project> projectRepository)
+        {
+            _pmRepository = pmRepository;
+            _projectRepository = projectRepository;
+        }
+        private const int PageSize = 5;
         public int PageNumber { get; set; }
         public int PageCount => (int)Math.Ceiling((double)TotalRecords / PageSize);
         public int TotalRecords { get; set; }
-
+        public string message { get; set; } = string.Empty;
         public List<Project> Project { get;set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? pageNumber)
+        public async Task<IActionResult> OnGetAsync(int? pageNumber, string? Message)
         {
+            if (Message != null)
+            {
+                message = Message;
+            }
             if (HttpContext.Session == null)
             {
                 return RedirectToPage("/Authentication/ErrorSession");

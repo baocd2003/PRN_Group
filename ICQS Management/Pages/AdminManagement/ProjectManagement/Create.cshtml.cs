@@ -14,8 +14,11 @@ namespace ICQS_Management.Pages.ProjectManagement
 {
     public class CreateModel : PageModel
     {
-        private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
-
+        private IProjectManagementRepository _pmRepository;
+        public CreateModel(IProjectManagementRepository pmRepository)
+        {
+            _pmRepository = pmRepository;
+        }
         [BindProperty]
         public Project Project { get; set; } = default!;
         [BindProperty]

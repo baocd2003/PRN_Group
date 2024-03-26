@@ -35,7 +35,7 @@ public class ProjectManagementService : applicationDbContext
     {
         using (applicationDbContext _db = new applicationDbContext())
         {
-            var listQuerry = await _db.Projects.Include(x => x.ProjectMaterials).ToListAsync();
+            var listQuerry = await _db.Projects.Include(x => x.ProjectMaterials).OrderBy(p => p.Status == 1 ? 0 : p.Status == 2 ? 1 : 2).ThenBy(p => p.ProjectName).ToListAsync();
             return listQuerry.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
     }

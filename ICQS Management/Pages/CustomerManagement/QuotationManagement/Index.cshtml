@@ -49,7 +49,7 @@
             @* <td>@QuotationManagementService.GetResponder(item.QuotationId)?.Email</td> *@
             <td>@string.Format("{0:N0}", item.CompletePrice)</td>
             <td style="border-radius: 0 .5rem .5rem 0;" class="quotation_buttons">
-                <a type="button" data-toggle="modal" data-target="#exampleModal">Details</a>
+                <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a>
                 @if (item.Status == 0)
                 {
                     <a asp-page="./CheckQuotation" asp-route-id="@item.QuotationId">Review response</a>
@@ -58,7 +58,7 @@
         </tr>
     }
 </table>
-@foreach (var item in Model.Quotation)
+@* @foreach (var item in Model.Quotation)
 {
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" class="position-relative" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -153,4 +153,4 @@
             </div>
         </div>
     </div>
-}
+} *@

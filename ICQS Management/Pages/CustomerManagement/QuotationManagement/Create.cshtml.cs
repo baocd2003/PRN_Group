@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Repository.Interface;
 using ICQS_Management.Pages.Authentication;
+using DataAccessLayer.Service;
 
 namespace ICQS_Management.Pages.QuotationManagement
 {
@@ -122,6 +123,7 @@ namespace ICQS_Management.Pages.QuotationManagement
             NewProject.NumOfLabors = NumOfLabors;
             NewProject.LaborSalaryPerMonth = LaborSalaryPerMonth;
             NewProject.MonthDuration = MonthDuration;
+            NewProject.TotalPrice = EstimatePrice;
             NewProject.Status = 2;
 
             var projectResult = _projectRepo.AddProject(NewProject);

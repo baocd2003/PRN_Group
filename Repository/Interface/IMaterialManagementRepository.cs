@@ -18,4 +18,5 @@ public interface IMaterialManagementRepository
     bool checkUpdatedMaterialExist(Material material);
     Material GetMaterialById(Guid id);
     void UpdateMaterial(Material material);
+    Material GetById(Guid id);
 }

@@ -56,7 +56,10 @@ namespace DataAccessLayer.Service
 
         public Quotation GetQuotation(Guid id)
         {
-            return _db.Quotations.FirstOrDefault(q => q.QuotationId == id);
+            return _db.Quotations.Include(q => q.Project)
+                .ThenInclude(p => p.ProjectMaterials)
+                .ThenInclude(pm => pm.Materials)
+                .ThenInclude(m => m.MaterialTypes).FirstOrDefault(q => q.QuotationId == id);
         }
 
         public Customer GetCustomerByEmail(string email)

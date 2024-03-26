@@ -32,6 +32,11 @@ public class MaterialManagementRepository : IMaterialManagementRepository
         return MaterialManagementService.Instance.GetAllMaterials();
     }
 
+    public Material GetById(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     public Material GetMaterialById(Guid id)
     {
         return MaterialManagementService.Instance.GetMaterialById(id);

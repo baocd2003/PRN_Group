@@ -2,18 +2,35 @@
     width: 55vw;
     margin: 2rem auto 0;
     border: 0.1rem solid rgba(0, 0, 0, 0.25);
-    padding: 3rem;
     border-radius: 0.1rem;
     box-shadow: 0 0 1rem -0.5rem rgba(0, 0, 0, 0.25);
-    form {
-        
-    }
+    margin-bottom: 10rem;
+}
+
+.quotation_header{
+    margin: 2.5rem 0 1.5rem;
+    display: flex;
+    padding: 0 2rem;
+    background: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    h3{
+          font-weight: bold;
+          color: white;
+      }
+    img{
+           height: 4.5rem;
+           width: 4.5rem;
+           scale: 2;
+           margin-right: .5rem;
+       }
 }
 
 .project_detail_wrapper {
     margin: 0.5rem 0;
-    border: 0.1rem solid rgba(0, 0, 0, 0.25);
     padding: 2rem;
+    padding-bottom: 0;
     border-radius: 0.5rem;
     background-color: rgba(255, 255, 255, 0.8);
 }
@@ -27,4 +44,12 @@
            height: 2.3rem;
            margin-right: .5rem;
        }
+}
+
+.quotation_materials{
+    padding: 0 2rem;
+}
+
+td{
+    font-size: .85rem;
 }

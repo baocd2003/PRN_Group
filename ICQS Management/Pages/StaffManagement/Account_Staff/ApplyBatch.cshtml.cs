@@ -142,11 +142,31 @@ namespace ICQS_Management.Pages.Account_Staff
                                         MaterialName = m.Name,
                                         Quantity = pm.Quantity
                                     }).ToList();
-
+                if (!_batchRepo.CheckAvailableBatchForQuote(QuotationId, SelectedItems))
+                {
+                    Quotation = _quoteRepo.GetQuotation(QuotationId);
+                    TempData["QuotationId"] = QuotationId;
+                    TempData["ErrorMessage"] = "Materials in selected batchs not enough";
+                    ProjectMaterials = (from pm in projectMaterials
+                                        join m in materials on pm.MaterialId equals m.MaterialId
+                                        where pm.ProjectId == Quotation.ProjectId
+                                        select new ProjectMaterialDTO
+                                        {
+                                            ProjectMaterialId = pm.ProjectMaterialId,
+                                            ProjectId = pm.ProjectId,
+                                            MaterialId = pm.MaterialId,
+                                            MaterialName = m.Name,
+                                            Quantity = pm.Quantity
+                                        }).ToList();
+                    Batches = _batchRepo.CheckAvailableQuantityBatch();
+                    Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
+                    return Page();
+                }
                 string loggedEmail = HttpContext.Session.GetString("LoggedEmail");
                 Staff selectedStaff = _context.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
                 materialPrice = _batchRepo.PreviewPrice(QuotationId, SelectedItems,Project);
-                Batches = _batchRepo.GetBatchesDateAsc();
+                Batches = _batchRepo.CheckAvailableQuantityBatch();
+                Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
                 TempData["QuotationId"] = QuotationId;
                 return Page();
             }

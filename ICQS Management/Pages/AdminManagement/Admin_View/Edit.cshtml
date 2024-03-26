@@ -17,12 +17,7 @@
                 <label asp-for="User.Email" class="control-label"></label>
                 <input asp-for="User.Email" class="form-control" />
                 <span asp-validation-for="User.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="User.Password" class="control-label"></label>
-                <input asp-for="User.Password" class="form-control" />
-                <span asp-validation-for="User.Password" class="text-danger"></span>
-            </div>
+            </div>            
             <div class="form-group">
                 <label asp-for="User.PhoneNumber" class="control-label"></label>
                 <input asp-for="User.PhoneNumber" class="form-control" />
@@ -34,6 +29,10 @@
         </form>
     </div>
 </div>
+@if (@TempData["createError"] is not null)
+{
+    <span class="text-danger">@TempData["createError"]</span>
+}
 
 <div>
     <a asp-page="./Index">Back to List</a>

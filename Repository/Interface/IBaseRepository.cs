@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BussinessObject.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,6 +16,7 @@ namespace Repository.Interface
         T GetById(object id);
         void Insert(T obj);
         void Update(T obj, object id);
+        void Update(User user);
         void Delete(object id);
         void Save();
     }

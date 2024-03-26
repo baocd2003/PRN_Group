@@ -15,8 +15,13 @@ namespace ICQS_Management.Pages.Admin_View
 {
     public class EditModel : PageModel
     {
-        private readonly IBaseRepository<User> _baseRepository = new BaseRepository<User>();
-
+        private readonly IBaseRepository<User> _baseRepository;  
+        private readonly IQuotationManagementRepository _quotationManagement;
+        public EditModel(IQuotationManagementRepository quotationManagement, IBaseRepository<User> baseRepository)
+        {
+            _quotationManagement = quotationManagement;
+            _baseRepository = baseRepository;
+        }
 
 
         [BindProperty]
@@ -37,7 +42,7 @@ namespace ICQS_Management.Pages.Admin_View
                     {
                         return NotFound();
                     }
-
+                    
                     User = _baseRepository.GetById(id);
 
                     if (User == null)
@@ -57,11 +62,19 @@ namespace ICQS_Management.Pages.Admin_View
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-
+            var iduser = _baseRepository.GetById(User.UserId);
+            if (User.Email is null || User.Name is null || User.PhoneNumber is null || User.Password is null)
+            {
+                TempData["createError"] = "Field can not be null";
+                return RedirectToPage();
+            }
+           
             try
             {
-                _baseRepository.Update(User, User.UserId);
-                _baseRepository.Save();
+                User.status = iduser.status;
+                User.Password = iduser.Password;
+                _baseRepository.Update(User);              
+                var user = _baseRepository.GetById(User.UserId);
                 return Page();
             }
             catch (Exception ex)

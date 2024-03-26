@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Service;
+﻿using BussinessObject.Entity;
+using DataAccessLayer.Service;
 using Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -33,5 +34,8 @@ namespace Repository
 
         public IEnumerable<T> GetAll()
         => BaseService<T>.Instance.GetAll();
+
+        public void Update(User user)
+        => BaseService<T>.Instance.Update(user);
     }
 }

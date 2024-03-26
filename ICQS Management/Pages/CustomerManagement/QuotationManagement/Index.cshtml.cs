@@ -14,11 +14,10 @@ namespace ICQS_Management.Pages.QuotationManagement
 {
     public class IndexModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-        private IQuotationManagementRepository _quoteRepo = new QuotationManagementRepository();
-        public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        private IQuotationManagementRepository _quoteRepo;
+        public IndexModel(IQuotationManagementRepository quoteRepo)
         {
-            _context = context;
+            _quoteRepo = quoteRepo;
         }
 
         public IList<Quotation> Quotation { get;set; }

@@ -16,17 +16,21 @@ namespace ICQS_Management.Pages.QuotationManagement
     public class DetailsModel : PageModel
     {
 
-        private IBatchManagement _batchRepo = new BatchManagementRepository();
-        private IProjectManagementRepository _projectRepo = new ProjectManagementRepository();
-        private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
+        private IBatchManagement _batchRepo;
+        private IProjectManagementRepository _projectRepo;
+        private IMaterialManagementRepository _materialRepo;
 
-        private IQuotationManagementRepository _quoteRepo = new QuotationManagementRepository();
+        private IQuotationManagementRepository _quoteRepo;
 
-        public DetailsModel(IBatchManagement batchRepo, IProjectManagementRepository projectRepo, IMaterialManagementRepository materialRepo)
+        public DetailsModel(IBatchManagement batchRepo,
+            IProjectManagementRepository projectRepo,
+            IMaterialManagementRepository materialRepo,
+            IQuotationManagementRepository quotRepo)
         {
             _batchRepo = batchRepo;
             _projectRepo = projectRepo;
             _materialRepo = materialRepo;
+            _quoteRepo = quotRepo;
         }
 
         [BindProperty]

@@ -43,6 +43,9 @@ table{
     td{
         padding: .1rem .5rem;
     }
+    td:not(:first-child){
+        padding: .1rem 2rem;
+    }
 }
 
 caption{

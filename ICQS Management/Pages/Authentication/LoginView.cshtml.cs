@@ -10,7 +10,11 @@ namespace ICQS_Management.Pages.Authentication
 {
     public class LoginViewModel : PageModel
     {
-        private IAuthRepository _authRepository = new AuthRepository();
+        private IAuthRepository _authRepository;
+        public LoginViewModel(IAuthRepository authRepository)
+        {
+            _authRepository = authRepository;
+        }
         public LoginDTO? LoginDTO { get; set; }
         public IActionResult OnGet()
         {

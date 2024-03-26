@@ -15,7 +15,10 @@ namespace ICQS_Management.Pages.CustomerManagement.ProjectManagement
     public class ProjectListModel : PageModel
     {
         private IProjectManagementRepository _pmRepository = new ProjectManagementRepository();
-
+        public ProjectListModel(IProjectManagementRepository pmRepository)
+        {
+            _pmRepository = pmRepository;
+        }
         public List<Project> Project { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()

@@ -14,8 +14,11 @@ namespace ICQS_Management.Pages.Authentication
 {
     public class CustomerRegisterModel : PageModel
     {
-        private IAuthRepository _authRepository = new AuthRepository();
-
+        private IAuthRepository _authRepository;
+        public CustomerRegisterModel(IAuthRepository authRepository)
+        {
+            _authRepository = authRepository;
+        }
         public IActionResult OnGet()
         {
             return Page();

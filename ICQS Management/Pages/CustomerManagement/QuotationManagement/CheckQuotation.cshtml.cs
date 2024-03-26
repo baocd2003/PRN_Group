@@ -16,14 +16,18 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
 {
     public class CheckQuotationModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private readonly IBatchManagement _batchRepo;
+        private readonly IProjectManagementRepository _projectRepo;
+        private readonly IMaterialManagementRepository _materialRepo;
 
-        private IBatchManagement _batchRepo = new BatchManagementRepository();
-        private IProjectManagementRepository _projectRepo = new ProjectManagementRepository();
-        private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
-        public CheckQuotationModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public CheckQuotationModel(
+            IBatchManagement batchRepo,
+            IProjectManagementRepository projectRepo,
+            IMaterialManagementRepository materialRepo)
         {
-            _context = context;
+            _batchRepo = batchRepo;
+            _projectRepo = projectRepo;
+            _materialRepo = materialRepo;
         }
 
         [BindProperty]
@@ -79,19 +83,19 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
             }
         }
 
-            public async Task<IActionResult> OnPostAsync()
-                {
-                    Guid quoteId = (Guid)TempData["id"];
-                    if (Request.Form.ContainsKey("confirmBut"))
-                    {
-                        _batchRepo.MinusQuantityInBatch(Quotation.QuotationId);
-                    }
-                    else
-                    {
-                        _batchRepo.DeleteQuotation(quoteId);
-                    }
-                    return Redirect("./Index");
-                }
-            } 
+        public async Task<IActionResult> OnPostAsync()
+        {
+            Guid quoteId = (Guid)TempData["id"];
+            if (Request.Form.ContainsKey("confirmBut"))
+            {
+                _batchRepo.MinusQuantityInBatch(Quotation.QuotationId);
+            }
+            else
+            {
+                _batchRepo.DeleteQuotation(quoteId);
+            }
+            return Redirect("./Index");
+        }
+    }
 
 }

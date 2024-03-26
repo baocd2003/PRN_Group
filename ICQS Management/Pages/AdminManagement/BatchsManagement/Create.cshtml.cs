@@ -62,8 +62,5 @@ namespace ICQS_Management.Pages.BatchsManagement
             HttpContext.Session.SetString("ImportDate" , Batch.ImportDate.ToString());
             return RedirectToPage("/AdminManagement/BatchDetailsManagement/Create");
         }
-
-
-  
     }
 }

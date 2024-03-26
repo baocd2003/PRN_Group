@@ -16,13 +16,14 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class UpdateMoreDetailsModel : PageModel
     {
-        private IBatchManagement _repo = new BatchManagementRepository();
-        private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
-
-        public UpdateMoreDetailsModel(IBatchManagement repo , IMaterialManagementRepository materialRepo)
+        private IBatchManagement _repo;
+        private IMaterialManagementRepository _materialRepo;
+        private IMaterialTypeManagementRepository _typeRepo;
+        public UpdateMoreDetailsModel(IBatchManagement repo , IMaterialManagementRepository materialRepo, IMaterialTypeManagementRepository typeRepo)
         {
             _repo = repo;
             _materialRepo = materialRepo;
+            _typeRepo = typeRepo;
         }
 
         [BindProperty]
@@ -33,7 +34,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
         [BindProperty]
         public float MediumPrice { get; set; } = 0;
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(Guid? materialId)
         {
             if (HttpContext.Session == null)
             {
@@ -51,7 +52,23 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                     var id = HttpContext.Session.GetString("selectedBatchId");
                     List<BatchDetail> list = _repo.GetBatchDetailsByBatchId(Guid.Parse(id));
                     //List<BatchDetail> list = _context.BatchDetails.Where(bd => bd.BatchId == id).ToList();
-                    ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(list), "MaterialId", "Name");
+                    if (materialId != null)
+                    {
+                        ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(list), "MaterialId", "Name", materialId);
+                        Material mat = _materialRepo.GetMaterialById((Guid)materialId);
+                        MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
+                        TempData["MatId"] = (Guid)materialId;
+                        MediumPrice = mat.MediumPrice;
+                    }
+                    else
+                    {
+                        ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(list), "MaterialId", "Name");
+                        List<Material> matList = _materialRepo.GetOthersMaterial(list).ToList();
+                        Material mat = matList.FirstOrDefault();
+                        MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
+                        TempData["MatId"] = mat.MaterialId;
+                        MediumPrice = mat.MediumPrice;
+                    }
                     return Page();
                 }
             }
@@ -71,15 +88,19 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                 return Page();
             }
             BatchDetail.BatchId = selectedBatchId;
+            BatchDetail.MaterialId = (Guid)TempData["MatId"];
             string detailListJson = HttpContext.Session.GetString("moreDetailList");
             List<BatchDetail> batchDetails = JsonConvert.DeserializeObject<List<BatchDetail>>(detailListJson);
             batchDetails.Add(BatchDetail);
-
             var continueCheckbox = Request.Form["continueCheckbox"];
             if (!string.IsNullOrEmpty(continueCheckbox))
             {
                 List<BatchDetail> list = _repo.GetBatchDetailsByBatchId(selectedBatchId);
                 ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(list), "MaterialId", "Name");
+                List<Material> matList = _materialRepo.GetOthersMaterial(list).ToList();
+                Material mat = matList.FirstOrDefault();
+                MaterialType = _typeRepo.GetMaterialTypeById(mat.MaterialTypeId);
+                MediumPrice = mat.MediumPrice;
                 string detailList = JsonConvert.SerializeObject(batchDetails);
                 HttpContext.Session.SetString("moreDetailList", detailList);
                 return Page();
@@ -88,8 +109,14 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             {
                 _repo.AddMoreDetailsInBatch(batchDetails);
                 HttpContext.Session.Remove("moreDetailList");
-                return RedirectToPage("/AdminManagement/BatchsManagement/Details?id=" + selectedBatchId);
+                return RedirectToPage("/AdminManagement/BatchsManagement/Index");
             }
+        }
+
+        public IActionResult OnPostChooseMaterialAsync(Guid MaterialId)
+        {
+            BatchDetail.MaterialId = MaterialId;
+            return RedirectToPage("./UpdateMoreDetails", new { materialId = MaterialId });
         }
     }
 }

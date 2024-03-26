@@ -124,7 +124,7 @@ namespace ICQS_Management.Pages.Account_Staff
                 //_batchRepo.StaffApplyQuote(selectedStaff.StaffId, afterQuote);
                 //_projectRepo.UpdateProject(Project);
                 _batchRepo.UpdateQuantityInBatch(QuotationId, SelectedItems, selectedStaff.StaffId,Project);
-                return RedirectToPage("/AdminManagement/BatchsManagement/Index");
+                return RedirectToPage("./ViewQuotes");
             }
             else
             {

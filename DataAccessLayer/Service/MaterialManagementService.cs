@@ -39,7 +39,7 @@ public class MaterialManagementService : applicationDbContext
     }
     public async Task<List<MaterialDTO>> GetMaterialDTOsPaged(int pageNumber, int pageSize)
     {
-        return this.Materials
+        return this.Materials.OrderBy(m => m.Name)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .Select(material => new MaterialDTO

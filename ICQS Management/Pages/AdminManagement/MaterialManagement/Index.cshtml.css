@@ -45,12 +45,12 @@
     justify-content: center;
 }
 
-.pagination .page-item {
-    margin: 0 5px;
-    text-align: center;
-    width: 40px;
-    vertical-align: middle;
-}
+    .pagination .page-item {
+        margin: 0 5px;
+        text-align: center;
+        width: 40px;
+        vertical-align: middle;
+    }
 
 .page-link {
     text-align: center;
@@ -61,7 +61,7 @@ ul.pagination .page-item.active .page-link {
 }
 
 .table_header tr th {
-    width: 15%;
+    width: 25%;
 }
 
 .notification {

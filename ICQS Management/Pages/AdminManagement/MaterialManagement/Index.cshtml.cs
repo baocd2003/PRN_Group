@@ -15,17 +15,26 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 {
     public class IndexModel : PageModel
     {
-        private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
-        private readonly IBaseRepository<Material> _baseRepository = new BaseRepository<Material>();
+        private IMaterialManagementRepository _materialRepository;
+        private readonly IBaseRepository<Material> _baseRepository;
+        public IndexModel(IMaterialManagementRepository materialRepository, IBaseRepository<Material> baseRepository)
+        {
+            _baseRepository = baseRepository;
+            _materialRepository = materialRepository;
+        }
         public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 6;
+        public int PageSize { get; set; } = 5;
         public int PageCount => (int)Math.Ceiling((double)TotalRecords / PageSize);
         public int TotalRecords { get; set; }
-
+        public string message { get; set; } = string.Empty;
         public List<MaterialDTO> MaterialDTO { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? pageNumber)
+        public async Task<IActionResult> OnGetAsync(int? pageNumber, string ? Message)
         {
+            if(Message != null)
+            {
+                message = Message;
+            }
             if (HttpContext.Session == null)
             {
                 return RedirectToPage("/Authentication/ErrorSession");

@@ -16,6 +16,10 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialTypeManagement
     public class EditModel : PageModel
     {
         private IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
+        public EditModel(IMaterialTypeManagementRepository materialTypeRepository)
+        {
+            _materialTypeRepository = materialTypeRepository;
+        }
         [BindProperty]
         public MaterialType MaterialType { get; set; }
         [BindProperty]

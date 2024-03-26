@@ -1,0 +1,19 @@
+﻿.title {
+    margin-bottom: 4vh;
+    margin-top: 6vh;
+    padding: 0 0 0 3rem;
+    font-weight: bold;
+}
+
+.add_box {
+    display: flex;
+    justify-content: center;
+}
+
+.info {
+    display: flex;
+}
+
+    .info dt {
+        width: 300px;
+    }

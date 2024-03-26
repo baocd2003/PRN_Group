@@ -15,7 +15,10 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialTypeManagement
     public class DetailsModel : PageModel
     {
         private IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
-
+        public DetailsModel(IMaterialTypeManagementRepository materialTypeRepository)
+        {
+            _materialTypeRepository = materialTypeRepository;
+        }
         public MaterialType MaterialType { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)

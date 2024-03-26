@@ -18,6 +18,11 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
     {
         private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
         public IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
+        public DetailsModel(IMaterialManagementRepository materialRepository, IMaterialTypeManagementRepository materialTypeRepository)
+        {
+            _materialRepository = materialRepository;
+            _materialTypeRepository = materialTypeRepository;
+        }
         [BindProperty]
         public MaterialDTO MaterialDTO { get; set; } = default!;
 

@@ -15,8 +15,13 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
 {
     public class CreateModel : PageModel
     {
-        private IMaterialManagementRepository _materialRepository = new MaterialManagementRepository();
-        public IMaterialTypeManagementRepository _materialTypeRepository = new MaterialTypeManagementRepository();
+        private IMaterialManagementRepository _materialRepository;
+        public IMaterialTypeManagementRepository _materialTypeRepository;
+        public CreateModel(IMaterialManagementRepository materialRepository, IMaterialTypeManagementRepository materialTypeRepository)
+        {
+            _materialRepository = materialRepository;
+            _materialTypeRepository = materialTypeRepository;
+        }
         [BindProperty]
         public MaterialDTO MaterialDTO { get; set; } = default!;
         [BindProperty]
@@ -60,7 +65,7 @@ namespace ICQS_Management.Pages.AdminManagement.MaterialManagement
                 }
                 _materialRepository.AddMaterial(createdMaterial);
                 message = "Add successfully.";
-                return Page();
+                return RedirectToPage("./Index", new { Message = "Add Successfully" });
             }
             return NotFound();
         }

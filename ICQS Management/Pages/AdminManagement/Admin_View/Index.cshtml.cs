@@ -17,7 +17,7 @@ namespace ICQS_Management.Pages.Admin_View
         private readonly IAuthRepository authRepository;
 
         //Paging
-        private const int PageSize = 6;
+        private const int PageSize = 5;
         public int PageNumber { get; set; }
         public int PageCount => (int)Math.Ceiling((double)TotalRecords / PageSize);
         public int TotalRecords { get; set; }

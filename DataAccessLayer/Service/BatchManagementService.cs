@@ -376,15 +376,10 @@ namespace DataAccessLayer.Service
             _selectedQuotation.Status = 3;
             _db.SaveChanges();
         }
-        public void StaffApplyQuote(Guid staffId, Quotation quote)
+        public Staff StaffApplyQuote(String loggedEmail)
         {
-            Staff staff = _db.Staffs.FirstOrDefault(s => s.StaffId == staffId);
-            if (staff.Quotations == null)
-            {
-                staff.Quotations = new List<Quotation>();
-            }
-            staff.Quotations.Add(quote);
-            _db.SaveChanges();
+            Staff staff = _db.Staffs.FirstOrDefault(c => c.Email == loggedEmail);
+            return staff;
         }
 
         public Quotation GetQuotationWithProject(Guid id)

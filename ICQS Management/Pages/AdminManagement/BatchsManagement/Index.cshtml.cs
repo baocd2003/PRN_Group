@@ -8,13 +8,17 @@ using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.BatchsManagement
 {
     public class IndexModel : PageModel
     {
-        private BatchManagementRepository _repo = new BatchManagementRepository();
+        private IBatchManagement _repo;
 
+        public IndexModel(IBatchManagement repo) {
+            _repo = repo;
+        }
         public IList<Batch> Batch { get;set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()

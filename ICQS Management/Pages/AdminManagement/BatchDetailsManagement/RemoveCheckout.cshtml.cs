@@ -9,16 +9,17 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.BatchDetailsManagement
 {
     public class RemoveCheckoutModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private IMaterialManagementRepository _materialRepo;
 
-        public RemoveCheckoutModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        public RemoveCheckoutModel(IMaterialManagementRepository context)
         {
-            _context = context;
+            _materialRepo = context;
         }
 
         [BindProperty]
@@ -54,7 +55,6 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
                     {
                         return NotFound();
                     }
-                    ViewData["MaterialId"] = new SelectList(_context.Materials, "MaterialId", "Name", batchDetails[index].MaterialId);
                     return Page();
                 }
             }

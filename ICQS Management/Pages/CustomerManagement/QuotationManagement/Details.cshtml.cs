@@ -19,13 +19,10 @@ namespace ICQS_Management.Pages.QuotationManagement
         private IBatchManagement _batchRepo = new BatchManagementRepository();
         private IProjectManagementRepository _projectRepo = new ProjectManagementRepository();
         private IMaterialManagementRepository _materialRepo = new MaterialManagementRepository();
-<<<<<<< Updated upstream
-        public DetailsModel(IBatchManagement batchRepo, IProjectManagementRepository projectRepo, IMaterialManagementRepository materialRepo)
-=======
+
         private IQuotationManagementRepository _quoteRepo = new QuotationManagementRepository();
 
-        public DetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
->>>>>>> Stashed changes
+        public DetailsModel(IBatchManagement batchRepo, IProjectManagementRepository projectRepo, IMaterialManagementRepository materialRepo)
         {
             _batchRepo = batchRepo;
             _projectRepo = projectRepo;

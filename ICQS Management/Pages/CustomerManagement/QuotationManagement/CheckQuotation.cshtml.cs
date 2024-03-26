@@ -38,14 +38,14 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
         {
             if (HttpContext.Session == null)
             {
-                return RedirectToPage("/Authentication/ErrorSession");
+                return Redirect("/Authentication/ErrorSession");
             }
             else
             {
                 string userRole = HttpContext.Session.GetString("userRole");
                 if (string.IsNullOrEmpty(userRole) || (userRole != "Customer"))
                 {
-                    return RedirectToPage("/Authentication/ErrorSession");
+                    return Redirect("/Authentication/ErrorSession");
                 }
                 else
                 {
@@ -84,13 +84,13 @@ namespace ICQS_Management.Pages.CustomerManagement.QuotationManagement
                     Guid quoteId = (Guid)TempData["id"];
                     if (Request.Form.ContainsKey("confirmBut"))
                     {
-                        _batchRepo.MinusQuantityInBatch(quoteId);
+                        _batchRepo.MinusQuantityInBatch(Quotation.QuotationId);
                     }
                     else
                     {
                         _batchRepo.DeleteQuotation(quoteId);
                     }
-                    return RedirectToPage("./Index");
+                    return Redirect("./Index");
                 }
             } 
 

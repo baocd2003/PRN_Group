@@ -56,21 +56,21 @@ namespace ICQS_Management.Pages.QuotationManagement
                         return NotFound();
                     }
 
-                    Quotation = _batchRepo.GetQuotationWithProject((Guid)id);
-                    Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
-                    var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
-                    var materials = _materialRepo.GetAllMaterials();
-                    ProjectMaterialList = (from pm in projectMaterials
-                                           join m in materials on pm.MaterialId equals m.MaterialId
-                                           where pm.ProjectId == Quotation.ProjectId
-                                           select new ProjectMaterialDTO
-                                           {
-                                               ProjectMaterialId = pm.ProjectMaterialId,
-                                               ProjectId = pm.ProjectId,
-                                               MaterialId = pm.MaterialId,
-                                               MaterialName = m.Name,
-                                               Quantity = pm.Quantity
-                                           }).ToList();
+                    //        Quotation = _batchRepo.GetQuotationWithProject((Guid)id);
+                    //Project = _projectRepo.GetProjectByQuoteId(Quotation.QuotationId);
+                    //var projectMaterials = _projectRepo.GetProjectMaterialByProjectId(Quotation.ProjectId);
+                    //var materials = _materialRepo.GetAllMaterials();
+                    //ProjectMaterialList = (from pm in projectMaterials
+                    //                       join m in materials on pm.MaterialId equals m.MaterialId
+                    //                       where pm.ProjectId == Quotation.ProjectId
+                    //                       select new ProjectMaterialDTO
+                    //                       {
+                    //                           ProjectMaterialId = pm.ProjectMaterialId,
+                    //                           ProjectId = pm.ProjectId,
+                    //                           MaterialId = pm.MaterialId,
+                    //                           MaterialName = m.Name,
+                    //                           Quantity = pm.Quantity
+                    //                       }).ToList();
 
                     Quotation = _quoteRepo.GetQuotation(id.Value);
 
@@ -81,6 +81,20 @@ namespace ICQS_Management.Pages.QuotationManagement
                     return Page();
                 }
             }
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            Guid quoteId = (Guid)TempData["id"];
+            if (Request.Form.ContainsKey("confirmBut"))
+            {
+                _batchRepo.MinusQuantityInBatch(Quotation.QuotationId);
+            }
+            else
+            {
+                _batchRepo.DeleteQuotation(quoteId);
+            }
+            return Redirect("./Index");
         }
     }
 }

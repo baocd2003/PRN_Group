@@ -40,10 +40,14 @@ namespace DataAccessLayer.Service
 
         public IList<Quotation> GetAllQuotations()
         {
-            return _db.Quotations.Include(q => q.Project)
+            using (var _dbb = new applicationDbContext())
+            {
+                return _dbb.Quotations.Include(q => q.Project)
                 .ThenInclude(p => p.ProjectMaterials)
                 .ThenInclude(pm => pm.Materials)
                 .ThenInclude(m => m.MaterialTypes).ToList();
+            }
+                
         }
 
         public static Staff GetResponder(Guid quotId)
@@ -56,10 +60,19 @@ namespace DataAccessLayer.Service
 
         public Quotation GetQuotation(Guid id)
         {
-            return _db.Quotations.Include(q => q.Project)
+            using (var _dbb = new applicationDbContext())
+            {
+                return _dbb.Quotations.Include(q => q.Project)
                 .ThenInclude(p => p.ProjectMaterials)
                 .ThenInclude(pm => pm.Materials)
+                .ThenInclude(m => m.MaterialTypes)
+                .Include(p => p.Batchs)
+                .ThenInclude(b => b.BatchDetails)
+                .ThenInclude(bd => bd.Materials)
                 .ThenInclude(m => m.MaterialTypes).FirstOrDefault(q => q.QuotationId == id);
+            }
+
+                
         }
 
         public Customer GetCustomerByEmail(string email)

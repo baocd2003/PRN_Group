@@ -50,10 +50,10 @@
             <td>@string.Format("{0:N0}", item.CompletePrice)</td>
             <td style="border-radius: 0 .5rem .5rem 0;" class="quotation_buttons">
                 <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a>
-                @if (item.Status == 1)
+                @* @if (item.Status == 1)
                 {
                     <a asp-page="./CheckQuotation" asp-route-id="@item.QuotationId">Review response</a>
-                }
+                } *@
             </td>
         </tr>
     }

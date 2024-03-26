@@ -139,7 +139,7 @@
                                 <input type="hidden" id="@item.Materials.MaterialTypeId" class="materialPrices" value=@(item.Materials.MediumPrice * item.Quantity) onchange="updateEstimatedMaterialPrice()" />
                                 <input asp-for="NewProjectMaterials[count].Quantity" id="quantity_@item.Materials.MaterialTypeId" class="form-control w-50" value="@item.Quantity" onchange="updateQuantity('@item.Materials.MaterialTypeId', this.value)" />
                             </div>
-                            <p>~ <span id="medium_price_@item.Materials.MaterialTypeId">@item.Materials.MediumPrice</span> / @item.Materials.MaterialTypes.UnitType</p>
+                            <p>~ $<span id="medium_price_@item.Materials.MaterialTypeId">@item.Materials.MediumPrice</span> / @item.Materials.MaterialTypes.UnitType</p>
                         </div>
                     </div>
                     count++;

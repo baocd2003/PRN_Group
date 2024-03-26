@@ -64,7 +64,7 @@
                     <table class="project_materials w-100">
                         <caption style="caption-side: top; text-align: right;">Materials</caption>
                         <tr>
-                            <th class="w-25" colspan="2">Name</th>
+                            <th colspan="2">Name</th>
                             <th class="w-25">Quantity</th>
                             <th class="w-25">Medium price</th>
                         </tr>
@@ -77,16 +77,17 @@
                             </tr>
                         }
                         <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <td style="border: none; background-color: white;"></td>
                             <td style="border: none; background-color: white; font-size: 1.2rem; padding: 1rem 0;" colspan="2" class="font-weight-bold text-center" colspan="2">Estimated Total</td>
                             <td style="border: none; background-color: white; font-size: 1.2rem;" class="font-weight-bold">@string.Format("{0:N0}", item.TotalPrice)</td>
                         </tr>
-                        <tr style="display: none;">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                        
                     </table>
                     <div class="d-flex justify-content-center mt-4">
                         <a asp-page="../QuotationManagement/Create" asp-route-id="@item.ProjectID" class="btn btn-primary">Get Quotation</a>

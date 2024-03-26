@@ -8,6 +8,7 @@
         <div class="add_box">
             <div>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="User.UserId" value="@Model.User.UserId" />
                 <div class="Edit_Info">
                     <label asp-for="User.Name" class="control-label" style="width: 300px !important"><span style="color: rgb(53, 84, 209); font-weight: bold">* </span>User Name</label>
                     <input asp-for="User.Name" class="form-control" required />

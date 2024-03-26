@@ -63,10 +63,10 @@ namespace ICQS_Management.Pages.Admin_View
         public async Task<IActionResult> OnPostAsync()
         {
             var iduser = _baseRepository.GetById(User.UserId);
-            if (User.Email is null || User.Name is null || User.PhoneNumber is null || User.Password is null)
+            if (User.Email is null || User.Name is null || User.PhoneNumber is null)
             {
                 TempData["createError"] = "Field can not be null";
-                return RedirectToPage();
+                return Page();
             }
            
             try
@@ -75,7 +75,7 @@ namespace ICQS_Management.Pages.Admin_View
                 User.Password = iduser.Password;
                 _baseRepository.Update(User);              
                 var user = _baseRepository.GetById(User.UserId);
-                return Page();
+                return RedirectToPage("./Index");
             }
             catch (Exception ex)
             {

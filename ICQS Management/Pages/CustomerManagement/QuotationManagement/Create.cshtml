@@ -65,11 +65,11 @@
                         </tr>
                         <tr>
                             <td>
-                                <input asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor" />
+                                <input asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor" readonly/>
                                 <span asp-validation-for="AreaPerFloor" class="text-danger"></span>
                             </td>
                             <td>
-                                <input asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" />
+                                <input asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" readonly />
                                 <span asp-validation-for="NumOfFloors" class="text-danger"></span>
                             </td>
                         </tr>

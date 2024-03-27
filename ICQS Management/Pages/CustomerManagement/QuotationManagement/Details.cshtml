@@ -96,6 +96,7 @@
                             <th class="w-25">Quantity</th>
                             <th class="w-25">Actual price</th>
                         </tr>
+                        var count = 0;
                         @foreach (var batch in Model.Quotation.Batchs)
                         {
                             @foreach (var batchDetail in batch.BatchDetails)
@@ -103,10 +104,12 @@
                                 <tr>
                                     <td>@batch.ImportDate</td>
                                     <td>@batchDetail.Materials.Name</td>
-                                    <td>@Model.Quotation.Project.ProjectMaterials.FirstOrDefault(pm => pm.MaterialId == batchDetail.MaterialId).Quantity (@batchDetail.Materials.MaterialTypes.UnitType)</td>
+                                    @* <td>@Model.Quotation.Project.ProjectMaterials.FirstOrDefault(pm => pm.MaterialId == batchDetail.MaterialId).Quantity (@batchDetail.Materials.MaterialTypes.UnitType)</td> *@
+                                    <td>@Model.Quotation.Project.ProjectMaterials.Where(pm => pm.MaterialId == batchDetail.MaterialId).ToList()[count].Quantity (@batchDetail.Materials.MaterialTypes.UnitType)</td>
                                     <td>$@string.Format("{0:N0}", batchDetail.Price)/@batchDetail.Materials.MaterialTypes.UnitType</td>
                                 </tr>
                             }
+                            count++;
                         }
                         <tr>
                             <td style="border: none; background-color: white;"></td>

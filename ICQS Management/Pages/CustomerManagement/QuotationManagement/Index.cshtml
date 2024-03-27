@@ -44,10 +44,10 @@
         }
         <tr>
             <td style="border-radius: .5rem 0 0 .5rem;">@item.RequestDate</td>
-            <td>@string.Format("{0:N0}", item.EstimatePrice)</td>
+            <td>$@string.Format("{0:N0}", item.EstimatePrice)</td>
             <td style="color: white;"><span class="@statusStyle">@quotStatus</span></td>
             @* <td>@QuotationManagementService.GetResponder(item.QuotationId)?.Email</td> *@
-            <td>@string.Format("{0:N0}", item.CompletePrice)</td>
+            <td>$@string.Format("{0:N0}", item.CompletePrice)</td>
             <td style="border-radius: 0 .5rem .5rem 0;" class="quotation_buttons">
                 @if (item.Status != 3)
                 {

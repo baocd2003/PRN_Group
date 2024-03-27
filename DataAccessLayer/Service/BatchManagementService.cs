@@ -178,7 +178,8 @@ namespace DataAccessLayer.Service
 
         public void UpdateQuantityInBatch(Guid quotationId, List<Guid> batchIds, Guid staffId, Project prj)
         {
-            Quotation _selectedQuotation = _db.Quotations.FirstOrDefault(q => q.QuotationId == quotationId);
+            Quotation _selectedQuotation = _db.Quotations.Include(q => q.Project).ThenInclude(p => p.ProjectMaterials)
+                .ThenInclude(pm => pm.Materials).FirstOrDefault(q => q.QuotationId == quotationId);
             Project _selectedProject = _db.Projects.FirstOrDefault(p => p.ProjectID == _selectedQuotation.ProjectId);
             List<ProjectMaterial> quoteMaterials = ProjectManagementService.Instance.GetProjectMaterialByProjectId(_selectedQuotation.ProjectId).ToList();
             Staff staff = _db.Staffs.FirstOrDefault(s => s.StaffId == staffId);
@@ -197,22 +198,31 @@ namespace DataAccessLayer.Service
                     if (batchDetail != null)
                     {
                         double quantityToUpdate = batchDetail.Quantity;
-                        if (quantityToUpdate >= remainingQuantity)
+                        if (quantityToUpdate >= remainingQuantity) // lo du quantity
                         {
                             quantityToUpdate -= remainingQuantity;
                             affectedBatchs.Add(batch);
                             price += remainingQuantity * batchDetail.Price;
+                            _selectedQuotation.Project.ProjectMaterials.Add(new ProjectMaterial()
+                            {
+                                ProjectMaterialId = new Guid(),
+                                MaterialId = batchDetail.MaterialId,
+                                ProjectId = _selectedProject.ProjectID,
+                                Quantity = Convert.ToInt32(remainingQuantity)
+                            });
                             //_db.SaveChanges();
                             remainingQuantity = 0;
                         }
-                        else
+                        else // lo thieu quantity
                         {
                             if (quantityToUpdate > 0)
                             {
                                 remainingQuantity -= quantityToUpdate;
+                                _selectedQuotation.Project.ProjectMaterials.FirstOrDefault(p => p.MaterialId == batchDetail.MaterialId).Quantity = Convert.ToInt32(quantityToUpdate);
                                 price += quantityToUpdate * batchDetail.Price;
                                 quantityToUpdate = 0;
                                 affectedBatchs.Add(batch);
+                                
                                 //_db.SaveChanges();
                             }
                             else

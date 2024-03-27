@@ -45,7 +45,7 @@ namespace DataAccessLayer.Service
                 return _dbb.Quotations.Include(q => q.Project)
                 .ThenInclude(p => p.ProjectMaterials)
                 .ThenInclude(pm => pm.Materials)
-                .ThenInclude(m => m.MaterialTypes).ToList();
+                .ThenInclude(m => m.MaterialTypes).OrderByDescending(q => q.RequestDate).ToList();
             }
                 
         }

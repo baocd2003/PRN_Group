@@ -92,6 +92,12 @@ namespace ICQS_Management.Pages.QuotationManagement
             Guid quoteId = (Guid)TempData["id"];
             if (Request.Form.ContainsKey("confirmBut"))
             {
+                Quotation quote = _quoteRepo.GetQuotation(quoteId);
+                List<Guid> batchIds = quote.Batchs.Select(batch => batch.BatchId).ToList();
+                if (_batchRepo.CheckAvailableBatchForQuote(quoteId,batchIds))
+                {
+                    ModelState.AddModelError("","Applied batchs for this request are out of quantity, Please request again");
+                }
                 _batchRepo.MinusQuantityInBatch(Quotation.QuotationId);
             }
             else

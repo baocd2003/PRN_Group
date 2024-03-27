@@ -7,24 +7,39 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.AdminManagement.QuotationManagement
 {
     public class IndexModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
-
-        public IndexModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        private IQuotationManagementRepository _quoteRepo;
+        public IndexModel(IQuotationManagementRepository quoteRepo)
         {
-            _context = context;
+            _quoteRepo = quoteRepo;
         }
 
-        public IList<Quotation> Quotation { get;set; }
+        public IList<Quotation> Quotation { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Quotation = await _context.Quotations
-                .Include(q => q.Project).ToListAsync();
+            if (HttpContext.Session == null)
+            {
+                return RedirectToPage("/Authentication/ErrorSession");
+            }
+            else
+            {
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    Quotation = _quoteRepo.GetAllQuotations().Where(q => q.Status == 2).ToList();
+                    return Page();
+                }
+            }
         }
     }
 }

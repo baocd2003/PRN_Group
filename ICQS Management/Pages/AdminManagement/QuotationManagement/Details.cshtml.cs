@@ -7,35 +7,62 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
+using BusinessObject.DTO;
+using Repository.Interface;
 
 namespace ICQS_Management.Pages.AdminManagement.QuotationManagement
 {
     public class DetailsModel : PageModel
     {
-        private readonly DataAccessLayer.ApplicationDbContext.applicationDbContext _context;
+        private IBatchManagement _batchRepo;
+        private IProjectManagementRepository _projectRepo;
+        private IMaterialManagementRepository _materialRepo;
 
-        public DetailsModel(DataAccessLayer.ApplicationDbContext.applicationDbContext context)
+        private IQuotationManagementRepository _quoteRepo;
+
+        public DetailsModel(IBatchManagement batchRepo,
+            IProjectManagementRepository projectRepo,
+            IMaterialManagementRepository materialRepo,
+            IQuotationManagementRepository quotRepo)
         {
-            _context = context;
+            _batchRepo = batchRepo;
+            _projectRepo = projectRepo;
+            _materialRepo = materialRepo;
+            _quoteRepo = quotRepo;
         }
 
+        [BindProperty]
         public Quotation Quotation { get; set; }
+        [BindProperty]
+        public Project Project { get; set; }
 
+        [BindProperty]
+        public List<ProjectMaterialDTO> ProjectMaterialList { get; set; }
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-            if (id == null)
+            if (HttpContext.Session == null)
             {
-                return NotFound();
+                return RedirectToPage("/Authentication/ErrorSession");
             }
-
-            Quotation = await _context.Quotations
-                .Include(q => q.Project).FirstOrDefaultAsync(m => m.QuotationId == id);
-
-            if (Quotation == null)
+            else
             {
-                return NotFound();
+                string userRole = HttpContext.Session.GetString("userRole");
+                if (string.IsNullOrEmpty(userRole) || (userRole != "admin"))
+                {
+                    return RedirectToPage("/Authentication/ErrorSession");
+                }
+                else
+                {
+                    Quotation = _quoteRepo.GetQuotation(id.Value);
+
+                    if (Quotation == null)
+                    {
+                        return NotFound();
+                    }
+                    return Page();
+                }
             }
-            return Page();
         }
+
     }
 }

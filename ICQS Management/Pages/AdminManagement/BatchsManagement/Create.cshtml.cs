@@ -44,11 +44,16 @@ namespace ICQS_Management.Pages.BatchsManagement
 
         [BindProperty]
         public Batch Batch { get; set; } = default!;
-       
+
         public async Task<IActionResult> OnPostAsync()
         {
-          if (Batch == null)
+            if (Batch == null)
             {
+                return Page();
+            }
+            if(Batch.ImportDate.Date < DateTime.Now.Date)
+            {
+                TempData["ErrorMessage"] = "Cannot import batch in past day";
                 return Page();
             }
             if (_repo.CheckOverlapBatch(Batch))
@@ -59,7 +64,7 @@ namespace ICQS_Management.Pages.BatchsManagement
             List<BatchDetail> batchDetail = new List<BatchDetail>();
             string detailList = JsonConvert.SerializeObject(batchDetail);
             HttpContext.Session.SetString("detailList", detailList);
-            HttpContext.Session.SetString("ImportDate" , Batch.ImportDate.ToString());
+            HttpContext.Session.SetString("ImportDate", Batch.ImportDate.ToString());
             return RedirectToPage("/AdminManagement/BatchDetailsManagement/Create");
         }
     }

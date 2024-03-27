@@ -6,56 +6,55 @@
     Layout = "~/Pages/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="d-flex justify-content-between">
+    <h1>Quotation Revenue</h1>
+    <h1>$@Model.Quotation.Sum(q => q.CompletePrice)</h1>
+</div>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+<table class="quotations_table w-100">
+    <tr>
+        <th>Request Date</th>
+        <th>Estimated Price</th>
+        <th>Status</th>
+        @* <th>Responded by</th> *@
+        <th>Actual Price</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.Quotation)
+    {
+        var quotStatus = "";
+        var statusStyle = "";
+        switch (item.Status)
+        {
+            case 0:
+                quotStatus = "Processing";
+                statusStyle = "badge rounded-pill bg-secondary";
+                break;
+            case 1:
+                quotStatus = "Responded";
+                statusStyle = "badge rounded-pill bg-success";
+                break;
+            case 2:
+                quotStatus = "Confirmed";
+                statusStyle = "badge rounded-pill bg-success";
+                break;
+            case 3:
+                quotStatus = "Denied";
+                statusStyle = "badge rounded-pill bg-danger";
+                break;
+        }
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Quotation[0].RequestDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quotation[0].EstimatePrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quotation[0].CompletePrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quotation[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quotation[0].Project)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Quotation) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RequestDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatePrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompletePrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Description)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.QuotationId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.QuotationId">Delete</a>
+            <td style="border-radius: .5rem 0 0 .5rem;">@item.RequestDate</td>
+            <td>$@string.Format("{0:N0}", item.EstimatePrice)</td>
+            <td style="color: white;"><span class="@statusStyle">@quotStatus</span></td>
+            @* <td>@QuotationManagementService.GetResponder(item.QuotationId)?.Email</td> *@
+            <td>$@string.Format("{0:N0}", item.CompletePrice)</td>
+            <td style="border-radius: 0 .5rem .5rem 0;" class="quotation_buttons">
+                @if (item.Status != 3)
+                {
+                    <a asp-page="./Details" asp-route-id="@item.QuotationId">Details</a>
+                }
             </td>
         </tr>
-}
-    </tbody>
+    }
 </table>

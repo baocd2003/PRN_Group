@@ -94,9 +94,12 @@ namespace ICQS_Management.Pages.QuotationManagement
             {
                 Quotation quote = _quoteRepo.GetQuotation(quoteId);
                 List<Guid> batchIds = quote.Batchs.Select(batch => batch.BatchId).ToList();
-                if (_batchRepo.CheckAvailableBatchForQuote(quoteId,batchIds))
+                if (!_batchRepo.CheckAvailableBatchForQuote(quoteId,batchIds))
                 {
-                    ModelState.AddModelError("","Applied batchs for this request are out of quantity, Please request again");
+                    TempData["ErrorMessage"] = "Applied batchs for this request are out of quantity, Please request again";
+                    Quotation = _quoteRepo.GetQuotation(quoteId);
+                    _batchRepo.DeleteQuotation(quoteId);
+                    return Page();
                 }
                 _batchRepo.MinusQuantityInBatch(Quotation.QuotationId);
             }

@@ -15,9 +15,12 @@ namespace ICQS_Management.Pages.Authentication
     public class CustomerRegisterModel : PageModel
     {
         private IAuthRepository _authRepository;
-        public CustomerRegisterModel(IAuthRepository authRepository)
+        private readonly IQuotationManagementRepository _quotationManagementRepository;
+
+        public CustomerRegisterModel(IAuthRepository authRepository, IQuotationManagementRepository quotationManagementRepository)
         {
             _authRepository = authRepository;
+            _quotationManagementRepository = quotationManagementRepository;
         }
         public IActionResult OnGet()
         {
@@ -32,6 +35,7 @@ namespace ICQS_Management.Pages.Authentication
         public async Task<IActionResult> OnPostAsync()
         {
 
+            var exitedUser = _quotationManagementRepository.GetCustomerByEmail(Customer.Email);
             if (Customer is null)
             {
                 TempData["RegisterError"] = "Can not add null value";
@@ -45,6 +49,11 @@ namespace ICQS_Management.Pages.Authentication
             else if (Customer.Email is null)
             {
                 TempData["RegisterError"] = "Email can not be null";
+                return Page();
+            }
+            else if(exitedUser is not null)
+            {
+                TempData["RegisterError"] = "Email existed!";
                 return Page();
             }
             else if (Customer.Password is null)

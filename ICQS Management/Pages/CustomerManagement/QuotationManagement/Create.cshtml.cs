@@ -83,6 +83,7 @@ namespace ICQS_Management.Pages.QuotationManagement
         // Project Material Properties
         public class NewProjectMaterial
         {
+            [Range(1, int.MaxValue, ErrorMessage = "Quantity must be a positive integer!")]
             public int Quantity { get; set; } = default!;
             public Guid MaterialId { get; set; } = default!;
 

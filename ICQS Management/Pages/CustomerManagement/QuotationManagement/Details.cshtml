@@ -4,6 +4,13 @@
 @{
     ViewData["Title"] = "Details";
 }
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
 <div class="detail_wrapper">
     <div class="w-75">
         <div class="quotation-header mb-3">

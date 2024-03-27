@@ -89,7 +89,7 @@ namespace ICQS_Management.Pages.QuotationManagement
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Guid quoteId = (Guid)TempData["id"];
+            Guid quoteId = Quotation.QuotationId;
             if (Request.Form.ContainsKey("confirmBut"))
             {
                 Quotation quote = _quoteRepo.GetQuotation(quoteId);

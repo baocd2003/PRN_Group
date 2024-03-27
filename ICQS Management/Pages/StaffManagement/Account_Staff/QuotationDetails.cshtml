@@ -1,0 +1,142 @@
+﻿@page
+@model ICQS_Management.Pages.StaffManagement.Account_Staff.QuotationDetailsModel
+@{
+}
+<div class="detail_wrapper">
+    <div class="w-75">
+        <div class="quotation-header mb-3">
+            <div class="quotation_header">
+                <h2>Quotation Project Detail</h2>
+                <img src="/images/iqcs_logo.png" />
+            </div>
+        </div>
+        <div class="project_card_wrapper">
+            <div class="project_card">
+                <dl class="row">
+                    <dt class="col-sm-3">
+                        Company
+                    </dt>
+                    <dd class="col-sm-9">
+                        : ICQS System
+                    </dd>
+                    <dt class="col-sm-3">
+                        Project Name
+                    </dt>
+                    <dd class="col-sm-9">
+                        : @Model.Quotation.Project.ProjectName
+                    </dd>
+                    <dt class="col-sm-3">
+                        Description
+                    </dt>
+                    <dd class="col-sm-9">
+                        : @Model.Quotation.Project.Description
+                    </dd>
+                    <dt class="col-sm-3">
+                        Area per floor
+                    </dt>
+                    <dd class="col-sm-9">
+                        : @Model.Quotation.Project.AreaPerFloor (m²)
+                    </dd>
+                    <dt class="col-sm-3">
+                        Floor(s)
+                    </dt>
+                    <dd class="col-sm-9">
+                        : @Model.Quotation.Project.NumOfFloors
+                    </dd>
+                </dl>
+                <table class="labor_cost w-100">
+                    <caption style="caption-side: top; text-align: right;">Labor cost</caption>
+                    <tr>
+                        <th class="w-25">Amount</th>
+                        <th class="w-25">Salary/ps</th>
+                        <th class="w-25">Duration</th>
+                        <th class="w-25">Price</th>
+
+                    </tr>
+                    <tr>
+                        <td>@Model.Quotation.Project.NumOfLabors (people)</td>
+                        <td>$@string.Format("{0:N0}", Model.Quotation.Project.LaborSalaryPerMonth)/month</td>
+                        <td>@Model.Quotation.Project.MonthDuration (months)</td>
+                        <td>$@string.Format("{0:N0}", (Model.Quotation.Project.NumOfLabors * Model.Quotation.Project.LaborSalaryPerMonth * Model.Quotation.Project.MonthDuration))</td>
+                    </tr>
+                </table>
+                <table class="project_materials w-100">
+                    <caption style="caption-side: top; text-align: right;">Materials</caption>
+
+                    @if (Model.Quotation.Status == 0)
+                    {
+                        <tr>
+                            <th style="border: none; background: white;"></th>
+                            <th class="w-25">Name</th>
+                            <th class="w-25">Quantity</th>
+                            <th class="w-25">Medium price</th>
+                        </tr>
+                        @foreach (var mat in Model.Quotation.Project.ProjectMaterials)
+                        {
+                            <tr>
+                                <td style="border: none; background: white;"></td>
+                                <td>@mat.Materials.Name</td>
+                                <td>@mat.Quantity (@mat.Materials.MaterialTypes.UnitType)</td>
+                                <td>$@string.Format("{0:N0}", mat.Materials.MediumPrice)/@mat.Materials.MaterialTypes.UnitType</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td style="border: none; background-color: white;"></td>
+                            <td style="border: none; background-color: white; font-size: 1.2rem; padding: 1rem 0;" class="font-weight-bold text-center" colspan="2">Estimated</td>
+                            <td style="border: none; background-color: white; font-size: 1.2rem;" class="font-weight-bold">$@string.Format("{0:N0}", Model.Quotation.Project.TotalPrice)</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th class="w-25">Batch</th>
+                            <th class="w-25">Name</th>
+                            <th class="w-25">Quantity</th>
+                            <th class="w-25">Actual price</th>
+                        </tr>
+                        var count = 0;
+                        @foreach (var batch in Model.Quotation.Batchs)
+                        {
+                            @foreach (var batchDetail in batch.BatchDetails)
+                            {
+                                <tr>
+                                    <td>@batch.ImportDate</td>
+                                    <td>@batchDetail.Materials.Name</td>
+                                    @* <td>@Model.Quotation.Project.ProjectMaterials.FirstOrDefault(pm => pm.MaterialId == batchDetail.MaterialId).Quantity (@batchDetail.Materials.MaterialTypes.UnitType)</td> *@
+                                    <td>@Model.Quotation.Project.ProjectMaterials.Where(pm => pm.MaterialId == batchDetail.MaterialId).ToList()[count].Quantity (@batchDetail.Materials.MaterialTypes.UnitType)</td>
+                                    <td>$@string.Format("{0:N0}", batchDetail.Price)/@batchDetail.Materials.MaterialTypes.UnitType</td>
+                                </tr>
+                            }
+                            count++;
+                        }
+                        <tr>
+                            <td style="border: none; background-color: white;"></td>
+                            <td style="border: none; background-color: white; font-size: 1.2rem; padding: 1rem 0;" class="font-weight-bold text-center" colspan="2">Total price</td>
+                            <td style="border: none; background-color: white; font-size: 1.2rem;" class="font-weight-bold">$@string.Format("{0:N0}", Model.Quotation.CompletePrice)</td>
+                        </tr>
+                    }
+                    <tr style="display: none;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+
+                </table>
+            </div>
+        </div>
+        @if (Model.Quotation.Status == 1)
+        {
+            <form method="post" class="d-flex justify-content-center">
+                <input type="hidden" asp-for="Quotation.QuotationId" value="@Model.Quotation.QuotationId" />
+                <input type="submit" name="confirmBut" value="Confirm Quotation" class="btn btn-primary" />
+                <a class="btn btn-primary" asp-page="./Delete" asp-route-id="@Model.Quotation.QuotationId">Deny</a>
+            </form>
+        }
+    </div>
+
+
+</div>
+
+<a asp-page="./ViewQuotes">Back to List</a>

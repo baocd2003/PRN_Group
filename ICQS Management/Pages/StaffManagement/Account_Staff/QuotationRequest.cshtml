@@ -7,6 +7,7 @@
 }
 
 <h1>QuotationRequest</h1>
+
 <table class="table">
     <thead>
         <tr>
@@ -35,7 +36,7 @@
                 @Html.DisplayFor(modelItem => item.Project.Description)
             </td>
             <td>
-                <a asp-page="./ApplyBatch" asp-route-id="@item.QuotationId">Aply</a> |
+                <a asp-page="./ApplyBatch" asp-route-id="@item.QuotationId">Apply</a> |
             </td>
         </tr>
 }

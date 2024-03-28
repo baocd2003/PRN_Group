@@ -9,6 +9,7 @@ using BussinessObject.Entity;
 using DataAccessLayer.ApplicationDbContext;
 using Repository.Interface;
 using Repository;
+using System.Text.RegularExpressions;
 
 namespace ICQS_Management.Pages.Authentication
 {
@@ -51,7 +52,12 @@ namespace ICQS_Management.Pages.Authentication
                 TempData["RegisterError"] = "Email can not be null";
                 return Page();
             }
-            else if(exitedUser is not null)
+            else if (!Regex.IsMatch(Customer.Email, @"^\S+@gmail\.com$"))
+            {
+                TempData["RegisterError"] = "Email format is invalid!";
+                return Page();
+            }
+            else if (exitedUser is not null)
             {
                 TempData["RegisterError"] = "Email existed!";
                 return Page();

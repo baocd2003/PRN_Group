@@ -110,7 +110,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
             var continueCheckbox = Request.Form["continueCheckbox"];
             if (!string.IsNullOrEmpty(continueCheckbox))
             {
-                ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name");
+                ViewData["MaterialId"] = new SelectList(_materialRepo.GetOthersMaterial(batchDetails), "MaterialId", "Name", (Guid)TempData["MatId"]);
                 string detailList = JsonConvert.SerializeObject(batchDetails);
                 HttpContext.Session.SetString("detailList", detailList);
                 if (!_materialRepo.GetOthersMaterial(batchDetails).Any())

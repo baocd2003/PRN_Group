@@ -59,13 +59,13 @@
                         </tr>
                         <tr>
                             <td>
-                                <input asp-for="NumOfLabors" class="form-control" value="@Model.Project.NumOfLabors" readonly />
+                                <input asp-for="NumOfLabors" id="NumOfLabors" class="form-control" value="@Model.Project.NumOfLabors" readonly />
                             </td>
                             <td>
-                                <input asp-for="LaborSalaryPerMonth" class="form-control" value="@Model.Project.LaborSalaryPerMonth" readonly />
+                                <input asp-for="LaborSalaryPerMonth" id="LaborSalaryPerMonth" class="form-control" value="@Model.Project.LaborSalaryPerMonth" readonly />
                             </td>
                             <td>
-                                <input asp-for="MonthDuration" class="form-control" value="@Model.Project.MonthDuration" readonly />
+                                <input asp-for="MonthDuration" id="MonthDuration" class="form-control" value="@Model.Project.MonthDuration" readonly />
                             </td>
                         </tr>
                     </table>
@@ -76,11 +76,11 @@
                         </tr>
                         <tr>
                             <td>
-                                <input id="areaPerFloor" asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor" onchange="updateArea()" />
+                                <input id="areaPerFloor" asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor" onchange="updateArea(@(Model.Project.AreaPerFloor * Model.Project.NumOfFloors), @Model.Project.MonthDuration)" min="1" />
                                 <span asp-validation-for="AreaPerFloor" class="text-danger"></span>
                             </td>
                             <td>
-                                <input id="floors" asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" onchange="updateArea()" />
+                                <input id="floors" asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" onchange="updateArea(@(Model.Project.AreaPerFloor*Model.Project.NumOfFloors), @Model.Project.MonthDuration)" min="1" />
                                 <span asp-validation-for="NumOfFloors" class="text-danger"></span>
                             </td>
                         </tr>
@@ -159,17 +159,23 @@
 </div>
 <script type="text/javascript" src="~/js/jquery-3.4.1.min.js"></script>
 <script>
-    function updateArea() {
+    function updateArea(defaultArea, currentMonthDuration) {
         var areaPerFloor = parseInt($("#areaPerFloor").val());
         var numOfFloors = parseInt($("#floors").val());
-        console.log('area/floor: ' + areaPerFloor + ', floors: ' + numOfFloors);
+        var newArea = areaPerFloor * numOfFloors;
+        var changeRate = parseFloat(newArea / defaultArea);
+
+        console.log(changeRate);
+        // console.log('area/floor: ' + areaPerFloor + ', floors: ' + numOfFloors);
         $(".quantity_box").each(function () {
             var materialTypeId = $(this).attr("id").split("_")[1];
             var quantityPerArea = parseFloat($("#apa_" + materialTypeId).text());
             // console.log(quantityPerArea);
             var newQuantity = Math.ceil(areaPerFloor * numOfFloors * quantityPerArea);
             $(this).val(newQuantity);
+            $("#MonthDuration").val(Math.ceil(currentMonthDuration * changeRate));
             updateQuantity(materialTypeId, newQuantity);
+            reCalculateLaborCost();
             reCalculateMatPrice();
             reCalculateTotalEstimate();
         });
@@ -238,6 +244,14 @@
         // console.log(laborPrice + ' ' + matPrice);
         var totalEstimate = laborPrice + matPrice;
         $("#total_estimated_price").val(totalEstimate.toFixed(2));
+    }
+
+    function reCalculateLaborCost() {
+        var NumOfLabors = $("#NumOfLabors").val();
+        var LaborSalaryPerMonth = $("#LaborSalaryPerMonth").val();
+        var MonthDuration = $("#MonthDuration").val();
+        $("#labor_cost").text(parseFloat(NumOfLabors * LaborSalaryPerMonth * MonthDuration));
+
     }
 
     reCalculateMatPrice();

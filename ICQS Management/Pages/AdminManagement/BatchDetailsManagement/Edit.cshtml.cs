@@ -56,7 +56,7 @@ namespace ICQS_Management.Pages.BatchDetailsManagement
         public async Task<IActionResult> OnPostAsync()
         {
             _repo.UpdateBatchDetail(BatchDetail);
-            return RedirectToPage("/AdminManagement/BatchsManagement/Details?id=" + BatchDetail.BatchId);
+            return RedirectToPage("/AdminManagement/BatchsManagement/Index");
         }
     }
 }

@@ -190,6 +190,7 @@ namespace DataAccessLayer.Service
             {
                 double remainingQuantity = quoteMaterial.Quantity;
                 //double materialBatchQuantity = 
+                var updatedProjectMaterials = 0;
                 foreach (Guid batchId in remainingBatchIds)
                 {
                     Batch batch = _db.Batches.FirstOrDefault(q => q.BatchId == batchId);
@@ -203,13 +204,21 @@ namespace DataAccessLayer.Service
                             quantityToUpdate -= remainingQuantity;
                             affectedBatchs.Add(batch);
                             price += remainingQuantity * batchDetail.Price;
-                            _selectedQuotation.Project.ProjectMaterials.Add(new ProjectMaterial()
+                            if (updatedProjectMaterials == 0)
                             {
-                                ProjectMaterialId = new Guid(),
-                                MaterialId = batchDetail.MaterialId,
-                                ProjectId = _selectedProject.ProjectID,
-                                Quantity = Convert.ToInt32(remainingQuantity)
-                            });
+                                _selectedQuotation.Project.ProjectMaterials.FirstOrDefault(p => p.MaterialId == batchDetail.MaterialId).Quantity = Convert.ToInt32(remainingQuantity);
+                                updatedProjectMaterials++;
+                            }
+                            else
+                            {
+                                _selectedQuotation.Project.ProjectMaterials.Add(new ProjectMaterial()
+                                {
+                                    ProjectMaterialId = new Guid(),
+                                    MaterialId = batchDetail.MaterialId,
+                                    ProjectId = _selectedProject.ProjectID,
+                                    Quantity = Convert.ToInt32(remainingQuantity)
+                                });
+                            }
                             //_db.SaveChanges();
                             remainingQuantity = 0;
                         }
@@ -218,11 +227,25 @@ namespace DataAccessLayer.Service
                             if (quantityToUpdate > 0)
                             {
                                 remainingQuantity -= quantityToUpdate;
-                                _selectedQuotation.Project.ProjectMaterials.FirstOrDefault(p => p.MaterialId == batchDetail.MaterialId).Quantity = Convert.ToInt32(quantityToUpdate);
+                                if (updatedProjectMaterials == 0)
+                                {
+                                    _selectedQuotation.Project.ProjectMaterials.FirstOrDefault(p => p.MaterialId == batchDetail.MaterialId).Quantity = Convert.ToInt32(quantityToUpdate);
+                                    updatedProjectMaterials++;
+                                }
+                                else
+                                {
+                                    _selectedQuotation.Project.ProjectMaterials.Add(new ProjectMaterial()
+                                    {
+                                        ProjectMaterialId = new Guid(),
+                                        MaterialId = batchDetail.MaterialId,
+                                        ProjectId = _selectedProject.ProjectID,
+                                        Quantity = Convert.ToInt32(quantityToUpdate)
+                                    });
+                                }
                                 price += quantityToUpdate * batchDetail.Price;
                                 quantityToUpdate = 0;
                                 affectedBatchs.Add(batch);
-                                
+
                                 //_db.SaveChanges();
                             }
                             else

@@ -13,61 +13,66 @@
         @TempData["ErrorMessage"]
     </div>
 }
-<hr />
 <form method="post" class="w-100">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Quotation.QuotationId" />
     <input type="hidden" asp-for="Project.ProjectID" />
 
+    <div class="row quotation_detail_wrapper">
+        <div class="col-md-6">
+
+        </div>
+        <h5 class="text-center">Quotation Information</h5>
+        <dl class="row" style="padding: 1.5rem 0.5rem; border: 0.1rem solid rgba(0, 0, 0, 0.3); border-radius: 0.5rem;">
+            <dt class="col-md-4">Request Date</dt>
+            <dd class="col-md-8">
+                <input asp-for="Quotation.RequestDate" class="form-control" readonly />
+                <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
+            </dd>
+            <dt class="col-md-4">Project Name</dt>
+            <dd class="col-md-8">
+                <input asp-for="Project.ProjectName" class="form-control" readonly />
+                <span asp-validation-for="Project.ProjectName" class="text-danger"></span>
+            </dd>
+            <dt class="col-md-4">Description</dt>
+            <dd class="col-md-8">
+                <input asp-for="Project.Description" class="form-control" readonly />
+                <span asp-validation-for="Project.Description" class="text-danger"></span>
+            </dd>
+            <dt class="col-md-4">Area/Floor</dt>
+            <dd class="col-md-8">
+                <input asp-for="Project.AreaPerFloor" class="form-control" readonly />
+                <span asp-validation-for="Project.AreaPerFloor" class="text-danger"></span>
+            </dd>
+            <dt class="col-md-4">Floors</dt>
+            <dd class="col-md-8">
+                <input asp-for="Project.NumOfFloors" class="form-control" readonly />
+                <span asp-validation-for="Project.NumOfFloors" class="text-danger"></span>
+            </dd>
+            <dt class="col-md-4">Workers</dt>
+            <dd class="col-md-8">
+                <input id="Project_NumOfLabors" asp-for="Project.NumOfLabors" class="form-control" readonly />
+                <span asp-validation-for="Project.NumOfLabors" class="text-danger"></span>
+            </dd>
+            <dt class="col-md-4">Worker salary/month</dt>
+            <dd class="col-md-8">
+                <input id="Project_LaborSalaryPerMonth" asp-for="Project.LaborSalaryPerMonth" class="form-control" readonly />
+                <span asp-validation-for="Project.LaborSalaryPerMonth" class="text-danger"></span>
+            </dd>
+            <dt class="col-md-4">Duration (month)</dt>
+            <dd class="col-md-8">
+                <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" readonly />
+                <span asp-validation-for="Project.MonthDuration" class="text-danger"></span>
+            </dd>
+            <dt class="col-md-4">Preview total price</dt>
+            <dd class="col-md-8">
+                <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" readonly />
+            </dd>
+        </dl>
+    </div>
+    <hr />
     <div class="row">
         <div class="col-md-8">
-            <h5 class="text-center">Quotation Information</h5>
-            <dl class="row" style="padding: 1.5rem 0.5rem; border: 0.1rem solid rgba(0, 0, 0, 0.3); border-radius: 0.5rem;">
-                <dt class="col-md-4">Request Date</dt>
-                <dd class="col-md-8">
-                    <input asp-for="Quotation.RequestDate" class="form-control" readonly />
-                    <span asp-validation-for="Quotation.RequestDate" class="text-danger"></span>
-                </dd>
-                <dt class="col-md-4">Project Name</dt>
-                <dd class="col-md-8">
-                    <input asp-for="Project.ProjectName" class="form-control" readonly />
-                    <span asp-validation-for="Project.ProjectName" class="text-danger"></span>
-                </dd>
-                <dt class="col-md-4">Description</dt>
-                <dd class="col-md-8">
-                    <input asp-for="Project.Description" class="form-control" readonly />
-                    <span asp-validation-for="Project.Description" class="text-danger"></span>
-                </dd>
-                <dt class="col-md-4">Area/Floor</dt>
-                <dd class="col-md-8">
-                    <input asp-for="Project.AreaPerFloor" class="form-control" readonly />
-                    <span asp-validation-for="Project.AreaPerFloor" class="text-danger"></span>
-                </dd>
-                <dt class="col-md-4">Floors</dt>
-                <dd class="col-md-8">
-                    <input asp-for="Project.NumOfFloors" class="form-control" readonly />
-                    <span asp-validation-for="Project.NumOfFloors" class="text-danger"></span>
-                </dd>
-                <dt class="col-md-4">Workers</dt>
-                <dd class="col-md-8">
-                    <input id="Project_NumOfLabors" asp-for="Project.NumOfLabors" class="form-control" readonly />
-                    <span asp-validation-for="Project.NumOfLabors" class="text-danger"></span>
-                </dd>
-                <dt class="col-md-4">Worker salary/month</dt>
-                <dd class="col-md-8">
-                    <input id="Project_LaborSalaryPerMonth" asp-for="Project.LaborSalaryPerMonth" class="form-control" readonly />
-                    <span asp-validation-for="Project.LaborSalaryPerMonth" class="text-danger"></span>
-                </dd>
-                <dt class="col-md-4">Duration (month)</dt>
-                <dd class="col-md-8">
-                    <input id="Project_MonthDuration" asp-for="Project.MonthDuration" class="form-control" readonly />
-                    <span asp-validation-for="Project.MonthDuration" class="text-danger"></span>
-                </dd>
-                <dt class="col-md-4">Preview total price</dt>
-                <dd class="col-md-8">
-                    <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" readonly/>
-                </dd>
-            </dl>
             <table class="table" style="padding: 1.5rem 0.5rem; border: 0.1rem solid rgba(0, 0, 0, 0.3); border-radius: 0.5rem;">
                 <caption style="caption-side: top; font-weight: bold;">Quotation Materials</caption>
                 <thead>

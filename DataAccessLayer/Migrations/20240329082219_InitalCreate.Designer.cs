@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(applicationDbContext))]
-    [Migration("20240326094920_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240329082219_InitalCreate")]
+    partial class InitalCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("MaterialTypeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("QuantityPerArea")
+                        .HasColumnType("real");
 
                     b.Property<string>("UnitType")
                         .IsRequired()

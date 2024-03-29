@@ -16,6 +16,7 @@ namespace BusinessObject.Entity
         public Guid MaterialTypeId { get; set; }
         public string MaterialTypeName { get; set; }
         public string UnitType { get; set; }
+        public float QuantityPerArea { get; set; }
         public virtual ICollection<Material> Materials { get; set; }
     }
 }

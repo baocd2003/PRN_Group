@@ -1,5 +1,5 @@
 ﻿.wrapper {
-    width: 55vw;
+    width: 60vw;
     margin: 2rem auto 0;
     border: 0.1rem solid rgba(0, 0, 0, 0.25);
     border-radius: 0.1rem;
@@ -29,7 +29,7 @@
 
 .project_detail_wrapper {
     margin: 0.5rem 0;
-    padding: 2rem;
+    padding: 0 2rem;
     padding-bottom: 0;
     border-radius: 0.5rem;
     background-color: rgba(255, 255, 255, 0.8);
@@ -46,10 +46,58 @@
        }
 }
 
-.quotation_materials{
+.section_txt_wrapper{
+    margin-bottom: 2rem;
+}
+
+.quotation_materials {
     padding: 0 2rem;
 }
 
 td{
     font-size: .85rem;
+}
+
+hr{
+    border-top: .14rem dashed rgba(0, 0, 0, 0.2);
+}
+
+.material_card{
+    border: .1rem solid rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.1);
+    padding: .5rem 1rem;
+    margin: .5rem 1rem;
+    max-width: 45%;
+    .form-group{
+                     margin-bottom: 0 !important;
+    }
+}
+
+.total_estimated{
+    position: relative;
+    label{
+        margin: 0 1rem;
+    }
+    
+}
+
+.total_estimated{
+    input{
+        background: white;
+        font-weight: bold;
+        font-size: 1.5rem;
+        text-align: center;
+        color: black;
+        position: relative;
+    }
+     
+}
+
+.total_estimated:before{
+    content: "$";
+    position: absolute;
+    right: 26rem;
+    z-index: 1;
+    font-weight: bold;
+    font-size: 1.5rem;
 }

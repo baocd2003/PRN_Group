@@ -47,6 +47,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("QuantityPerArea")
+                        .HasColumnType("real");
+
                     b.Property<string>("UnitType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

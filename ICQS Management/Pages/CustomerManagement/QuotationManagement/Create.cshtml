@@ -12,44 +12,38 @@
     </div>
     <form method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <dl class="row" style="font-size: .8rem; padding: 0 2rem;">
-            <dt class="col-md-2">Prototype</dt>
-            <dd class="col-md-10">: @Model.Project.ProjectName</dd>
-            <dt class="col-md-2">Request Date</dt>
-            <dd class="col-md-10">: @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</dd>
-        </dl>
         <input type="hidden" asp-for="RequestDate" class="form-control" readonly value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row" style="font-size: .8rem; padding: 0 2rem;">
+                    <dt class="col-md-4">Customer</dt>
+                    <dd class="col-md-8">: @HttpContext.Session.GetString("LoggedEmail")</dd>
+                    <dt class="col-md-4">Prototype</dt>
+                    <dd class="col-md-8">: @Model.Project.ProjectName</dd>
+                    <dt class="col-md-4">Request Date</dt>
+                    <dd class="col-md-8">: @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row" style="font-size: .8rem; padding: 0 2rem;">
+                    <dt class="col-md-4">Project Name</dt>
+                    <dd class="col-md-8">
+                        <input asp-for="ProjectName" placeholder="Your project name.." class="w-100"/>
+                        <span asp-validation-for="ProjectName" class="text-danger"></span>
+                    </dd>
+                    <dt class="col-md-4">Description</dt>
+                    <dd class="col-md-8">
+                        <textarea asp-for="Description" rows="3" placeholder="Project description..." class="w-100"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </dd>
+                </dl>
+            </div>
+        </div>
 
+        <hr />
         <div class="project_detail_wrapper">
             <div class="row">
-                <div class="col-md-4" style="border-right: .2rem solid rgba(0, 0, 0, 0.2);">
-                    @* <div class="d-flex justify-content-start section_txt">
-                    <img src="https://i.ibb.co/tbkC1zZ/blueprint.png" width="40" height="40" />
-                    <h5 class="font-weight-bold">Project Detail</h5>
-                    </div>
-                    <hr /> *@
-                    <table class="w-100">
-                        <tr>
-                            <td>Project Name</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input asp-for="ProjectName" class="form-control" placeholder="Your project name.." />
-                                <span asp-validation-for="ProjectName" class="text-danger"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Description</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <textarea asp-for="Description" rows="5" class="form-control" placeholder="Project description..."></textarea>
-                                <span asp-validation-for="Description" class="text-danger"></span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="d-flex justify-content-between section_txt_wrapper">
                         <div class="d-flex justify-content-start section_txt">
                             <img src="https://i.ibb.co/Snqfnc1/worker.png" width="40" height="40" />
@@ -57,24 +51,7 @@
                         </div>
                         <span>Estimated labor cost: $<span class="font-weight-bold" id="labor_cost">@(Model.Project.NumOfLabors * Model.Project.LaborSalaryPerMonth * Model.Project.MonthDuration)</span></span>
                     </div>
-                    <hr />
-                    <table class="mb-3">
-                        <tr>
-                            <td>Area/floor (m²)</td>
-                            <td>Floors</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor" readonly/>
-                                <span asp-validation-for="AreaPerFloor" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <input asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" readonly />
-                                <span asp-validation-for="NumOfFloors" class="text-danger"></span>
-                            </td>
-                        </tr>
-                    </table>
-                    <table>
+                    <table class="w-100">
                         <tr>
                             <td>Amount (people)</td>
                             <td>Salary/worker</td>
@@ -92,12 +69,28 @@
                             </td>
                         </tr>
                     </table>
+                    <table class="mb-3" class="w-100">
+                        <tr>
+                            <td>Area/floor (m²)</td>
+                            <td>Floors</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="areaPerFloor" asp-for="AreaPerFloor" class="form-control" value="@Model.Project.AreaPerFloor" onchange="updateArea()" />
+                                <span asp-validation-for="AreaPerFloor" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input id="floors" asp-for="NumOfFloors" class="form-control" value="@Model.Project.NumOfFloors" onchange="updateArea()" />
+                                <span asp-validation-for="NumOfFloors" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
-
+        <hr />
         <div class="quotation_materials">
-            <div class="d-flex justify-content-between mt-4 section_txt_wrapper">
+            <div class="d-flex justify-content-between section_txt_wrapper">
                 <div class="d-flex justify-content-start section_txt">
                     <img src="https://i.ibb.co/XXXMhq4/brick.png" width="40" height="40" />
                     <h5 class="font-weight-bold">Materials</h5>
@@ -109,7 +102,6 @@
                 }
                 <span>Estimated material cost: $<span class="font-weight-bold" id="estimated_material_cost">@estimatedMat</span></span>
             </div>
-            <hr />
             <div class="row">
                 <input type="hidden" asp-for="ProjectId" value="@Model.ProjectId" />
                 @{
@@ -118,29 +110,36 @@
                 @foreach (var item in Model.ProjectMaterials)
                 {
                     @* <input type="hidden" asp-for="NewProjectMaterials[count].Materials.MaterialId" value="@item.MaterialId" /> *@
-                    <div class="col-md-4">
+                    <div class="col-md-6 material_card">
                         <div class="form-group">
-                            <label asp-for="NewProjectMaterials" class="control-label font-weight-bold">@item.Materials.MaterialTypes.MaterialTypeName (@item.Materials.MaterialTypes.UnitType)</label>
+                            <div class="d-flex justify-content-between">
+                                <label asp-for="NewProjectMaterials" class="control-label font-weight-bold">@item.Materials.MaterialTypes.MaterialTypeName</label>
+                                <span class="d-flex align-items-center" style="font-size: 0.8rem;">(@item.Materials.MaterialTypes.UnitType)</span>
+                            </div>
                             <div class="d-flex justify-content-between">
                                 <select asp-for="NewProjectMaterials[count].MaterialId" id="select_@item.Materials.MaterialTypeId" class="form-control" onchange="updateMaterialPrice('@item.Materials.MaterialTypeId', this.value)">
                                     @foreach (var material in Model.Materials.Where(m => m.MaterialTypeId == item.Materials.MaterialTypeId).Distinct())
                                     {
                                         if (material.MaterialId == item.MaterialId)
                                         {
-                                            <option value="@material.MaterialId" selected>@material.Name</option>
+                                            <option value="@material.MaterialId" selected><span class="font-weight-bold w-50">@material.Name </span><span style="font-size: 0.85rem;">~ $@material.MediumPrice/@material.MaterialTypes.UnitType</span></option>
                                         }
                                         else
                                         {
-                                            <option value="@material.MaterialId">@material.Name</option>
+                                            <option value="@material.MaterialId">
+                                                <span class="font-weight-bold">@material.Name </span><span style="font-size: 0.85rem;">~ $@material.MediumPrice/@material.MaterialTypes.UnitType</span>
+                                            </option>
                                         }
                                     }
 
                                 </select>
                                 <input type="hidden" id="@item.Materials.MaterialTypeId" class="materialPrices" value=@(item.Materials.MediumPrice * item.Quantity) onchange="updateEstimatedMaterialPrice()" />
-                                <input asp-for="NewProjectMaterials[count].Quantity" id="quantity_@item.Materials.MaterialTypeId" class="form-control w-50" value="@item.Quantity" onchange="updateQuantity('@item.Materials.MaterialTypeId', this.value)" />
+                                <input readonly asp-for="NewProjectMaterials[count].Quantity" id="quantity_@item.Materials.MaterialTypeId" class="form-control w-25 bg-white quantity_box" value="@item.Quantity" onchange="updateQuantity('@item.Materials.MaterialTypeId', this.value)" />
                                 <span asp-validation-for="NewProjectMaterials[count].Quantity" class="text-danger"></span>
                             </div>
-                            <p>~ $<span id="medium_price_@item.Materials.MaterialTypeId">@item.Materials.MediumPrice</span> / @item.Materials.MaterialTypes.UnitType</p>
+                            <span class="d-inline-block text-center font-weight-bold text-secondary font-italic w-100" style="font-size: 0.8rem;">* <span id="apa_@item.Materials.MaterialTypeId">@item.Materials.MaterialTypes.QuantityPerArea</span> @item.Materials.MaterialTypes.UnitType/m²</span>
+
+                            @* <p>~ $<span id="medium_price_@item.Materials.MaterialTypeId">@item.Materials.MediumPrice</span> / @item.Materials.MaterialTypes.UnitType</p> *@
                         </div>
                     </div>
                     count++;
@@ -148,12 +147,11 @@
             </div>
         </div>
 
-        <div class="form-group d-flex justify-content-center align-items-center mt-4">
-            <label asp-for="EstimatePrice" class="control-label font-weight-bold">Estimated Price</label>
+        <div class="form-group d-flex justify-content-center align-items-center total_estimated mt-4">
+            <label asp-for="EstimatePrice" class="control-label font-weight-bold">Estimated Price:</label>
             <input id="total_estimated_price" asp-for="EstimatePrice" class="form-control w-25" readonly placeholder="..." value=@Model.Project.TotalPrice />
         </div>
         
-        <hr />
         <div class="form-group w-100 d-flex justify-content-center">
             <input type="submit" value="Create" class="btn btn-primary" />
         </div>
@@ -161,6 +159,23 @@
 </div>
 <script type="text/javascript" src="~/js/jquery-3.4.1.min.js"></script>
 <script>
+    function updateArea() {
+        var areaPerFloor = parseInt($("#areaPerFloor").val());
+        var numOfFloors = parseInt($("#floors").val());
+        console.log('area/floor: ' + areaPerFloor + ', floors: ' + numOfFloors);
+        $(".quantity_box").each(function () {
+            var materialTypeId = $(this).attr("id").split("_")[1];
+            var quantityPerArea = parseFloat($("#apa_" + materialTypeId).text());
+            // console.log(quantityPerArea);
+            var newQuantity = Math.ceil(areaPerFloor * numOfFloors * quantityPerArea);
+            $(this).val(newQuantity);
+            updateQuantity(materialTypeId, newQuantity);
+            reCalculateMatPrice();
+            reCalculateTotalEstimate();
+        });
+    }
+
+
     function updateQuantity(materialId, newQuantity) {
         var selectedMatId = $("#select_" + materialId).val();
         // console.log(newQuantity);

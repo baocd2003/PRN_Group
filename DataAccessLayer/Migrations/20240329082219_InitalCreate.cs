@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessLayer.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitalCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,7 +28,8 @@ namespace DataAccessLayer.Migrations
                 {
                     MaterialTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MaterialTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UnitType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UnitType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuantityPerArea = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {

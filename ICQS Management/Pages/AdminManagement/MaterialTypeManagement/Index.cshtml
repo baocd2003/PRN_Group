@@ -20,6 +20,9 @@
             <th>
                 Unit Type
             </th>
+            <th>
+                Quantity Per Area
+            </th>
             <th style="width: 10%">Action</th>
         </tr>
     </thead>
@@ -31,6 +34,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UnitType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityPerArea)
             </td>
             <td style="display: flex; justify-content: space-between; border-top: 0; align-items: center; height: 70px">
                 <div class="action_button">

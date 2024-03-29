@@ -36,7 +36,7 @@
 }
 
 .action_button {
-    width: 20%;
+    width: 30%;
     vertical-align: middle;
 }
 
@@ -61,7 +61,7 @@ ul.pagination .page-item.active .page-link {
 }
 
 .table_header tr th {
-    width: 30%;
+    width: 20%;
 }
 
 .notification {
@@ -87,6 +87,8 @@ ul.pagination .page-item.active .page-link {
     font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
+    background-color: rgb(53, 84, 209);
+    color: #fff;
 }
 
 .status-active {

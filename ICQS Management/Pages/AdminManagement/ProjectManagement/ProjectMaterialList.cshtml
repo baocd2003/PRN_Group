@@ -4,16 +4,16 @@
 @{
     ViewData["Title"] = "ProjectMaterialList";
 }
+<a asp-page="Index" style="margin-right: 48px">&#8592; Back to Project List</a>
 
-<h1 style="margin-bottom: 2vh; text-align: center">Project Material Management</h1>
-<h3 style="margin-bottom: 2vh; text-align: center">Project Name: @Model.ProjectName</h3>
+<h1 class="title">Project's Material</h1>
+<h3 class="title" style="margin-bottom: 2vh">Project Name: @Model.ProjectName</h3>
 
-<p>
+<p class="create_button">
     @if (Model.Status == 1)
     {
         <a asp-page="./CreateProjectMaterial" asp-route-Projectid="@Model.ProjectId" class="btn btn-primary">Add</a>
     }
-    <a asp-page="Index" class="btn btn-primary">Back to Project List</a>
 </p>
 <table class="table">
     <thead>
@@ -52,7 +52,6 @@
             <td>
                 @if (Model.Status == 1)
                 {
-                    <a asp-page="./ProjectMaterialDetail" asp-route-id="@item.ProjectMaterialId" class="btn btn-primary" style="width: 40%; text-align: center">Edit</a>
                     @if(Model.countProjectMaterial > 1)
                     {
                         <a asp-page="./DeleteProjectMaterial" asp-route-id="@item.ProjectMaterialId" class="btn btn-danger" style="width: 40%; text-align: center">Delete</a>

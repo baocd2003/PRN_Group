@@ -63,14 +63,14 @@
                     </div>
                     <input id="Project_TotalMaterialPrice" value="@Model.materialPrice" class="form-control" hidden />
                     <div class="form-group">
-                        <label asp-for="Project.TotalPrice" class="control-label"></label>
+                        <label asp-for="Project.TotalPrice" class="control-label">Total Price</label>
                         <input id="Project_TotalPrice" asp-for="Project.TotalPrice" class="form-control" readonly />
                         <span asp-validation-for="Project.TotalPrice" class="text-danger"></span>
                     </div>
                 </div>
             </div>
             <div class="form-group" style="margin: 0 18% 2rem 18%">
-                <label asp-for="Project.Description" class="control-label"></label>
+                <label asp-for="Project.Description" class="control-label"><span style="color: rgb(53, 84, 209); font-weight: bold">* </span>Description</label>
                 <textarea asp-for="Project.Description" class="form-control"></textarea>
                 <span asp-validation-for="Project.Description" class="text-danger"></span>
             </div>

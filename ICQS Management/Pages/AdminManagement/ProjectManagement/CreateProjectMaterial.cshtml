@@ -20,6 +20,10 @@
             <label class="control-label">Unit Type: </label>
             <label>@Model.UnitType</label>
         </div>
+        <div class="form-group">
+            <label class="control-label">Quantity Per Area: </label>
+            <label>@Model.QuantityPerArea</label>
+        </div>
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group" hidden>
@@ -31,11 +35,6 @@
                 <select asp-for="ProjectMaterial.MaterialId" class="form-control" asp-items="ViewBag.MaterialId" disabled="@Model.isDisabled"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ProjectMaterial.Quantity" class="control-label"></label>
-                <input asp-for="ProjectMaterial.Quantity" class="form-control" value="1" min="1" required/>
-                <span asp-validation-for="ProjectMaterial.Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Add" class="btn btn-primary" @(Model.isDisabled ? "disabled" : "") />
                 @if (Model.countProjectMaterial >= 1)
                 {
@@ -45,12 +44,17 @@
         </form>
     </div>
     <div class="col-md-8">
-        <h3 style="margin-bottom: 2vh; text-align: center">
-            Total Price: @{
-                var formattedTotalPrice = string.Format("{0:N0}", Model.totalprice);
-            }
-            @formattedTotalPrice
-        </h3>
+        <div style="display: flex; justify-content: center; margin-bottom: 2vh">
+            <h3>
+                Total Price: @{
+                    var formattedTotalPrice = string.Format("{0:N0}", Model.totalprice);
+                }
+                @formattedTotalPrice $
+            </h3>
+            <h3 style="margin-left: 20px">
+                Total Area: @Model.TotalArea m<sup>2</sup>
+            </h3>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -77,11 +81,8 @@
                             @Html.DisplayFor(modelItem => item.MaterialName)
                         </td>
                         <td>
-                            <form asp-page-handler="Edit" asp-route-id="@item.ProjectMaterialId" method="post" style="display: inline;">
-                                <input type="number" name="editedQuantity" value="@item.Quantity" class="form-control" style="width: 80px" min="1">
-                                <input asp-for="@Model.projectId" class="form-control" hidden />
-                                <button type="submit" class="btn btn-primary" style="width: 40%; text-align: center">Save</button>
-                            </form>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.MediumPrice)
                         </td>

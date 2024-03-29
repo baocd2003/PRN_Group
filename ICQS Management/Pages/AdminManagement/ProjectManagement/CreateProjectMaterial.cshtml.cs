@@ -45,6 +45,10 @@ namespace ICQS_Management.Pages.ProjectManagement
         public Boolean isDisabled { get; set; } = false;
         [BindProperty]
         public string UnitType { get; set; }
+        [BindProperty]
+        public float QuantityPerArea { get; set; }
+        [BindProperty]
+        public float TotalArea { get; set; }
         public IActionResult OnGet(Guid ProjectId, Guid? materialTypeId)
         {
             if (HttpContext.Session == null)
@@ -104,6 +108,8 @@ namespace ICQS_Management.Pages.ProjectManagement
                             isDisabled = true;
                         }
                     }
+                    QuantityPerArea = _materialTypeRepository.GetMaterialTypeById(_materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId).QuantityPerArea;
+                    TotalArea = Convert.ToInt32(_projectManagementRepository.GetProjectById(projectId).AreaPerFloor) * _projectManagementRepository.GetProjectById(projectId).NumOfFloors;
                     return Page();
                 }
             }
@@ -111,19 +117,12 @@ namespace ICQS_Management.Pages.ProjectManagement
         public IActionResult OnPostAsync()
         {
             ProjectMaterial.ProjectId = projectId;
+            int totalArea = Convert.ToInt32(_projectManagementRepository.GetProjectById(projectId).AreaPerFloor) * _projectManagementRepository.GetProjectById(projectId).NumOfFloors;
+            float quantityPerArea = _materialTypeRepository.GetMaterialTypeById(_mMRepository.GetMaterialById(ProjectMaterial.MaterialId).MaterialTypeId).QuantityPerArea;
+            ProjectMaterial.Quantity = (int)Math.Ceiling(totalArea * quantityPerArea);
             _projectManagementRepository.AddProjectMaterial(ProjectMaterial);
             _projectManagementRepository.UpdateProjectTotalPrice(ProjectMaterial.ProjectId);
             return RedirectToPage("./CreateProjectMaterial", new { ProjectId = ProjectMaterial.ProjectId });
-        }
-
-        public IActionResult OnPostEditAsync(Guid id, int editedQuantity)
-        {
-            ProjectMaterial projectMaterial = _projectManagementRepository.GetProjectMaterialByProjectMaterialId(id);
-            int quantityDifferences = editedQuantity - projectMaterial.Quantity;
-            projectMaterial.Quantity = editedQuantity;
-            _projectManagementRepository.UpdateProjectMaterial(projectMaterial);
-            _projectManagementRepository.UpdateProjectTotalPrice(projectMaterial.ProjectId);
-            return RedirectToPage("./CreateProjectMaterial", new { ProjectId = projectId });
         }
         public IActionResult OnPostDeleteAsync(Guid id)
         {

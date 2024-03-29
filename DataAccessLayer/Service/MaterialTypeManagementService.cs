@@ -52,6 +52,7 @@ public class MaterialTypeManagementService : applicationDbContext
         {
             updatedMaterialType.MaterialTypeName = materialType.MaterialTypeName;
             updatedMaterialType.UnitType = materialType.UnitType;
+            updatedMaterialType.QuantityPerArea = materialType.QuantityPerArea;
             this.SaveChanges(true);
         }
     }

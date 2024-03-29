@@ -13,7 +13,7 @@
         <form id="materialForm" asp-page-handler="ChooseMaterial" asp-route-id="@Model.projectId" method="post">
             <div class="form-group">
                 <label class="control-label">Material Type</label>
-                <select id="materialTypeSelect" name="MaterialTypeId" class="form-control" asp-items="ViewBag.MaterialTypeId" onchange="submitForm(this)"></select>
+                <select id="materialTypeSelect" name="MaterialTypeId" class="form-control" asp-items="ViewBag.MaterialTypeId" onchange="submitForm(this)" disabled="@Model.isTypeDisabled"></select>
             </div>
         </form>
         <div class="form-group">

@@ -44,6 +44,8 @@ namespace ICQS_Management.Pages.ProjectManagement
         [BindProperty]
         public Boolean isDisabled { get; set; } = false;
         [BindProperty]
+        public Boolean isTypeDisabled { get; set; } = false;
+        [BindProperty]
         public string UnitType { get; set; }
         [BindProperty]
         public float QuantityPerArea { get; set; }
@@ -101,9 +103,18 @@ namespace ICQS_Management.Pages.ProjectManagement
                     }
                     else
                     {
-                        ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes().Where(e => !ProjectMaterialList.Select(pml => pml.MaterialTypeId).Contains(e.MaterialTypeId)), "MaterialTypeId", "MaterialTypeName", _materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId);
-                        UnitType = _materialTypeRepository.GetMaterialTypeById(_materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId).UnitType;
-                        ViewData["MaterialId"] = new SelectList(availableMaterials.Where(am => am.MaterialTypeId == _materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId), "MaterialId", "Name");
+                        var materialType = _materialTypeRepository.GetAllMaterialTypes().FirstOrDefault(e => !ProjectMaterialList.Select(pml => pml.MaterialTypeId).Contains(e.MaterialTypeId));
+                        if (materialType == null)
+                        {
+                            isTypeDisabled = true;
+                            isDisabled = true;
+                            QuantityPerArea = _materialTypeRepository.GetMaterialTypeById(_materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId).QuantityPerArea;
+                            TotalArea = Convert.ToInt32(_projectManagementRepository.GetProjectById(projectId).AreaPerFloor) * _projectManagementRepository.GetProjectById(projectId).NumOfFloors;
+                            return Page();
+                        }
+                        ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes().Where(e => !ProjectMaterialList.Select(pml => pml.MaterialTypeId).Contains(e.MaterialTypeId)), "MaterialTypeId", "MaterialTypeName", _materialTypeRepository.GetAllMaterialTypes().Where(e => !ProjectMaterialList.Select(pml => pml.MaterialTypeId).Contains(e.MaterialTypeId)).First().MaterialTypeId);
+                        UnitType = _materialTypeRepository.GetMaterialTypeById(_materialTypeRepository.GetAllMaterialTypes().Where(e => !ProjectMaterialList.Select(pml => pml.MaterialTypeId).Contains(e.MaterialTypeId)).First().MaterialTypeId).UnitType;
+                        ViewData["MaterialId"] = new SelectList(availableMaterials.Where(am => am.MaterialTypeId == _materialTypeRepository.GetAllMaterialTypes().Where(e => !ProjectMaterialList.Select(pml => pml.MaterialTypeId).Contains(e.MaterialTypeId)).First().MaterialTypeId), "MaterialId", "Name");
                         if (ViewData["MaterialId"] == null || ((SelectList)ViewData["MaterialId"]).Count() <= 0)
                         {
                             isDisabled = true;

@@ -76,6 +76,7 @@ namespace ICQS_Management.Pages.ProjectManagement
                                            select new ProjectMaterialDTO
                                            {
                                                ProjectMaterialId = pm.ProjectMaterialId,
+                                               MaterialTypeId = m.MaterialTypeId,
                                                ProjectId = pm.ProjectId,
                                                MaterialId = pm.MaterialId,
                                                MaterialName = m.Name,
@@ -90,7 +91,7 @@ namespace ICQS_Management.Pages.ProjectManagement
                         .Where(material => !projectMaterials.Any(pm => pm.MaterialId == material.MaterialId));
                     if (materialTypeId != null)
                     {
-                        ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes(), "MaterialTypeId", "MaterialTypeName", materialTypeId);
+                        ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes().Where(e => !ProjectMaterialList.Select(pml => pml.MaterialTypeId).Contains(e.MaterialTypeId)), "MaterialTypeId", "MaterialTypeName", materialTypeId);
                         UnitType = _materialTypeRepository.GetMaterialTypeById(materialTypeId.Value).UnitType;
                         ViewData["MaterialId"] = new SelectList(availableMaterials.Where(am => am.MaterialTypeId == materialTypeId), "MaterialId", "Name");
                         if (ViewData["MaterialId"] == null || ((SelectList)ViewData["MaterialId"]).Count() <= 0)
@@ -100,7 +101,7 @@ namespace ICQS_Management.Pages.ProjectManagement
                     }
                     else
                     {
-                        ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes(), "MaterialTypeId", "MaterialTypeName", _materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId);
+                        ViewData["MaterialTypeId"] = new SelectList(_materialTypeRepository.GetAllMaterialTypes().Where(e => !ProjectMaterialList.Select(pml => pml.MaterialTypeId).Contains(e.MaterialTypeId)), "MaterialTypeId", "MaterialTypeName", _materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId);
                         UnitType = _materialTypeRepository.GetMaterialTypeById(_materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId).UnitType;
                         ViewData["MaterialId"] = new SelectList(availableMaterials.Where(am => am.MaterialTypeId == _materialTypeRepository.GetAllMaterialTypes().First().MaterialTypeId), "MaterialId", "Name");
                         if (ViewData["MaterialId"] == null || ((SelectList)ViewData["MaterialId"]).Count() <= 0)

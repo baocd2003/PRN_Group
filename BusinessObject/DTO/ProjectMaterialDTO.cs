@@ -11,6 +11,7 @@ namespace BusinessObject.DTO
         public Guid ProjectMaterialId { get; set; }
         public Guid ProjectId { get; set; }
         public Guid MaterialId { get; set; }
+        public Guid MaterialTypeId {  get; set; }
         public string MaterialName { get; set; }
         public float MediumPrice { get; set; }
         public string UnitType { get; set; }

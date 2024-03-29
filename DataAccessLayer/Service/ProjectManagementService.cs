@@ -94,7 +94,11 @@ public class ProjectManagementService : applicationDbContext
     }
     public IEnumerable<ProjectMaterial> GetProjectMaterialByProjectId(Guid projectID)
     {
-        return this.ProjectMaterials.Include(p => p.Materials).ThenInclude(p => p.MaterialTypes).Where(pm => pm.ProjectId == projectID).ToList();
+        using (var _db = new applicationDbContext())
+        {
+            return _db.ProjectMaterials.Include(p => p.Materials).ThenInclude(p => p.MaterialTypes).Where(pm => pm.ProjectId == projectID).ToList();
+
+        }
     }
     public ProjectMaterial GetProjectMaterialByProjectMaterialId(Guid projectMaterialID)
     {
